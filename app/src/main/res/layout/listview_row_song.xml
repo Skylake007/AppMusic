@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imgSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100sp"
+        android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16sp"
         app:layoutDescription="@string/description_row_song"
