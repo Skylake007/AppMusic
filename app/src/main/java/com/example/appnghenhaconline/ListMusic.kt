@@ -4,6 +4,8 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -18,7 +20,7 @@ class ListMusic : AppCompatActivity() {
     private lateinit var songAdapter: SongAdapter
     private lateinit var songs: ArrayList<Song>
 
-    lateinit var mediaPlayer : MediaPlayer
+    private lateinit var mediaPlayer : MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,24 @@ class ListMusic : AppCompatActivity() {
         init()
         callApiShowListView()
 
+        // sĩ viết
+        lvSong.setOnItemClickListener(object : AdapterView.OnItemClickListener {
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
+                //playsong(arraylistSongUrl.get(position))
+                //Toast.makeText(this@MainActivity,arraylistSongName.get(position),Toast.LENGTH_SHORT).show()
+                !lvSong.isFocusable
+                if (mediaPlayer.isPlaying){
+                    mediaPlayer.stop()
+                    playsong(songs.get(position).link)
+                    Toast.makeText(this@ListMusic,songs.get(position).title,Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    playsong(songs.get(position).link)
+                    Toast.makeText(this@ListMusic,songs.get(position).title, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
     }
 
@@ -58,21 +77,23 @@ class ListMusic : AppCompatActivity() {
         songs = ArrayList()
         songAdapter = SongAdapter(this,R.layout.listview_row_song,songs)
         lvSong.adapter = songAdapter
+        mediaPlayer = MediaPlayer() // create media sĩ viết
     }
 
-    fun play(v : View) {
+    // phần sĩ viết dưới này..............
+    fun play(v : View) { // button play music
         mediaPlayer.start()
     }
 
-    fun pause(v : View) {
+    fun pause(v : View) { // buttion pause
         if(mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
     }
 
-    private fun playsong(url : String) {
-        mediaPlayer = MediaPlayer()
+    private fun playsong(url : String) { //funtion play music
         try {
+            mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(url)
             mediaPlayer.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
                 override fun onPrepared(mp: MediaPlayer?) {

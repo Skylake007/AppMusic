@@ -12,7 +12,7 @@
         android:layout_height="550dp"
         android:layout_marginBottom="180dp"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"
+
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="-25dp" />
 
@@ -23,18 +23,23 @@
         android:background="@drawable/ic_baseline_play_arrow_24"
         android:clickable="true"
         android:onClick="play"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="586dp"></ImageButton>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_pause"
+        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvSong"></ImageButton>
 
     <ImageButton
         android:id="@+id/button_pause"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
         android:background="@drawable/ic_baseline_pause_24"
         android:clickable="true"
         android:onClick="pause"
-        tools:layout_editor_absoluteX="254dp"
-        tools:layout_editor_absoluteY="586dp"></ImageButton>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvSong"></ImageButton>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
