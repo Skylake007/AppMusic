@@ -9,11 +9,32 @@
     <ListView
         android:id="@+id/lvSong"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="550dp"
+        android:layout_marginBottom="180dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-         />
+        tools:layout_editor_absoluteX="-25dp" />
+
+    <ImageButton
+        android:id="@+id/button_play"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_baseline_play_arrow_24"
+        android:clickable="true"
+        android:onClick="play"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="586dp"></ImageButton>
+
+    <ImageButton
+        android:id="@+id/button_pause"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_baseline_pause_24"
+        android:clickable="true"
+        android:onClick="pause"
+        tools:layout_editor_absoluteX="254dp"
+        tools:layout_editor_absoluteY="586dp"></ImageButton>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
