@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AppNgheNhacOnline</string>
+    <string name="test">TestView</string>
+
+    <!--   Descript in listview_row_song.xml-->
+    <string name="description_row_song">this is a description for layout listview_row_song</string>
+</resources>
