@@ -4,4 +4,15 @@
 
     <!--   Descript in listview_row_song.xml-->
     <string name="description_row_song">this is a description for layout listview_row_song</string>
+
+    <string-array name="sex">
+        <item>Nam</item>
+        <item>Nữ</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string name="action_play_now">Nghe ngay</string>
+    <string name="action_discover">Khám phá</string>
+    <string name="action_radio">Radio</string>
+    <string name="action_search">Tìm kiếm</string>
 </resources>
