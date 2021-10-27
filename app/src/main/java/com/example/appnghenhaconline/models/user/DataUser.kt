@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.models
+package com.example.appnghenhaconline.models.user
 
 class DataUser(
     var error: Boolean,

@@ -1,7 +1,6 @@
 package com.example.appnghenhaconline.api
 
-import com.example.appnghenhaconline.models.DataUser
-import com.example.appnghenhaconline.models.User
+import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.song.DataSong
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

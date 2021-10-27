@@ -1,5 +1,6 @@
-package com.example.appnghenhaconline.models
+package com.example.appnghenhaconline.models.user
 
+import com.example.appnghenhaconline.models.Playlist
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

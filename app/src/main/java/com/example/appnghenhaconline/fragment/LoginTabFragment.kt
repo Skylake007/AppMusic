@@ -9,14 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.appnghenhaconline.activity.HomeActivity
-import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import kotlinx.android.synthetic.main.login_tab_fragment.*
 import com.example.appnghenhaconline.api.ApiService
-import com.example.appnghenhaconline.models.DataUser
-import com.example.appnghenhaconline.models.User
-import kotlinx.android.synthetic.main.login_tab_fragment.*
+import com.example.appnghenhaconline.models.user.DataUser
+import com.example.appnghenhaconline.models.user.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
