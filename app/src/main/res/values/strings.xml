@@ -8,7 +8,7 @@
     <string-array name="sex">
         <item>Nam</item>
         <item>Nữ</item>
-        <item>Khác</item>
+
     </string-array>
 
     <string name="action_play_now">Nghe ngay</string>

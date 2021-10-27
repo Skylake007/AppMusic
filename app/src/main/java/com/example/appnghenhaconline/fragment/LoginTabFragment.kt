@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
@@ -36,14 +37,19 @@ class LoginTabFragment: Fragment() {
         var username : EditText = view.findViewById(R.id.etEmail)
         var password : EditText = view.findViewById(R.id.etPassword)
         btnLogin.setOnClickListener {
-
-            callApiSignIn(username.text.toString(),password.text.toString())
+            if (username.text.toString() == "" || password.text.toString() == "") {
+                MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
+            }
+            else {
+                var encryptPassword = MyLib.md5(password.text.toString())
+                callApiSignIn(username.text.toString(), encryptPassword)
+            }
         }
     }
 
-    private fun callApiSignIn(username : String, password : String) { // call API SignIn
+    private fun callApiSignIn(username : String, password : String) { // call API LogIn
         Log.e(null,username.toString() +"\n" + password.toString())
-        ApiService.apiService.getSignIn(username, password).enqueue(object : Callback<DataUser?> {
+        ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
                 val dataUser = response.body()
                 Log.e(null, dataUser.toString())
@@ -51,17 +57,17 @@ class LoginTabFragment: Fragment() {
                     if (!dataUser!!.error) {
                         val listUser: ArrayList<User> = dataUser.listUser
 
-
-                        Toast.makeText(context,dataUser.message,Toast.LENGTH_SHORT).show()
+                        MyLib.showToast(requireContext(),dataUser.message)
                     }
                     else {
-                        Toast.makeText(context,dataUser.message,Toast.LENGTH_SHORT).show()
+                        MyLib.showToast(requireContext(),dataUser.message)
                     }
                 }
             }
 
             override fun onFailure(call: Call<DataUser?>, t: Throwable) {
-                Toast.makeText(context, "Call Api Error",Toast.LENGTH_SHORT).show()
+                MyLib.showToast(requireContext(),"Call Api Error")
+
             }
 
         })

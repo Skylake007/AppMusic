@@ -2,13 +2,15 @@ package com.example.appnghenhaconline.api
 
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.song.DataSong
+import com.example.appnghenhaconline.models.user.DataUserSignUp
+import com.example.appnghenhaconline.models.user.User
+import com.example.appnghenhaconline.models.user.UserSignUp
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -26,10 +28,15 @@ interface ApiService {
             .create(ApiService::class.java)
     }
 
-    @GET("signIn")
-    fun getSignIn(@Query("q") username : String,
-                  @Query("p") password : String
+    @GET("LogIn")
+    fun getLogIn(@Query("username") username : String,
+                  @Query("password") password : String
     ) : Call<DataUser>
 
-
+    @POST("SignUp")
+    fun postSignUp(@Query("name") name : String,
+                   @Query("password") password: String,
+                   @Query("sex") sex : Boolean,
+                   @Query("email") email : String
+    ) : Call<DataUserSignUp>
 }
