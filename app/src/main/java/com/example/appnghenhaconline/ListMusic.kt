@@ -30,23 +30,19 @@ class ListMusic : AppCompatActivity() {
         callApiShowListView()
 
         // sĩ viết
-        lvSong.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                //playsong(arraylistSongUrl.get(position))
+        lvSong.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id -> //playsong(arraylistSongUrl.get(position))
                 //Toast.makeText(this@MainActivity,arraylistSongName.get(position),Toast.LENGTH_SHORT).show()
                 !lvSong.isFocusable
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
                     playsong(songs.get(position).link)
                     Toast.makeText(this@ListMusic,songs.get(position).title,Toast.LENGTH_SHORT).show()
-                }
-                else {
+                } else {
                     playsong(songs.get(position).link)
                     Toast.makeText(this@ListMusic,songs.get(position).title, Toast.LENGTH_SHORT).show()
                 }
             }
-        })
 
     }
 
