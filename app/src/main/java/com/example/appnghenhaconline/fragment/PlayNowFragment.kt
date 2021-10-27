@@ -1,18 +1,16 @@
-package com.example.appnghenhaconline.Fragment
+package com.example.appnghenhaconline.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appnghenhaconline.Adapter.CategoryAdapter
+import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.Playlist
-import kotlinx.android.synthetic.main.play_now_fragment.*
 
 class PlayNowFragment : Fragment() {
     internal lateinit var view: View
@@ -29,13 +27,11 @@ class PlayNowFragment : Fragment() {
     }
 
     private fun initCategoryList(){
-        var categoryAdapter = CategoryAdapter(view.context)
+        var categoryAdapter = CategoryAdapter(view.context,getListCatagory())
         rcvCategory = view.findViewById(R.id.rcvCategory)
         rcvCategory.setHasFixedSize(true)
         rcvCategory.layoutManager = LinearLayoutManager(view.context,
             LinearLayoutManager.VERTICAL,false)
-        categoryAdapter.setData(getListCatagory())
-
         rcvCategory.adapter = categoryAdapter
     }
 

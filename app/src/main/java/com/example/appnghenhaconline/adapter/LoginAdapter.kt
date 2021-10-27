@@ -1,10 +1,10 @@
-package com.example.appnghenhaconline.Adapter
+package com.example.appnghenhaconline.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.appnghenhaconline.Fragment.LoginTabFragment
-import com.example.appnghenhaconline.Fragment.SignupTabFragment
+import com.example.appnghenhaconline.fragment.LoginTabFragment
+import com.example.appnghenhaconline.fragment.SignupTabFragment
 
 class LoginAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
@@ -14,14 +14,14 @@ class LoginAdapter(fragmentActivity: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment {
-        when(position){
+        return when(position){
             0 -> {
-                return LoginTabFragment()
+                LoginTabFragment()
             }
             1 -> {
-                return SignupTabFragment()
+                SignupTabFragment()
             }
-            else -> return LoginTabFragment()
+            else -> LoginTabFragment()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.Adapter
+package com.example.appnghenhaconline.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,34 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
-class PlaylistSMAdapter: RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
-
-    private lateinit var playlists: ArrayList<Playlist>
-
-    fun setData(playlist: ArrayList<Playlist>){
-        this.playlists = playlist
-        notifyDataSetChanged()
-    }
+class PlaylistSMAdapter(private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSMViewHolder {
-        var view: View = LayoutInflater.from(parent.context)
+        val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.playlist_sm_item, parent, false)
         return PlaylistSMViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PlaylistSMViewHolder, position: Int) {
-        var playlist: Playlist = playlists.get(position)
-        if (playlist==null)  return
+        val playlist: Playlist = playlists[position]
 
-        holder.tvPlaylistTitle.text =playlist.getTittle()
-        Picasso.get().load(playlist.getResourceId()).into(holder.imgPlaylist)
+        holder.tvPlaylistTitle.text =playlist.title
+        Picasso.get().load(playlist.resourceId).into(holder.imgPlaylist)
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {
             onClickShowInfo(playlist)
@@ -41,7 +32,7 @@ class PlaylistSMAdapter: RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHo
     }
 
     private fun onClickShowInfo(playlist: Playlist) {
-        Log.e("Task", playlist.getTittle())
+        Log.e("Task", playlist.title)
     }
     override fun getItemCount(): Int {
         return playlists.size

@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@+id/imgSong"
+        android:id="@+id/imgSon"
         android:layout_width="100sp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"

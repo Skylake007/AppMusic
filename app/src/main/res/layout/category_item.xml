@@ -13,7 +13,8 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:text="category_1"/>
+        android:text="category_1"
+        android:layout_marginStart="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvPlaylist"

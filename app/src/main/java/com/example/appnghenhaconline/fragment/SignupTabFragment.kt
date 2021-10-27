@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.Fragment
+package com.example.appnghenhaconline.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

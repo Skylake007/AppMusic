@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.Fragment
+package com.example.appnghenhaconline.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.example.appnghenhaconline.Activity.HomeActivity
+import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.R
-import kotlinx.android.synthetic.main.login_tab_fragment.*
 
 class LoginTabFragment: Fragment() {
 
@@ -25,7 +24,7 @@ class LoginTabFragment: Fragment() {
         return view
     }
 
-    fun event(){
+    private fun event(){
         val btnLogin: Button = view.findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
             val intent = Intent(view.context, HomeActivity::class.java)

@@ -1,9 +1,9 @@
-package com.example.appnghenhaconline.Adapter
+package com.example.appnghenhaconline.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.appnghenhaconline.Fragment.*
+import com.example.appnghenhaconline.fragment.*
 
 class HomeAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
@@ -13,20 +13,20 @@ class HomeAdapter(fragmentActivity: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment {
-        when(position){
+        return when(position){
             0 -> {
-                return PlayNowFragment()
+                PlayNowFragment()
             }
             1 -> {
-                return DiscoverFragment()
+                DiscoverFragment()
             }
             2 -> {
-                return RadioFragment()
+                RadioFragment()
             }
             3 -> {
-                return SearchFragment()
+                SearchFragment()
             }
-            else -> return PlayNowFragment()
+            else -> PlayNowFragment()
         }
     }
 }

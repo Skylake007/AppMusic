@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.Adapter
+package com.example.appnghenhaconline.adapter
 
 import android.content.Context
 import android.util.Log
@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Category
 
-class CategoryAdapter(context: Context): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>()
-                                    ,View.OnClickListener{
+class CategoryAdapter(var context: Context,
+                      private var listCategory: ArrayList<Category>)
+                        : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
 
-    private var context: Context = context
-    private lateinit var listCategory: ArrayList<Category>
 
     //biến type
     companion object{
@@ -24,13 +23,8 @@ class CategoryAdapter(context: Context): RecyclerView.Adapter<CategoryAdapter.Ca
         const val TYPE_PLAYLIST_SM: Int = 2
     }
 
-    fun setData(list: ArrayList<Category>){
-        this.listCategory = list
-        notifyDataSetChanged()
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return listCategory[position].getType()
+        return listCategory[position].type
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -40,34 +34,31 @@ class CategoryAdapter(context: Context): RecyclerView.Adapter<CategoryAdapter.Ca
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        var category: Category = listCategory[position]
-        if (category==null)  return
+        val category: Category = listCategory[position]
 
         //nếu type == Sl => show SLAdapter
         if (TYPE_PLAYLIST_SL == holder.itemViewType){
-            var linearLayoutManager = LinearLayoutManager(context,
+            val linearLayoutManager = LinearLayoutManager(context,
                                     RecyclerView.HORIZONTAL, false)
             holder.rcvPlaylist.layoutManager = linearLayoutManager
 
-            var playlistSlAdapter = PlaylistSLAdapter()
-            playlistSlAdapter.setData(category.getPlaylists())
+            val playlistSlAdapter = PlaylistSLAdapter(context,category.playlists)
 
             holder.rcvPlaylist.isFocusable = false
             holder.rcvPlaylist.adapter = playlistSlAdapter
-            holder.tvNameCategory.text = category.getNameCategory()
+            holder.tvNameCategory.text = category.nameCategory
         }else
             //nếu type == SM => show SMAdapter
             if (TYPE_PLAYLIST_SM == holder.itemViewType){
-            var linearLayoutManager = LinearLayoutManager(context,
+            val linearLayoutManager = LinearLayoutManager(context,
                                     RecyclerView.HORIZONTAL, false)
             holder.rcvPlaylist.layoutManager = linearLayoutManager
 
-            var playlistSmAdapter = PlaylistSMAdapter()
-            playlistSmAdapter.setData(category.getPlaylists())
+            val playlistSmAdapter = PlaylistSMAdapter(category.playlists)
 
             holder.rcvPlaylist.isFocusable = false
             holder.rcvPlaylist.adapter = playlistSmAdapter
-            holder.tvNameCategory.text = category.getNameCategory()
+            holder.tvNameCategory.text = category.nameCategory
         }
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {
@@ -75,7 +66,7 @@ class CategoryAdapter(context: Context): RecyclerView.Adapter<CategoryAdapter.Ca
         }
     }
     private fun onClickShowInfo(category: Category){
-        Log.e("Task",category.getNameCategory())
+        Log.e("Task",category.nameCategory)
     }
 
     override fun getItemCount(): Int {
@@ -86,9 +77,5 @@ class CategoryAdapter(context: Context): RecyclerView.Adapter<CategoryAdapter.Ca
         var tvNameCategory: TextView = itemView.findViewById(R.id.tvCategory)
         var rcvPlaylist: RecyclerView = itemView.findViewById(R.id.rcvPlaylist)
         var layoutItem: LinearLayout = itemView.findViewById(R.id.layoutCategory)
-    }
-
-    override fun onClick(v: View?) {
-        TODO("Not yet implemented")
     }
 }

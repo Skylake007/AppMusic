@@ -45,6 +45,6 @@ class SongAdapter( var context: Context, var layout: Int? = null, var listSong: 
 
     class ViewHolder(view: View){
         var imgSong: ImageView = view.findViewById(R.id.imgSong)
-        var tvSongTitle: TextView = view.findViewById(R.id.tvSongTitle)
+        var tvSongTitle: TextView = view.findViewById(R.id.titleSong)
     }
 }

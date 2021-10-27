@@ -1,37 +1,26 @@
-package com.example.appnghenhaconline.Activity
+package com.example.appnghenhaconline.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Window
-import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
-import android.widget.TableLayout
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
-import com.example.appnghenhaconline.Adapter.LoginAdapter
-import com.example.appnghenhaconline.Fragment.LoginTabFragment
-import com.example.appnghenhaconline.Fragment.SignupTabFragment
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.example.appnghenhaconline.adapter.LoginAdapter
 import com.example.appnghenhaconline.R
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_login)
-        window.setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN)
         setContentView(R.layout.activity_login)
 
+        hideSystemUI()
         initTabFragment()
     }
 
     private fun initTabFragment(){
-        var loginAdapter = LoginAdapter(this)
+        val loginAdapter = LoginAdapter(this)
         view_pager.adapter = loginAdapter
         TabLayoutMediator(tab_layout,view_pager){tittle, position ->
             when(position){
@@ -46,5 +35,14 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }.attach()
+    }
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, layoutLoginActivity).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = WindowInsetsControllerCompat
+                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
     }
 }
