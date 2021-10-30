@@ -4,7 +4,7 @@ import com.example.appnghenhaconline.models.Playlist
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class User (
+class User  (
     @SerializedName("_id")
     var id : String,
     var username : String,

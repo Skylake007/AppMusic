@@ -66,7 +66,6 @@ class SignupTabFragment : Fragment() {
         }
     }
 
-
     private fun callApiSignIn(name : String, password : String, sex : Boolean, email : String) { // call API SignIn
         ApiService.apiService.postSignUp(name,password,sex,email).enqueue(object : Callback<DataUserSignUp> {
             override fun onResponse(call: Call<DataUserSignUp>, response: Response<DataUserSignUp>) {

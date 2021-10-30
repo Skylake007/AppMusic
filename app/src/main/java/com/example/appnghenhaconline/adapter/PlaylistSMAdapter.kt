@@ -23,8 +23,8 @@ class PlaylistSMAdapter(private var playlists: ArrayList<Playlist>): RecyclerVie
     override fun onBindViewHolder(holder: PlaylistSMViewHolder, position: Int) {
         val playlist: Playlist = playlists[position]
 
-        holder.tvPlaylistTitle.text =playlist.title
-        Picasso.get().load(playlist.resourceId).into(holder.imgPlaylist)
+        holder.tvPlaylistTitle.text =playlist.playlistname
+        Picasso.get().load(playlist.id).into(holder.imgPlaylist)
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {
             onClickShowInfo(playlist)
@@ -32,7 +32,7 @@ class PlaylistSMAdapter(private var playlists: ArrayList<Playlist>): RecyclerVie
     }
 
     private fun onClickShowInfo(playlist: Playlist) {
-        Log.e("Task", playlist.title)
+        Log.e("Task", playlist.playlistname)
     }
     override fun getItemCount(): Int {
         return playlists.size

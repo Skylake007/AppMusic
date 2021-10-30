@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
@@ -56,8 +58,11 @@ class LoginTabFragment: Fragment() {
                 if (dataUser != null) {
                     if (!dataUser!!.error) {
                         val listUser: ArrayList<User> = dataUser.listUser
-
                         MyLib.showToast(requireContext(),dataUser.message)
+                        val intent = Intent(requireContext(),HomeActivity::class.java)
+                        var bundle : Bundle
+                        intent.putExtra("User",listUser[0])
+                        startActivity(intent)
                     }
                     else {
                         MyLib.showToast(requireContext(),dataUser.message)

@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.api
 
+import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.user.DataUserSignUp
@@ -39,4 +40,7 @@ interface ApiService {
                    @Query("sex") sex : Boolean,
                    @Query("email") email : String
     ) : Call<DataUserSignUp>
+
+    @GET("LoadPlayList")
+    fun getPlayList() : Call<DataPlayList>
 }

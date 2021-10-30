@@ -46,7 +46,7 @@ class CategoryAdapter(var context: Context,
 
             holder.rcvPlaylist.isFocusable = false
             holder.rcvPlaylist.adapter = playlistSlAdapter
-            holder.tvNameCategory.text = category.nameCategory
+            holder.tvNameCategory.text = category.categoryname
         }else
             //nếu type == SM => show SMAdapter
             if (TYPE_PLAYLIST_SM == holder.itemViewType){
@@ -58,7 +58,7 @@ class CategoryAdapter(var context: Context,
 
             holder.rcvPlaylist.isFocusable = false
             holder.rcvPlaylist.adapter = playlistSmAdapter
-            holder.tvNameCategory.text = category.nameCategory
+            holder.tvNameCategory.text = category.categoryname
         }
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {
@@ -66,7 +66,7 @@ class CategoryAdapter(var context: Context,
         }
     }
     private fun onClickShowInfo(category: Category){
-        Log.e("Task",category.nameCategory)
+        Log.e("Task",category.categoryname)
     }
 
     override fun getItemCount(): Int {

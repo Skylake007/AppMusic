@@ -3,6 +3,7 @@ package com.example.appnghenhaconline.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -10,16 +11,20 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.user.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 class HomeActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         hideSystemUI()
         initBottomNav()
         showPlayMusicFragment()
+        val user = intent.getSerializableExtra("User") as? User
+        Log.e(null, user?.id!!)
     }
 
     private fun initBottomNav(){
