@@ -25,7 +25,7 @@ class AlbumFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.album_music_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_album_music_fragment, container, false)
 
         tittleAlbum = view.findViewById(R.id.tittleAlbumMusic)
         imgAlbum = view.findViewById(R.id.imgAlbumMusic)
@@ -69,8 +69,8 @@ class AlbumFragment: Fragment() {
         if (bundleReceive!= null){
             var playlist : Playlist = bundleReceive["object_song"] as Playlist
             if (playlist != null){
-                tittleAlbum.text = playlist.title
-                Picasso.get().load(playlist.resourceId).into(imgAlbum)
+                tittleAlbum.text = playlist.playlistName
+                Picasso.get().load(playlist.image).into(imgAlbum)
             }
         }
 

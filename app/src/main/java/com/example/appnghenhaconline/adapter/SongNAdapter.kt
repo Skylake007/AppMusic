@@ -16,7 +16,7 @@ class SongNAdapter(var context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongNViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.song_item, parent, false)
+            .inflate(R.layout.i_song_item, parent, false)
         return SongNViewHolder(view)
     }
 

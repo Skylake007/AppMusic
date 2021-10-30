@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
+import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
 import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.Playlist
 
@@ -19,7 +21,7 @@ class PlayNowFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.play_now_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_play_now_fragment, container, false)
 
 
         initCategoryList()
@@ -27,31 +29,45 @@ class PlayNowFragment : Fragment() {
     }
 
     private fun initCategoryList(){
-        var categoryAdapter = CategoryAdapter(view.context,getListCatagory())
-        rcvCategory = view.findViewById(R.id.rcvCategory)
+        var playlistAdapterSL = PlaylistSLAdapter(view.context,getListPlaylist())
+        rcvCategory = view.findViewById(R.id.rcvCategory1)
         rcvCategory.setHasFixedSize(true)
         rcvCategory.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.VERTICAL,false)
-        rcvCategory.adapter = categoryAdapter
+            LinearLayoutManager.HORIZONTAL,false)
+        rcvCategory.adapter = playlistAdapterSL
+
+        var playlistAdapterSM1 = PlaylistSMAdapter(view.context,getListPlaylist())
+        rcvCategory = view.findViewById(R.id.rcvCategory2)
+        rcvCategory.setHasFixedSize(true)
+        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.HORIZONTAL,false)
+        rcvCategory.adapter = playlistAdapterSM1
+
+        var playlistAdapterSM2 = PlaylistSMAdapter(view.context,getListPlaylist())
+        rcvCategory = view.findViewById(R.id.rcvCategory3)
+        rcvCategory.setHasFixedSize(true)
+        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.HORIZONTAL,false)
+        rcvCategory.adapter = playlistAdapterSM2
+
+        var playlistAdapterSM3 = PlaylistSMAdapter(view.context,getListPlaylist())
+        rcvCategory = view.findViewById(R.id.rcvCategory4)
+        rcvCategory.setHasFixedSize(true)
+        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.HORIZONTAL,false)
+        rcvCategory.adapter = playlistAdapterSM3
     }
 
-    private fun getListCatagory(): ArrayList<Category>{
-        var listCatagory: ArrayList<Category> = ArrayList()
-
+    private fun getListPlaylist(): ArrayList<Playlist>{
         var listPlaylist: ArrayList<Playlist> = ArrayList()
-        listPlaylist.add(Playlist("Phan Mạnh Quỳnh1",R.drawable.cv_img1))
-        listPlaylist.add(Playlist("Mr. Siro2",R.drawable.cv_img2))
-        listPlaylist.add(Playlist("Trịnh Thăng Bình3",R.drawable.cv_img3))
-
-        listPlaylist.add(Playlist("Phan Mạnh Quỳnh4",R.drawable.cv_img1))
-        listPlaylist.add(Playlist("Mr. Siro5",R.drawable.cv_img2))
-        listPlaylist.add(Playlist("Trịnh Thăng Bình6",R.drawable.cv_img3))
-
-        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SL,"Category_1",listPlaylist))
-        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SM,"Category_2",listPlaylist))
-        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SM,"Category_3",listPlaylist))
-        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SL,"Category_4",listPlaylist))
-
-        return listCatagory
+        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+            Category("abc","Nhạc giực")))
+        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+            Category("abc","Nhạc giực")))
+        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+            Category("abc","Nhạc giực")))
+        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+            Category("abc","Nhạc giực")))
+        return listPlaylist
     }
 }

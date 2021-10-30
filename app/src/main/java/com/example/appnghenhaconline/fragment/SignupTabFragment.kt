@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
-import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.DataUserSignUp
-import com.example.appnghenhaconline.models.user.UserSignUp
-import kotlinx.android.synthetic.main.signup_tab_fragment.*
-import kotlinx.android.synthetic.main.signup_tab_fragment.view.*
+import kotlinx.android.synthetic.main.fm_signup_tab_fragment.*
+import kotlinx.android.synthetic.main.fm_signup_tab_fragment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,10 +26,10 @@ class SignupTabFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.signup_tab_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_signup_tab_fragment, container, false)
 
         val sex = resources.getStringArray(R.array.sex)
-        val arrAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_sex_item, sex)
+        val arrAdapter = ArrayAdapter(requireContext(), R.layout.i_dropdown_sex_item, sex)
         view.etSex.setAdapter(arrAdapter)
         event()
         return view

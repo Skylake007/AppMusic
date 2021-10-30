@@ -7,7 +7,7 @@
     android:layout_marginTop="10dp">
 
     <TextView
-        android:id="@+id/tvCategory"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
@@ -17,7 +17,7 @@
         android:layout_marginStart="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvPlaylist"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
