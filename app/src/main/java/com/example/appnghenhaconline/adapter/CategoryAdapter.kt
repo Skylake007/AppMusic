@@ -16,20 +16,9 @@ class CategoryAdapter(var context: Context,
                       private var listCategory: ArrayList<Category>)
                         : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
 
-
-    //biến type
-    companion object{
-        const val TYPE_PLAYLIST_SL: Int = 1
-        const val TYPE_PLAYLIST_SM: Int = 2
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return listCategory[position].type
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.category_item, parent, false)
+            .inflate(R.layout.i_category_item, parent, false)
         return CategoryViewHolder(view)
     }
 
@@ -37,36 +26,36 @@ class CategoryAdapter(var context: Context,
         val category: Category = listCategory[position]
 
         //nếu type == Sl => show SLAdapter
-        if (TYPE_PLAYLIST_SL == holder.itemViewType){
-            val linearLayoutManager = LinearLayoutManager(context,
-                                    RecyclerView.HORIZONTAL, false)
-            holder.rcvPlaylist.layoutManager = linearLayoutManager
-
-            val playlistSlAdapter = PlaylistSLAdapter(context,category.playlists)
-
-            holder.rcvPlaylist.isFocusable = false
-            holder.rcvPlaylist.adapter = playlistSlAdapter
-            holder.tvNameCategory.text = category.categoryname
-        }else
-            //nếu type == SM => show SMAdapter
-            if (TYPE_PLAYLIST_SM == holder.itemViewType){
-            val linearLayoutManager = LinearLayoutManager(context,
-                                    RecyclerView.HORIZONTAL, false)
-            holder.rcvPlaylist.layoutManager = linearLayoutManager
-
-            val playlistSmAdapter = PlaylistSMAdapter(category.playlists)
-
-            holder.rcvPlaylist.isFocusable = false
-            holder.rcvPlaylist.adapter = playlistSmAdapter
-            holder.tvNameCategory.text = category.categoryname
-        }
-        //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {
-            onClickShowInfo(category)
-        }
+//        if (TYPE_PLAYLIST_SL == holder.itemViewType){
+//            val linearLayoutManager = LinearLayoutManager(context,
+//                                    RecyclerView.HORIZONTAL, false)
+//            holder.rcvPlaylist.layoutManager = linearLayoutManager
+//
+//            val playlistSlAdapter = PlaylistSLAdapter(context,category.playlists)
+//
+//            holder.rcvPlaylist.isFocusable = false
+//            holder.rcvPlaylist.adapter = playlistSlAdapter
+//            holder.tvNameCategory.text = category.nameCategory
+//        }else
+//            //nếu type == SM => show SMAdapter
+//            if (TYPE_PLAYLIST_SM == holder.itemViewType){
+//            val linearLayoutManager = LinearLayoutManager(context,
+//                                    RecyclerView.HORIZONTAL, false)
+//            holder.rcvPlaylist.layoutManager = linearLayoutManager
+//
+//            val playlistSmAdapter = PlaylistSMAdapter(category.playlists)
+//
+//            holder.rcvPlaylist.isFocusable = false
+//            holder.rcvPlaylist.adapter = playlistSmAdapter
+//            holder.tvNameCategory.text = category.nameCategory
+//        }
+//        //Thêm sự kiện onClick
+//        holder.layoutItem.setOnClickListener {
+//            onClickShowInfo(category)
+//        }
     }
     private fun onClickShowInfo(category: Category){
-        Log.e("Task",category.categoryname)
+//        Log.e("Task",category.nameCategory)
     }
 
     override fun getItemCount(): Int {
@@ -74,8 +63,8 @@ class CategoryAdapter(var context: Context,
     }
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tvNameCategory: TextView = itemView.findViewById(R.id.tvCategory)
-        var rcvPlaylist: RecyclerView = itemView.findViewById(R.id.rcvPlaylist)
-        var layoutItem: LinearLayout = itemView.findViewById(R.id.layoutCategory)
+//        var tvNameCategory: TextView = itemView.findViewById(R.id.tvCategory)
+//        var rcvPlaylist: RecyclerView = itemView.findViewById(R.id.rcvPlaylist)
+//        var layoutItem: LinearLayout = itemView.findViewById(R.id.layoutCategory)
     }
 }

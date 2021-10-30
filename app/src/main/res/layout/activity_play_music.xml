@@ -12,8 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/cv_img2" />
+        android:src="@drawable/cv_img2"
+        android:scaleX="3"
+        android:scaleY="3"/>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="#8A656464"/>
+
+    <io.alterac.blurkit.BlurLayout
+        android:id="@+id/blurLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        app:blk_blurRadius="15"
+        app:blk_downscaleFactor="0.11"
+        app:blk_fps="0" />
     <androidx.cardview.widget.CardView
         android:id="@+id/imgPlayMusic"
         android:layout_width="wrap_content"
@@ -30,14 +46,6 @@
             android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 
-    <io.alterac.blurkit.BlurLayout
-        android:id="@+id/blurLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        app:blk_blurRadius="15"
-        app:blk_downscaleFactor="0.11"
-        app:blk_fps="0" />
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -20,15 +20,15 @@ class PlaylistSLAdapter(var context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSLViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-                            .inflate(R.layout.playlist_sl_item, parent, false)
+                            .inflate(R.layout.i_playlist_sl_item, parent, false)
         return PlaylistSLViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PlaylistSLViewHolder, position: Int) {
         val playlist: Playlist = playlists[position]
 
-        holder.tvPlaylistTitle.text =playlist.title
-        Picasso.get().load(playlist.resourceId).into(holder.imgPlaylist)
+        holder.tvPlaylistTitle.text =playlist.playlistname
+        Picasso.get().load(playlist.image).into(holder.imgPlaylist)
 
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
@@ -40,7 +40,7 @@ class PlaylistSLAdapter(var context: Context,
             albumFragment.arguments = bundle
 
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.rcvCategoryLayout, albumFragment)
+                .replace(R.id.playNowFragmentLayout, albumFragment)
                 .addToBackStack(null)
                 .commit()
         }

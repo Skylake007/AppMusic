@@ -1,6 +1,7 @@
 package com.example.appnghenhaconline.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
+import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
 import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -22,55 +25,76 @@ import retrofit2.Response
 class PlayNowFragment : Fragment() {
     internal lateinit var view: View
     lateinit var rcvCategory: RecyclerView
+    lateinit var listPlaylist : ArrayList<Playlist>
+    lateinit var playlistAdapterSL : PlaylistSLAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.play_now_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_play_now_fragment, container, false)
 
 
-        initCategoryList()
+       initCategoryList()
+
         return view
     }
 
     private fun initCategoryList(){
-        var categoryAdapter = CategoryAdapter(view.context,getListCatagory())
-        rcvCategory = view.findViewById(R.id.rcvCategory)
+        listPlaylist = ArrayList()
+        playlistAdapterSL = PlaylistSLAdapter(view.context,listPlaylist)
+        rcvCategory = view.findViewById(R.id.rcvCategory1)
         rcvCategory.setHasFixedSize(true)
         rcvCategory.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.VERTICAL,false)
-        rcvCategory.adapter = categoryAdapter
-    }
+            LinearLayoutManager.HORIZONTAL,false)
+        rcvCategory.adapter = playlistAdapterSL
+        callApiPlayList(listPlaylist,playlistAdapterSL,"EDM")
 
-    private fun getListCatagory(): ArrayList<Category>{
-        var listCatagory: ArrayList<Category> = ArrayList()
-
-        var listPlaylist: ArrayList<Playlist> = ArrayList()
-
-//        listPlaylist.add(Playlist("Phan Mạnh Quỳnh1",R.drawable.cv_img1))
-//        listPlaylist.add(Playlist("Mr. Siro2",R.drawable.cv_img2))
-//        listPlaylist.add(Playlist("Trịnh Thăng Bình3",R.drawable.cv_img3))
+//        var playlistAdapterSM1 = PlaylistSMAdapter(view.context,getListPlaylist())
+//        rcvCategory = view.findViewById(R.id.rcvCategory2)
+//        rcvCategory.setHasFixedSize(true)
+//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+//            LinearLayoutManager.HORIZONTAL,false)
+//        rcvCategory.adapter = playlistAdapterSM1
 //
-//        listPlaylist.add(Playlist("Phan Mạnh Quỳnh4",R.drawable.cv_img1))
-//        listPlaylist.add(Playlist("Mr. Siro5",R.drawable.cv_img2))
-//        listPlaylist.add(Playlist("Trịnh Thăng Bình6",R.drawable.cv_img3))
-
-        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SL,"Play List"))
-//        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SM,"Category_2",listPlaylist))
-//        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SM,"Category_3",listPlaylist))
-//        listCatagory.add(Category(CategoryAdapter.TYPE_PLAYLIST_SL,"Category_4",listPlaylist))
-
-        return listCatagory
+//        var playlistAdapterSM2 = PlaylistSMAdapter(view.context,getListPlaylist())
+//        rcvCategory = view.findViewById(R.id.rcvCategory3)
+//        rcvCategory.setHasFixedSize(true)
+//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+//            LinearLayoutManager.HORIZONTAL,false)
+//        rcvCategory.adapter = playlistAdapterSM2
+//
+//        var playlistAdapterSM3 = PlaylistSMAdapter(view.context,getListPlaylist())
+//        rcvCategory = view.findViewById(R.id.rcvCategory4)
+//        rcvCategory.setHasFixedSize(true)
+//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
+//            LinearLayoutManager.HORIZONTAL,false)
+//        rcvCategory.adapter = playlistAdapterSM3
     }
 
-    private fun callApiPlayList() {
+//    private fun getListPlaylist(): ArrayList<Playlist>{
+//        var listPlaylist: ArrayList<Playlist> = ArrayList()
+////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+////            Category("abc","Nhạc giực")))
+////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+////            Category("abc","Nhạc giực")))
+////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+////            Category("abc","Nhạc giực")))
+////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
+////            Category("abc","Nhạc giực")))
+//        return listPlaylist
+//    }
+
+    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter, categoryName : String) {
         ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
             override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
                 var dataPlayList = response.body()
                 if(dataPlayList != null) {
                     if(!dataPlayList.error) {
-                        val listPlayList : ArrayList<Playlist> = dataPlayList.listPlayList
-
+                        list.addAll(dataPlayList.listPlayList)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
                     }
                 }
             }

@@ -1,21 +1,33 @@
 package com.example.appnghenhaconline.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.user.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlin.math.abs
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
+
+    lateinit var gestureDetector : GestureDetector
+
+    companion object{
+        const val MIN_DISTANCE = 100
+        const val MIN_VELOCITY = 100
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,10 +99,63 @@ class HomeActivity : AppCompatActivity() {
                                         .show(WindowInsetsCompat.Type.systemBars())
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun showPlayMusicFragment(){
-        playNav.setOnClickListener {
+        gestureDetector = GestureDetector(this, this)
+        playNav.setOnTouchListener { v, event ->
+            gestureDetector.onTouchEvent(event)
+            true
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    override fun onDown(e: MotionEvent?): Boolean {
+//        TODO("Not yet implemented")
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent?) {
+//        TODO("Not yet implemented")
+    }
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        val intent = Intent(this, PlayMusicActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
+        return true
+    }
+
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?,
+                          distanceX: Float, distanceY: Float): Boolean {
+//        TODO("Not yet implemented")
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
+                         velocityX: Float, velocityY: Float): Boolean {
+        if ( e1!!.y - e2!!.y > MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
+            MyLib.showToast(this,"TOP")
             val intent = Intent(this, PlayMusicActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
         }
+
+     return false
     }
 }

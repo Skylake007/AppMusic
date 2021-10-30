@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
@@ -28,7 +27,7 @@ class LoginTabFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.login_tab_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_login_tab_fragment, container, false)
 
         event()
         return view

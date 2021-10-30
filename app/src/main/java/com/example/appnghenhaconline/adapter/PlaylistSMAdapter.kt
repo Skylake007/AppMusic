@@ -1,22 +1,27 @@
 package com.example.appnghenhaconline.adapter
 
+import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.fragment.AlbumFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
-class PlaylistSMAdapter(private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
+class PlaylistSMAdapter(var context: Context,
+                        private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSMViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.playlist_sm_item, parent, false)
+            .inflate(R.layout.i_playlist_sm_item, parent, false)
         return PlaylistSMViewHolder(view)
     }
 
@@ -24,10 +29,21 @@ class PlaylistSMAdapter(private var playlists: ArrayList<Playlist>): RecyclerVie
         val playlist: Playlist = playlists[position]
 
         holder.tvPlaylistTitle.text =playlist.playlistname
-        Picasso.get().load(playlist.id).into(holder.imgPlaylist)
+        Picasso.get().load(playlist.image).into(holder.imgPlaylist)
         //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {
-            onClickShowInfo(playlist)
+        //Thêm sự kiện onClick
+        holder.layoutItem.setOnClickListener {v->
+            val activity = v.context as AppCompatActivity
+            val albumFragment = AlbumFragment()
+
+            var bundle = Bundle()
+            bundle.putSerializable("object_song", playlist)
+            albumFragment.arguments = bundle
+
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.playNowFragmentLayout, albumFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
