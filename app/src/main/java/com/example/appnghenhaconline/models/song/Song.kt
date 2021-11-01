@@ -13,7 +13,7 @@ class Song(
     var link: String,
     var title : String,
     var category: ArrayList<Category>,
-    var singer: Singer,
+    var singer: List<Singer>,
     var listPlaylist: ArrayList<Playlist>
 ) : Serializable {
     override fun toString(): String {

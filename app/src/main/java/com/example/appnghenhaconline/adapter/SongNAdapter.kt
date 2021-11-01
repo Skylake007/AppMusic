@@ -8,11 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.songN.SongN
 import com.squareup.picasso.Picasso
 
 class SongNAdapter(var context: Context,
-                   private var listSongN: ArrayList<SongN>) : RecyclerView.Adapter<SongNAdapter.SongNViewHolder>(){
+                   private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongNAdapter.SongNViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongNViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -21,14 +22,14 @@ class SongNAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: SongNViewHolder, position: Int) {
-        val songN: SongN = listSongN[position]
+        val song: Song = listSong[position]
 
-        holder.tvTittle.text = songN.titleSong
-        Picasso.get().load(songN.imageSong).into(holder.imgSong)
+        holder.tvTittle.text = song.title
+        Picasso.get().load(song.image).into(holder.imgSong)
     }
 
     override fun getItemCount(): Int {
-       return listSongN.size
+       return listSong.size
     }
 
     class SongNViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
