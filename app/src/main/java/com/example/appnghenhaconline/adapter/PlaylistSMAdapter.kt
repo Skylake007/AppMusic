@@ -29,8 +29,10 @@ class PlaylistSMAdapter(var context: Context,
         val playlist: Playlist = playlists[position]
 
         holder.tvPlaylistTitle.text =playlist.playlistname
-        Picasso.get().load(playlist.image).into(holder.imgPlaylist)
-        //Thêm sự kiện onClick
+        Picasso.get().load(playlist.image)
+                        .placeholder(R.drawable.img_loading)
+                        .error(R.drawable.img_error)
+                        .into(holder.imgPlaylist)
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
@@ -55,8 +57,8 @@ class PlaylistSMAdapter(var context: Context,
     }
 
     class PlaylistSMViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittle)
-        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylist)
+        var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
+        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
     }
 }

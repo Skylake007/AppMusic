@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ class PlayNowFragment : Fragment() {
     lateinit var rcvCategory: RecyclerView
     lateinit var listPlaylist : ArrayList<Playlist>
     lateinit var playlistAdapterSL : PlaylistSLAdapter
+    lateinit var playlistAdapterSM : PlaylistSMAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -40,51 +42,24 @@ class PlayNowFragment : Fragment() {
     }
 
     private fun initCategoryList(){
+        //Playlist_1
         listPlaylist = ArrayList()
         playlistAdapterSL = PlaylistSLAdapter(view.context,listPlaylist)
         rcvCategory = view.findViewById(R.id.rcvCategory1)
-        rcvCategory.setHasFixedSize(true)
-        rcvCategory.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.HORIZONTAL,false)
-        rcvCategory.adapter = playlistAdapterSL
-        callApiPlayList(listPlaylist,playlistAdapterSL,"EDM")
 
-//        var playlistAdapterSM1 = PlaylistSMAdapter(view.context,getListPlaylist())
-//        rcvCategory = view.findViewById(R.id.rcvCategory2)
-//        rcvCategory.setHasFixedSize(true)
-//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
-//            LinearLayoutManager.HORIZONTAL,false)
-//        rcvCategory.adapter = playlistAdapterSM1
-//
-//        var playlistAdapterSM2 = PlaylistSMAdapter(view.context,getListPlaylist())
-//        rcvCategory = view.findViewById(R.id.rcvCategory3)
-//        rcvCategory.setHasFixedSize(true)
-//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
-//            LinearLayoutManager.HORIZONTAL,false)
-//        rcvCategory.adapter = playlistAdapterSM2
-//
-//        var playlistAdapterSM3 = PlaylistSMAdapter(view.context,getListPlaylist())
-//        rcvCategory = view.findViewById(R.id.rcvCategory4)
-//        rcvCategory.setHasFixedSize(true)
-//        rcvCategory.layoutManager = LinearLayoutManager(view.context,
-//            LinearLayoutManager.HORIZONTAL,false)
-//        rcvCategory.adapter = playlistAdapterSM3
+        createCategorySL(rcvCategory, playlistAdapterSL)
+        callApiPlayList(listPlaylist,playlistAdapterSL)
+
     }
 
-//    private fun getListPlaylist(): ArrayList<Playlist>{
-//        var listPlaylist: ArrayList<Playlist> = ArrayList()
-////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
-////            Category("abc","Nhạc giực")))
-////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
-////            Category("abc","Nhạc giực")))
-////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
-////            Category("abc","Nhạc giực")))
-////        listPlaylist.add(Playlist("abc","Phan Mạnh Quỳnh",R.drawable.cv_img1,
-////            Category("abc","Nhạc giực")))
-//        return listPlaylist
-//    }
+    private fun createCategorySL(rcv: RecyclerView, adapter: PlaylistSLAdapter){
+        rcv.layoutManager = LinearLayoutManager(view.context,
+                            LinearLayoutManager.HORIZONTAL, false)
+        rcv.setHasFixedSize(true)
+        rcv.adapter = adapter
+    }
 
-    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter, categoryName : String) {
+    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter) {
         ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
             override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
                 var dataPlayList = response.body()
@@ -102,7 +77,6 @@ class PlayNowFragment : Fragment() {
             override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error")
             }
-
         })
     }
 }

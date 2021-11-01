@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.user.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlin.math.abs
@@ -103,10 +105,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
                          velocityX: Float, velocityY: Float): Boolean {
         if ( e1!!.y - e2!!.y < MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
-            MyLib.showToast(this,"TOP")
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slilde_in_down, R.anim.slilde_out_down)
+            MyLib.showToast(this,"Bottom")
+            onBackPressed()
         }
         return false
     }

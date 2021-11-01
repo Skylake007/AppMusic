@@ -1,7 +1,9 @@
 package com.example.appnghenhaconline.models.playlist
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import retrofit2.http.Url
 import java.io.Serializable
 
 class Playlist(

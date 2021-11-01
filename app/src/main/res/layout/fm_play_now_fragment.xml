@@ -21,14 +21,18 @@
                     android:id="@+id/tvCategory1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
+                    android:text="Category1"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingStart="20dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+
+                    android:paddingTop="10dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,12 +44,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingStart="20dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+
+                    android:paddingTop="10dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,12 +65,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingStart="20dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,12 +85,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:paddingTop="10dp"
+                    android:paddingStart="20dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

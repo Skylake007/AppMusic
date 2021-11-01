@@ -14,7 +14,7 @@
         android:layout_height="230dp">
 
         <ImageView
-            android:id="@+id/imgPlaylist"
+            android:id="@+id/imgPlaylistSM"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -29,7 +29,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/tvPlaylistTittle"
+                android:id="@+id/tvPlaylistTittleSM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
