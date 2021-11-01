@@ -2,15 +2,20 @@ package com.example.appnghenhaconline.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
@@ -18,11 +23,13 @@ import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.user.User
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlin.math.abs
 
 class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
 
     lateinit var gestureDetector : GestureDetector
+    lateinit var mediaPlayer : MediaPlayer
 
     companion object{
         const val MIN_DISTANCE = 100
@@ -34,9 +41,11 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
         setContentView(R.layout.activity_home)
         hideSystemUI()
         initBottomNav()
+
         showPlayMusicFragment()
         val user = intent.getSerializableExtra("User") as? User
         Log.e(null, user?.id!!)
+        eventMusic()
     }
 
     private fun initBottomNav(){
@@ -99,6 +108,24 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
                                         .show(WindowInsetsCompat.Type.systemBars())
     }
 
+    private fun eventMusic(){
+        btnPlay.setOnClickListener {
+            if (btnPlay.isVisible){
+
+                btnPlay.visibility = View.GONE
+                btnPause.visibility = View.VISIBLE
+            }
+        }
+        btnPause.setOnClickListener {v->
+            if (btnPauseMusic.isVisible){
+
+                btnPause.visibility = View.GONE
+                btnPlay.visibility = View.VISIBLE
+            }
+        }
+    }
+
+
     @SuppressLint("ClickableViewAccessibility")
     private fun showPlayMusicFragment(){
         gestureDetector = GestureDetector(this, this)
@@ -108,18 +135,17 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
         }
     }
 
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
+                         velocityX: Float, velocityY: Float): Boolean {
+        if ( e1!!.y - e2!!.y > MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
+            MyLib.showToast(this,"TOP")
+            val intent = Intent(this, PlayMusicActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
+        }
 
-
-
-
-
-
-
-
-
-
-
-
+        return false
+    }
 
     override fun onDown(e: MotionEvent?): Boolean {
 //        TODO("Not yet implemented")
@@ -147,15 +173,5 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
         TODO("Not yet implemented")
     }
 
-    override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
-                         velocityX: Float, velocityY: Float): Boolean {
-        if ( e1!!.y - e2!!.y > MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
-            MyLib.showToast(this,"TOP")
-            val intent = Intent(this, PlayMusicActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
-        }
 
-     return false
-    }
 }

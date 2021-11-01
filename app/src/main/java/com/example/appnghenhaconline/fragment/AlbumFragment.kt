@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -18,7 +17,6 @@ import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.models.songN.SongN
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +32,7 @@ class AlbumFragment: Fragment() {
     lateinit var  listsong : ArrayList<Song>
     lateinit var  idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
+    lateinit var songNAdapter: SongNAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -51,40 +50,35 @@ class AlbumFragment: Fragment() {
 
     private fun initSongList(){
         listsong = ArrayList()
-        var songNAdapter = SongNAdapter(view.context,listsong)
+        songNAdapter = SongNAdapter(view.context,listsong)
+
         rcvSong = view.findViewById(R.id.rcvSong)
         rcvSong.setHasFixedSize(true)
         rcvSong.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.VERTICAL,false)
+                                LinearLayoutManager.VERTICAL,false)
         rcvSong.adapter = songNAdapter
+        songNAdapter.setOnItemClickListener(object : SongNAdapter.IonItemClickListener{
+            override fun onItemClick(position: Int) {
+                if (mediaPlayer.isPlaying){
+                    mediaPlayer.stop()
+                    mediaPlayer.release()
+                    playSong(listsong[position].link)
+                    MyLib.showLog("AlbumFragment: "+ listsong[position].link)
+                } else {
+                    playSong(listsong[position].link)
+                    MyLib.showLog("AlbumFragment: "+ listsong[position].link)
+                }
+            }
+
+        })
         callApiShowListSongByID(listsong,songNAdapter,idPlayList)
         mediaPlayer = MediaPlayer()
     }
 
-//    private fun getSongList(): ArrayList<SongN>{
-//        var listSong: ArrayList<SongN> = ArrayList()
-//
-//        listSong.add(SongN("Cháu lên bar",R.drawable.cv_img1))
-//        listSong.add(SongN("Ba thương cô",R.drawable.cv_img2))
-//        listSong.add(SongN("1234",R.drawable.cv_img3))
-//        listSong.add(SongN("Alibaba",R.drawable.cv_img2))
-//        listSong.add(SongN("Nhạt",R.drawable.cv_img1))
-//        listSong.add(SongN("Người tôi yêu",R.drawable.cv_img3))
-//        listSong.add(SongN("Cháu lên bar",R.drawable.cv_img2))
-//        listSong.add(SongN("Cháu lên bar",R.drawable.cv_img1))
-//        listSong.add(SongN("Ba thương cô",R.drawable.cv_img2))
-//        listSong.add(SongN("1234",R.drawable.cv_img3))
-//        listSong.add(SongN("Alibaba",R.drawable.cv_img2))
-//        listSong.add(SongN("Nhạt",R.drawable.cv_img1))
-//        listSong.add(SongN("Người tôi yêu",R.drawable.cv_img3))
-//        listSong.add(SongN("Cháu lên bar",R.drawable.cv_img2))
-//        return listSong
-//    }
-
     private fun initAlbum(){  // khi nhấn vào item
-        var bundleReceive : Bundle = requireArguments()
+        val bundleReceive : Bundle = requireArguments()
         if (bundleReceive!= null){
-            var playlist : Playlist = bundleReceive["object_song"] as Playlist
+            val playlist : Playlist = bundleReceive["object_song"] as Playlist
             if (playlist != null){
                 tittleAlbum.text = playlist.playlistname
                 idPlayList = playlist.id // get id of playlist
@@ -107,7 +101,6 @@ class AlbumFragment: Fragment() {
                         songAdapter.notifyDataSetChanged()
                     }else MyLib.showLog(dataSong.message)
                 }
-
             }
 
             override fun onFailure(call: Call<DataSong?>, t: Throwable) {
@@ -126,15 +119,11 @@ class AlbumFragment: Fragment() {
         }
     }
 
-    private fun playsong(url : String) { //funtion play music
+    private fun playSong(url : String) { //funtion play music
         try {
             mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(url)
-            mediaPlayer.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
-                override fun onPrepared(mp: MediaPlayer?) {
-                    mp?.start()
-                }
-            })
+            mediaPlayer.setOnPreparedListener { mp -> mp?.start() }
             mediaPlayer.prepare()
         }catch (e: IOException){
             e.printStackTrace()

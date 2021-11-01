@@ -1,9 +1,12 @@
 package com.example.appnghenhaconline
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.appnghenhaconline.activity.HomeActivity
+import java.io.IOException
 import java.math.BigInteger
 import java.security.MessageDigest
 
@@ -20,5 +23,6 @@ class MyLib {
             val md = MessageDigest.getInstance("MD5")
             return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
         }
+
     }
 }
