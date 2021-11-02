@@ -88,9 +88,11 @@ class AlbumFragment: Fragment() {
     }
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>, songAdapter : SongNAdapter, id : String ) {
+        
         ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
                 val dataSong = response.body()
+                MyLib.showLog(dataSong.toString())
                 if(dataSong!=null){
                     if(!dataSong!!.error){
                         val listSong: ArrayList<Song> = dataSong.listSong

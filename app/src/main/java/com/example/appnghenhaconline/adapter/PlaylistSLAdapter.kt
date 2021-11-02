@@ -49,6 +49,7 @@ class PlaylistSLAdapter(var context: Context,
 
             val bundle = Bundle()
             bundle.putSerializable("object_song", playlist)
+            MyLib.showLog("PlaylistSLA: "+playlist.id)
             albumFragment.arguments = bundle
 
             activity.supportFragmentManager.beginTransaction()
