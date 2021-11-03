@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.fragment
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +18,9 @@ import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
+import com.example.appnghenhaconline.service.MyService
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,10 +32,12 @@ class AlbumFragment: Fragment() {
     lateinit var rcvSong: RecyclerView
     lateinit var tittleAlbum : TextView
     lateinit var imgAlbum : ImageView
-    lateinit var  listsong : ArrayList<Song>
-    lateinit var  idPlayList : String
+    lateinit var listsong : ArrayList<Song>
+    lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
     lateinit var songNAdapter: SongNAdapter
+    lateinit var btnNext: ImageView
+    lateinit var btnPre: ImageView
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -41,6 +46,8 @@ class AlbumFragment: Fragment() {
 
         tittleAlbum = view.findViewById(R.id.tittleAlbumMusic)
         imgAlbum = view.findViewById(R.id.imgAlbumMusic)
+//        btnNext = view.findViewById(R.id.btnNext)
+//        btnPre = view.findViewById(R.id.btnPre)
 
         initAlbum()
         initSongList()
@@ -57,34 +64,30 @@ class AlbumFragment: Fragment() {
         rcvSong.layoutManager = LinearLayoutManager(view.context,
                                 LinearLayoutManager.VERTICAL,false)
         rcvSong.adapter = songNAdapter
+        //Sự kiện onItemClick
         songNAdapter.setOnItemClickListener(object : SongNAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
-                    mediaPlayer.release()
-                    playSong(listsong[position].link)
-                    MyLib.showLog("AlbumFragment: "+ listsong[position].link)
-                } else {
-                    playSong(listsong[position].link)
-                    MyLib.showLog("AlbumFragment: "+ listsong[position].link)
+                    clickStartService(listsong[position])
+                }else{
+                    clickStartService(listsong[position])
                 }
+                MyLib.showLog("AlbumFragment: "+ listsong[position].link)
             }
-
         })
+
         callApiShowListSongByID(listsong,songNAdapter,idPlayList)
         mediaPlayer = MediaPlayer()
     }
 
     private fun initAlbum(){  // khi nhấn vào item
         val bundleReceive : Bundle = requireArguments()
-        if (bundleReceive!= null){
-            val playlist : Playlist = bundleReceive["object_song"] as Playlist
-            if (playlist != null){
-                tittleAlbum.text = playlist.playlistname
-                idPlayList = playlist.id // get id of playlist
-                Picasso.get().load(playlist.image).into(imgAlbum)
-            }
-        }
+        val playlist : Playlist = bundleReceive["object_song"] as Playlist
+
+        tittleAlbum.text = playlist.playlistname
+        idPlayList = playlist.id // get id of playlist
+        Picasso.get().load(playlist.image).resize(800,800).into(imgAlbum)
     }
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>, songAdapter : SongNAdapter, id : String ) {
@@ -92,7 +95,7 @@ class AlbumFragment: Fragment() {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
                 val dataSong = response.body()
                 if(dataSong!=null){
-                    if(!dataSong!!.error){
+                    if(!dataSong.error){
                         val listSong: ArrayList<Song> = dataSong.listSong
 
                         MyLib.showLog(listSong.toString())
@@ -109,27 +112,21 @@ class AlbumFragment: Fragment() {
         })
     }
 
-    fun play(v : View) { // button play music
-        mediaPlayer.start()
+    private fun clickStopService() {
+        val intent = Intent(requireContext(), MyService::class.java)
+        activity?.stopService(intent)
     }
 
-    fun pause(v : View) { // buttion pause
-        if(mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-        }
-    }
+    private fun clickStartService(song: Song) {
+        val intent = Intent(requireContext(), MyService::class.java)
 
-    private fun playSong(url : String) { //funtion play music
-        try {
-            mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.setOnPreparedListener { mp -> mp?.start() }
-            mediaPlayer.prepare()
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-    }
+        val bundle = Bundle()
+        bundle.putSerializable("item_song", song)
+        intent.putExtras(bundle)
 
+        activity?.startService(intent)
+        MyLib.showLog("AlbumFragment: Running service")
+    }
 }
 
 

@@ -30,6 +30,7 @@ class PlaylistSMAdapter(var context: Context,
 
         holder.tvPlaylistTitle.text =playlist.playlistname
         Picasso.get().load(playlist.image)
+                        .resize(480,500)
                         .placeholder(R.drawable.img_loading)
                         .error(R.drawable.img_error)
                         .into(holder.imgPlaylist)

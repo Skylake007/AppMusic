@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import com.example.appnghenhaconline.adapter.SongNAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -17,7 +18,7 @@ import java.io.IOException
 
 class ListMusic : AppCompatActivity() {
 
-    private lateinit var songAdapter: SongAdapter
+    private lateinit var songAdapter: SongNAdapter
     private lateinit var songs: ArrayList<Song>
 
     private lateinit var mediaPlayer : MediaPlayer
@@ -71,8 +72,8 @@ class ListMusic : AppCompatActivity() {
 
     private fun init(){
         songs = ArrayList()
-        songAdapter = SongAdapter(this,R.layout.listview_row_song,songs)
-        lvSong.adapter = songAdapter
+        songAdapter = SongNAdapter(this, songs)
+//        lvSong.adapter = songAdapter
         mediaPlayer = MediaPlayer() // create media sĩ viết
     }
 

@@ -1,35 +1,76 @@
 package com.example.appnghenhaconline.activity
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
-import android.view.animation.AnimationUtils
-import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.user.User
+import com.example.appnghenhaconline.service.MyService
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlin.math.abs
 
-class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
+class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
-    lateinit var gestureDetector : GestureDetector
+    private lateinit var gestureDetector : GestureDetector
     lateinit var mediaPlayer : MediaPlayer
+    lateinit var mSong: Song
+    var isPlaying: Boolean = false
+    lateinit var btnPlayOrPause : ImageView
+    lateinit var imgPlayNav : ImageView
+    lateinit var tvPlayNav : TextView
+
+    private var broadcastReceiver = object: BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val bundle: Bundle? = intent?.extras
+            //nhận dữ liệu action từ MyService
+                mSong = bundle?.get("item_song") as Song
+                isPlaying = bundle.getBoolean("status_player")
+                val actionMusic: Int = bundle.getInt("action_music")
+
+            handleLayoutMusic(actionMusic)
+        }
+    }
+
+    private fun handleLayoutMusic(action: Int) {
+        when(action){
+            MyService.ACTION_PAUSE->{
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_RESUME->{
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_START->{
+                showInfoSong()
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_INFO->{
+                showInfoSong()
+                setStatusButtonPlayOrPause()
+            }
+        }
+    }
 
     companion object{
         const val MIN_DISTANCE = 100
@@ -39,13 +80,20 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        btnPlayOrPause = findViewById(R.id.btnPlayOrPause)
+        imgPlayNav = findViewById(R.id.imgPlayNav)
+        tvPlayNav = findViewById(R.id.tvPlayNav)
+
         hideSystemUI()
         initBottomNav()
-
         showPlayMusicFragment()
         val user = intent.getSerializableExtra("User") as? User
         Log.e(null, user?.id!!)
-        eventMusic()
+//        eventMusic()
+        LocalBroadcastManager.getInstance(this)
+                                    .registerReceiver(broadcastReceiver,
+                                    IntentFilter("send_action_to_activity"))
     }
 
     private fun initBottomNav(){
@@ -102,34 +150,39 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
         }
     }
 
-    private fun showSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, layoutHomeActivity)
-                                        .show(WindowInsetsCompat.Type.systemBars())
-    }
+    private fun showInfoSong(){
+        if (mSong==null) return
 
-    private fun eventMusic(){
-        btnPlay.setOnClickListener {
-            if (btnPlay.isVisible){
+        Picasso.get().load(mSong.image).into(imgPlayNav)
+        tvPlayNav.text = mSong.title
 
-                btnPlay.visibility = View.GONE
-                btnPause.visibility = View.VISIBLE
-            }
-        }
-        btnPause.setOnClickListener {v->
-            if (btnPauseMusic.isVisible){
-
-                btnPause.visibility = View.GONE
-                btnPlay.visibility = View.VISIBLE
+        btnPlayOrPause.setOnClickListener {
+            if (isPlaying){
+                sendActionToService(MyService.ACTION_PAUSE)
+            }else{
+                sendActionToService(MyService.ACTION_RESUME)
             }
         }
     }
 
+    private fun setStatusButtonPlayOrPause(){
+        if (isPlaying){
+            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
+        }else{
+            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+        }
+    }
+    private fun sendActionToService(action: Int){
+        val intent = Intent(this, MyService::class.java)
+        intent.putExtra("action_music_service", action)
+
+        startService(intent)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun showPlayMusicFragment(){
         gestureDetector = GestureDetector(this, this)
-        playNav.setOnTouchListener { v, event ->
+        layoutInfo.setOnTouchListener { v, event ->
             gestureDetector.onTouchEvent(event)
             true
         }
@@ -138,8 +191,12 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
                          velocityX: Float, velocityY: Float): Boolean {
         if ( e1!!.y - e2!!.y > MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
-            MyLib.showToast(this,"TOP")
             val intent = Intent(this, PlayMusicActivity::class.java)
+//            val bundle = Bundle()
+//            bundle.putSerializable("item_songs", mSong)
+//            bundle.putBoolean("status_players", isPlaying)
+//            intent.putExtras(bundle)
+
             startActivity(intent)
             overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
         }
@@ -159,6 +216,8 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
         val intent = Intent(this, PlayMusicActivity::class.java)
         startActivity(intent)
+
+        sendActionToPlayMusicActivity(MyService.ACTION_START)
         overridePendingTransition(R.anim.slilde_in_up, R.anim.slilde_out_up)
         return true
     }
@@ -173,5 +232,22 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
         TODO("Not yet implemented")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+    }
+    private fun sendActionToPlayMusicActivity(action: Int){
+        val intent = Intent("send_action_ata")
+        val bundle = Bundle()
 
+        // gửi dữ liệu đến activity
+        bundle.putSerializable("item_songs", mSong)
+        bundle.putBoolean("status_players", isPlaying)
+        bundle.putInt("action_musics", action)
+
+        intent.putExtras(bundle)
+
+        sendBroadcast(intent)
+        MyLib.showLog("HomeActivity: Send success!")
+    }
 }

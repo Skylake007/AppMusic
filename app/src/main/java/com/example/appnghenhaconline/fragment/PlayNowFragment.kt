@@ -50,6 +50,29 @@ class PlayNowFragment : Fragment() {
         createCategorySL(rcvCategory, playlistAdapterSL)
         callApiPlayList(listPlaylist,playlistAdapterSL)
 
+        //Playlist_2
+        listPlaylist = ArrayList()
+        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        rcvCategory = view.findViewById(R.id.rcvCategory2)
+
+        createCategorySM(rcvCategory, playlistAdapterSM)
+        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+
+        //Playlist_3
+        listPlaylist = ArrayList()
+        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        rcvCategory = view.findViewById(R.id.rcvCategory3)
+
+        createCategorySM(rcvCategory, playlistAdapterSM)
+        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+
+        //Playlist_4
+        listPlaylist = ArrayList()
+        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        rcvCategory = view.findViewById(R.id.rcvCategory4)
+
+        createCategorySM(rcvCategory, playlistAdapterSM)
+        callApiPlayListSM(listPlaylist,playlistAdapterSM)
     }
 
     private fun createCategorySL(rcv: RecyclerView, adapter: PlaylistSLAdapter){
@@ -59,7 +82,35 @@ class PlayNowFragment : Fragment() {
         rcv.adapter = adapter
     }
 
+    private fun createCategorySM(rcv: RecyclerView, adapter: PlaylistSMAdapter){
+        rcv.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.HORIZONTAL, false)
+        rcv.setHasFixedSize(true)
+        rcv.adapter = adapter
+    }
+
     private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter) {
+        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+                var dataPlayList = response.body()
+                if(dataPlayList != null) {
+                    if(!dataPlayList.error) {
+                        list.addAll(dataPlayList.listPlayList)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+        })
+    }
+
+    private fun callApiPlayListSM(list : ArrayList<Playlist>, adapter : PlaylistSMAdapter) {
         ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
             override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
                 var dataPlayList = response.body()
