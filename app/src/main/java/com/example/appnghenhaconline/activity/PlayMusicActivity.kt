@@ -27,6 +27,7 @@ import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.service.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlin.math.abs
 
@@ -52,27 +53,11 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         override fun onReceive(context: Context?, intent: Intent?) {
             val bundle: Bundle? = intent?.extras
             //nhận dữ liệu action từ MyService
-            mSong = bundle?.get("item_songs") as Song
-            isPlaying = bundle.getBoolean("status_players")
-            val actionMusic: Int = bundle.getInt("action_musics")
+            mSong = bundle?.get("item_song") as Song
+            isPlaying = bundle.getBoolean("status_player")
+            val actionMusic: Int = bundle.getInt("action_music")
 
             handleLayoutMusic(actionMusic)
-
-            Picasso.get().load(mSong.image).into(imgPlay)
-            Picasso.get().load(mSong.image).into(imgBgPlay)
-            tvSongPlay.text = mSong.title
-
-            btnPlayOrPause.setOnClickListener {
-                if (isPlaying){
-                    sendActionToService(MyService.ACTION_PAUSE)
-                    val animZoomIn = AnimationUtils.loadAnimation(context, R.anim.anim_zoom_in_img)
-                    imgCardViewPlay.startAnimation(animZoomIn)
-                }else{
-                    sendActionToService(MyService.ACTION_RESUME)
-                    val animZoomOut = AnimationUtils.loadAnimation(context, R.anim.anim_zoom_out_img)
-                    imgCardViewPlay.startAnimation(animZoomOut)
-                }
-            }
         }
     }
 
@@ -80,11 +65,11 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
         init()
-        hideSystemUI()
+        MyLib.hideSystemUI(window, layoutPlayMusic)
         swipeActivity()
-//        LocalBroadcastManager.getInstance(this)
-//                                .registerReceiver(broadcastReceiver,
-//                                IntentFilter("send_action_ATA"))
+        LocalBroadcastManager.getInstance(this)
+                                .registerReceiver(broadcastReceiver,
+                                IntentFilter("send_action_to_activity"))
     }
     private fun init(){
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
@@ -111,9 +96,11 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun handleLayoutMusic(action: Int) {
         when(action){
             MyService.ACTION_PAUSE->{
+                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
+                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
@@ -138,19 +125,23 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun showInfoSong(){
         if (mSong==null) return
 
-        Picasso.get().load(mSong.image).into(imgPlay)
-        Picasso.get().load(mSong.image).into(imgBgPlay)
+        Picasso.get().load(mSong.image)
+//                        .resize(450,400)
+                        .into(imgPlay)
+        Picasso.get().load(mSong.image)
+                        .resize(480,480)
+                        .into(imgBgPlay)
         tvSongPlay.text = mSong.title
 
         btnPlayOrPause.setOnClickListener {
             if (isPlaying){
                 sendActionToService(MyService.ACTION_PAUSE)
-                val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
-                imgCardViewPlay.startAnimation(animZoomIn)
-            }else{
-                sendActionToService(MyService.ACTION_RESUME)
                 val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
                 imgCardViewPlay.startAnimation(animZoomOut)
+            }else{
+                sendActionToService(MyService.ACTION_RESUME)
+                val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
+                imgCardViewPlay.startAnimation(animZoomIn)
             }
         }
     }
@@ -160,15 +151,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         intent.putExtra("action_music_service", action)
 
         startService(intent)
-    }
-
-    private fun hideSystemUI() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, layoutPlayMusic).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
     }
 
     override fun onDown(e: MotionEvent?): Boolean {
@@ -188,7 +170,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         return false
     }
 
-
     override fun onLongPress(e: MotionEvent?) {
 
     }
@@ -205,11 +186,5 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val intent = IntentFilter("send_action_ata")
-        registerReceiver(broadcastReceiver, intent)
     }
 }

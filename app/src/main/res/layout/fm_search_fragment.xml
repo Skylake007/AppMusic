@@ -14,34 +14,57 @@
         android:textColor="@color/black"/>
 
     <RelativeLayout
+        android:id="@+id/layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp">
 
-        <EditText
+        <TextView
+            android:id="@+id/tvSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_bg"
+            android:background="@drawable/cm_edittext_search"
             android:hint="Nghệ sĩ, Bài hát, v.v."
             android:maxLines="1"
             android:paddingLeft="15dp"
-
             android:paddingTop="15dp"
+
             android:paddingBottom="15dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/button_ic_custom"
+<!--        <ImageButton-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginEnd="15dp"-->
+<!--            android:background="@drawable/cm_button_ic"-->
 
-            android:src="@drawable/ic_search_black" />
+<!--            android:src="@drawable/ic_search_black" />-->
 
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Danh sách chủ đề"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvPlaylistSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 </LinearLayout>

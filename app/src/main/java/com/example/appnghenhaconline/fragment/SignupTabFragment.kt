@@ -37,14 +37,19 @@ class SignupTabFragment : Fragment() {
 
     private fun event() {
         val btnSignup : Button = view.findViewById(R.id.btnSignUp)
-        var firstName : EditText = view.findViewById(R.id.first_name)
-        var lastName : EditText = view.findViewById(R.id.last_name)
-        var email : EditText = view.findViewById(R.id.email)
-        var password : EditText = view.findViewById(R.id.password)
-        var confirmPassword : EditText = view.findViewById(R.id.confirm_password)
+        val firstName : EditText = view.findViewById(R.id.first_name)
+        val lastName : EditText = view.findViewById(R.id.last_name)
+        val email : EditText = view.findViewById(R.id.email)
+        val password : EditText = view.findViewById(R.id.password)
+        val confirmPassword : EditText = view.findViewById(R.id.confirm_password)
 
         btnSignup.setOnClickListener {
-            if(first_name.text.toString() == "" || last_name.text.toString() == "" || email.text.toString() == "" || password.text.toString() == "" || confirmPassword.text.toString() == "" || etSex.text.toString() == "") {
+            if(first_name.text.toString() == ""
+                || last_name.text.toString() == ""
+                || email.text.toString() == ""
+                || password.text.toString() == ""
+                || confirmPassword.text.toString() == ""
+                || etSex.text.toString() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
@@ -52,9 +57,9 @@ class SignupTabFragment : Fragment() {
                     MyLib.showToast(requireContext(),"Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
                 }
                 else {
-                    var sex: Boolean = etSex.text.toString() == "Nam"
-                    var name = firstName.text.toString() + " " + lastName.text.toString()
-                    var encryptPassword = MyLib.md5(password.text.toString())
+                    val sex: Boolean = etSex.text.toString() == "Nam"
+                    val name = firstName.text.toString() + " " + lastName.text.toString()
+                    val encryptPassword = MyLib.md5(password.text.toString())
 
                     callApiSignIn(name,encryptPassword,sex,email.text.toString())
                 }

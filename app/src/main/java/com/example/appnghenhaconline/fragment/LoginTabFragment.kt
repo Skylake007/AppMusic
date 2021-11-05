@@ -20,9 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginTabFragment: Fragment() {
-
     internal lateinit var view: View
-
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -35,14 +33,14 @@ class LoginTabFragment: Fragment() {
 
     private fun event(){
         val btnLogin: Button = view.findViewById(R.id.btnLogin)
-        var username : EditText = view.findViewById(R.id.etEmail)
-        var password : EditText = view.findViewById(R.id.etPassword)
+        val username : EditText = view.findViewById(R.id.etEmail)
+        val password : EditText = view.findViewById(R.id.etPassword)
         btnLogin.setOnClickListener {
             if (username.text.toString() == "" || password.text.toString() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
-                var encryptPassword = MyLib.md5(password.text.toString())
+                val encryptPassword = MyLib.md5(password.text.toString())
                 callApiSignIn(username.text.toString(), encryptPassword)
             }
         }
@@ -55,7 +53,7 @@ class LoginTabFragment: Fragment() {
                 val dataUser = response.body()
                 Log.e(null, dataUser.toString())
                 if (dataUser != null) {
-                    if (!dataUser!!.error) {
+                    if (!dataUser.error) {
                         val listUser: ArrayList<User> = dataUser.listUser
                         MyLib.showToast(requireContext(),dataUser.message)
                         val intent = Intent(requireContext(),HomeActivity::class.java)
@@ -71,9 +69,7 @@ class LoginTabFragment: Fragment() {
 
             override fun onFailure(call: Call<DataUser?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error")
-
             }
-
         })
     }
 }

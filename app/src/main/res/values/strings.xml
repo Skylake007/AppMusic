@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppNgheNhacOnline</string>
+    <string name="app_name">Tea Music</string>
     <string name="test">TestView</string>
 
     <!--   Descript in listview_row_song.xml-->
@@ -8,11 +8,29 @@
     <string-array name="sex">
         <item>Nam</item>
         <item>Nữ</item>
-
     </string-array>
 
+    //menu bottom nav
     <string name="action_play_now">Nghe ngay</string>
-    <string name="action_discover">Khám phá</string>
-    <string name="action_radio">Radio</string>
+    <string name="action_library">Thư viện</string>
     <string name="action_search">Tìm kiếm</string>
+
+    //menu setting
+    <string name="menu_user">Tài khoản</string>
+    <string name="menu_setting">Cài đặt</string>
+
+    //tab menu user
+    <string name="i_user_info">Thông tin tài khoản</string>
+    <string name="i_change_user_password">Đổi mật khẩu</string>
+
+    //tab menu setting
+    <string name="i_setting">Cài đặt</string>
+
+    //user info
+    <string name="name">Tên</string>
+    <string name="username">Tên người dùng</string>
+    <string name="sex">--Giới tính--</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="confirmPassword">Xác nhận mật khẩu</string>
 </resources>

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
-import com.example.appnghenhaconline.fragment.AlbumFragment
+import com.example.appnghenhaconline.fragment.ListSongFragment
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
@@ -45,7 +45,7 @@ class PlaylistSLAdapter(var context: Context,
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
-            val albumFragment = AlbumFragment()
+            val albumFragment = ListSongFragment()
 
             val bundle = Bundle()
             bundle.putSerializable("object_song", playlist)

@@ -1,8 +1,6 @@
 package com.example.appnghenhaconline.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
-import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
-import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
-import com.example.appnghenhaconline.models.user.DataUser
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,14 +29,13 @@ class PlayNowFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_play_now_fragment, container, false)
-
-
        initCategoryList()
 
         return view
     }
 
     private fun initCategoryList(){
+        //Khởi tạo danh sách playlist
         //Playlist_1
         listPlaylist = ArrayList()
         playlistAdapterSL = PlaylistSLAdapter(view.context,listPlaylist)

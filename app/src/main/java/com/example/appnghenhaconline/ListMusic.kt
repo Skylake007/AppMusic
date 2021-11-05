@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.example.appnghenhaconline.adapter.SongNAdapter
+import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -18,7 +18,7 @@ import java.io.IOException
 
 class ListMusic : AppCompatActivity() {
 
-    private lateinit var songAdapter: SongNAdapter
+    private lateinit var songAdapter: SongAdapter
     private lateinit var songs: ArrayList<Song>
 
     private lateinit var mediaPlayer : MediaPlayer
@@ -38,10 +38,10 @@ class ListMusic : AppCompatActivity() {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
                     playsong(songs.get(position).link)
-                    Toast.makeText(this@ListMusic,songs.get(position).title,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@ListMusic,songs.get(position).title,Toast.LENGTH_SHORT).show()
                 } else {
                     playsong(songs.get(position).link)
-                    Toast.makeText(this@ListMusic,songs.get(position).title, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@ListMusic,songs.get(position).title, Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -72,7 +72,7 @@ class ListMusic : AppCompatActivity() {
 
     private fun init(){
         songs = ArrayList()
-        songAdapter = SongNAdapter(this, songs)
+        songAdapter = SongAdapter(this, songs)
 //        lvSong.adapter = songAdapter
         mediaPlayer = MediaPlayer() // create media sĩ viết
     }

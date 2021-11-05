@@ -15,7 +15,7 @@
         android:scaleType="centerCrop"
         android:scaleX="3"
         android:scaleY="3"
-        android:src="@drawable/cv_img2" />
+        android:src="@drawable/img_avatar_2" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:id="@+id/imgSongPlayMusic"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/cv_img2"
+            android:src="@drawable/img_avatar_2"
             android:scaleType="centerCrop"/>
     </androidx.cardview.widget.CardView>
 

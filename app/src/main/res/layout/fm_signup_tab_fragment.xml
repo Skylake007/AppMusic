@@ -9,13 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="20dp">
+        android:padding="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
             android:gravity="center">
 
             <EditText
@@ -23,11 +21,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/cm_edittext_bg"
                 android:hint="Họ"
                 android:maxLines="1"
 
-                android:paddingLeft="20dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp" />
 
@@ -37,11 +34,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/cm_edittext_bg"
                 android:maxLines="1"
 
                 android:hint="Tên"
-                android:paddingLeft="20dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp" />
         </LinearLayout>
@@ -49,17 +45,16 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/sex"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp">
 
             <AutoCompleteTextView
                 android:id="@+id/etSex"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/edittext_bg"
-                android:hint="--Sex--"
+                android:background="@drawable/cm_edittext_bg"
+                android:hint="@string/sex"
                 android:inputType="none"
 
                 android:paddingLeft="20dp"
@@ -72,12 +67,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:background="@drawable/edittext_bg"
-            android:hint="Email"
+            android:background="@drawable/cm_edittext_bg"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp" />
@@ -87,13 +80,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:background="@drawable/edittext_bg"
-            android:hint="Mật khẩu"
+            android:background="@drawable/cm_edittext_bg"
+            android:hint="@string/password"
             android:inputType="textPassword"
 
-            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp" />
@@ -103,13 +94,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:background="@drawable/edittext_bg"
-            android:hint="Xác nhận mật khẩu"
+            android:background="@drawable/cm_edittext_bg"
+            android:hint="@string/confirmPassword"
             android:inputType="textPassword"
 
-            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp" />
@@ -118,14 +107,12 @@
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/cm_button_bg"
             android:text="Đăng ký"
             android:textSize="16sp"
             android:textStyle="bold"
 
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
     </LinearLayout>

@@ -150,6 +150,7 @@ class MyService : Service() {
         }
     }
 
+    //gửi dự liệu + tạo data cho notification
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun sendNotification(song: Song) {
         val intent = Intent(this, HomeActivity::class.java)

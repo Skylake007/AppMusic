@@ -1,23 +1,18 @@
 package com.example.appnghenhaconline.adapter
 
 import android.content.Context
-import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.models.songN.SongN
 import com.squareup.picasso.Picasso
 
-class SongNAdapter(var context: Context,
-                   private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongNAdapter.SongNViewHolder>(){
+class SongAdapter(var context: Context,
+                  private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongAdapter.SongNViewHolder>(){
 
     lateinit var mListener: IonItemClickListener
     interface IonItemClickListener{

@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:background="@drawable/edittext_bg"
-            android:hint="Email"
+            android:background="@drawable/cm_edittext_bg"
+            android:hint="@string/email"
 
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
@@ -29,10 +29,10 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mật khẩu"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:background="@drawable/edittext_bg"
+            android:background="@drawable/cm_edittext_bg"
 
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
@@ -48,7 +48,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/cm_button_bg"
 
             android:paddingTop="10dp"
             android:paddingBottom="10dp"

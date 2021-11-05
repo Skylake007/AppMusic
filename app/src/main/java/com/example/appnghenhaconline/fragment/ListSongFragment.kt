@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
-import com.example.appnghenhaconline.adapter.SongNAdapter
+import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -20,13 +20,11 @@ import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.service.MyService
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
-class AlbumFragment: Fragment() {
+class ListSongFragment: Fragment() {
 
     internal lateinit var view: View
     lateinit var rcvSong: RecyclerView
@@ -35,7 +33,7 @@ class AlbumFragment: Fragment() {
     lateinit var listsong : ArrayList<Song>
     lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
-    lateinit var songNAdapter: SongNAdapter
+    lateinit var songAdapter: SongAdapter
     lateinit var btnNext: ImageView
     lateinit var btnPre: ImageView
 
@@ -49,23 +47,24 @@ class AlbumFragment: Fragment() {
 //        btnNext = view.findViewById(R.id.btnNext)
 //        btnPre = view.findViewById(R.id.btnPre)
 
-        initAlbum()
+        initPlaylist()
         initSongList()
 
         return view
     }
 
     private fun initSongList(){
+        //khởi tạo danh sách bài hát
         listsong = ArrayList()
-        songNAdapter = SongNAdapter(view.context,listsong)
+        songAdapter = SongAdapter(view.context,listsong)
 
         rcvSong = view.findViewById(R.id.rcvSong)
         rcvSong.setHasFixedSize(true)
         rcvSong.layoutManager = LinearLayoutManager(view.context,
                                 LinearLayoutManager.VERTICAL,false)
-        rcvSong.adapter = songNAdapter
+        rcvSong.adapter = songAdapter
         //Sự kiện onItemClick
-        songNAdapter.setOnItemClickListener(object : SongNAdapter.IonItemClickListener{
+        songAdapter.setOnItemClickListener(object : SongAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
@@ -77,11 +76,12 @@ class AlbumFragment: Fragment() {
             }
         })
 
-        callApiShowListSongByID(listsong,songNAdapter,idPlayList)
+        callApiShowListSongByID(listsong,songAdapter,idPlayList)
         mediaPlayer = MediaPlayer()
     }
 
-    private fun initAlbum(){  // khi nhấn vào item
+    private fun initPlaylist(){
+        // Nhận dữ liệu playlist từ PlayNowFragment
         val bundleReceive : Bundle = requireArguments()
         val playlist : Playlist = bundleReceive["object_song"] as Playlist
 
@@ -90,7 +90,7 @@ class AlbumFragment: Fragment() {
         Picasso.get().load(playlist.image).resize(800,800).into(imgAlbum)
     }
 
-    private fun callApiShowListSongByID(songs : ArrayList<Song>, songAdapter : SongNAdapter, id : String ) {
+    private fun callApiShowListSongByID(songs : ArrayList<Song>, songAdapter : SongAdapter, id : String ) {
         
         ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
@@ -119,6 +119,7 @@ class AlbumFragment: Fragment() {
         activity?.stopService(intent)
     }
 
+    //call service xử lý xự kiện phát nhạc
     private fun clickStartService(song: Song) {
         val intent = Intent(requireContext(), MyService::class.java)
 

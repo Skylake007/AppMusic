@@ -4,13 +4,9 @@
             android:title="@string/action_play_now"
             android:icon="@drawable/ic_play_circle"/>
 
-    <item android:id="@+id/action_discover"
-        android:title="@string/action_discover"
-        android:icon="@drawable/ic_dashboard"/>
-
     <item android:id="@+id/action_radio"
-        android:title="@string/action_radio"
-        android:icon="@drawable/ic_podcasts"/>
+        android:title="@string/action_library"
+        android:icon="@drawable/ic_library"/>
 
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
