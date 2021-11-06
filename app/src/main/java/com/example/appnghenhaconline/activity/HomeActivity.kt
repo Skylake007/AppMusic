@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -28,7 +27,7 @@ import kotlin.math.abs
 class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var gestureDetector : GestureDetector
-    private lateinit var menuDropdown: ImageView
+    private lateinit var menuUser: ImageView
     lateinit var btnPlayOrPause : ImageView
     lateinit var imgPlayNav : ImageView
     lateinit var tvPlayNav : TextView
@@ -69,7 +68,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         btnPlayOrPause = findViewById(R.id.btnPlayOrPause)
         imgPlayNav = findViewById(R.id.imgPlayNav)
         tvPlayNav = findViewById(R.id.tvPlayNav)
-        menuDropdown = findViewById(R.id.setting)
+        menuUser = findViewById(R.id.setting)
     }
 
     private fun initMenu(){
@@ -107,23 +106,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         }
         //khởi tạo menu dropdown
-        menuDropdown.setOnClickListener {v ->
-            val popupMenu = PopupMenu(this, v)
-            var intent : Intent
-            popupMenu.menuInflater.inflate(R.menu.menu_setting, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener {item ->
-                when(item.itemId){
-                    R.id.menu_user->{
-                        MyLib.showToast(this,"menu_user")
-                        intent = Intent(this, UserActivity::class.java)
-                        startActivity(intent)
-                        true
-                    }else->{
-                        false
-                    }
-                }
-            }
-            popupMenu.show()
+        menuUser.setOnClickListener {v ->
+            intent = Intent(this, UserActivity::class.java)
+            startActivity(intent)
         }
         //khởi tạo sự kiện click và vuốt cho PlayNav
         showPlayMusicFragment()

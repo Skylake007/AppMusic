@@ -12,19 +12,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppNgheNhacOnline.NoActionBarAndStatusBar"
+        android:theme="@style/Theme.AppNgheNhacOnline"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".activity.UserPasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.UserInfoActivity"
-            android:exported="true" />
+            android:name=".activity.UserActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".activity.SettingActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.UserActivity"
+            android:name=".activity.UserInfoActivity"
             android:exported="true">
 
         </activity>

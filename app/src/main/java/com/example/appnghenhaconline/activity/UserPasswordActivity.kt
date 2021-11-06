@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -19,11 +20,8 @@ class UserPasswordActivity : AppCompatActivity() {
     private fun event() {
         btnBack = findViewById(R.id.btnBack)
         btnBack.setOnClickListener {
-            onBackPressed()
+            intent = Intent(this, UserActivity::class.java)
+            startActivity(intent)
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 }

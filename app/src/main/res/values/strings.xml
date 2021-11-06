@@ -29,8 +29,12 @@
     //user info
     <string name="name">Tên</string>
     <string name="username">Tên người dùng</string>
-    <string name="sex">--Giới tính--</string>
+    <string name="sex">Giới tính</string>
     <string name="email">Email</string>
     <string name="password">Mật khẩu</string>
+    <string name="newPassword">Mật khẩu mới</string>
     <string name="confirmPassword">Xác nhận mật khẩu</string>
+
+    //notification
+    <string name="required">Bắt buộc*</string>
 </resources>
