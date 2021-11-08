@@ -32,6 +32,7 @@
     <string name="sex">Giới tính</string>
     <string name="email">Email</string>
     <string name="password">Mật khẩu</string>
+    <string name="oldPassword">Mật khẩu cũ</string>
     <string name="newPassword">Mật khẩu mới</string>
     <string name="confirmPassword">Xác nhận mật khẩu</string>
 

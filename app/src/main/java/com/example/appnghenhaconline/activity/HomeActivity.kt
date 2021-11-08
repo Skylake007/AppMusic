@@ -55,10 +55,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         MyLib.hideSystemUI(window, layoutHomeActivity)
-        init()
-        initMenu()
         val user = intent.getSerializableExtra("User") as? User
-        Log.e(null, user?.id!!)
+        init()
+        initMenu(user!!)
         LocalBroadcastManager.getInstance(this)
                                 .registerReceiver(broadcastReceiver,
                                 IntentFilter("send_action_to_activity"))
@@ -71,7 +70,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         menuUser = findViewById(R.id.setting)
     }
 
-    private fun initMenu(){
+    private fun initMenu(user: User){
         //mặc định load trang là PlayNowFragment
         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, PlayNowFragment()).apply {
@@ -108,6 +107,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         //khởi tạo menu dropdown
         menuUser.setOnClickListener {v ->
             intent = Intent(this, UserActivity::class.java)
+            intent.putExtra("User",user)
             startActivity(intent)
         }
         //khởi tạo sự kiện click và vuốt cho PlayNav

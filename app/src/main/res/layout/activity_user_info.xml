@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/btnBack"
+                android:id="@+id/btnBackUserInfo"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
@@ -40,6 +40,15 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_b" />
+
+        <ImageView
+            android:id="@+id/btnSaveInfo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_check" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -87,6 +96,7 @@
             app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
@@ -104,6 +114,7 @@
             android:enabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"

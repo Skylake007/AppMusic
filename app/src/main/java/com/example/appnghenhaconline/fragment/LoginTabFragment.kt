@@ -57,7 +57,6 @@ class LoginTabFragment: Fragment() {
                         val listUser: ArrayList<User> = dataUser.listUser
                         MyLib.showToast(requireContext(),dataUser.message)
                         val intent = Intent(requireContext(),HomeActivity::class.java)
-                        var bundle : Bundle
                         intent.putExtra("User",listUser[0])
                         startActivity(intent)
                     }
