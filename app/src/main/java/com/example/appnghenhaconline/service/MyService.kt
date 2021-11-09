@@ -33,10 +33,14 @@ class MyService : Service() {
         const val ACTION_CLEAR: Int = 3
         const val ACTION_START: Int = 4
         const val ACTION_INFO: Int = 5
-    }
+        const val ACTION_NEXT: Int = 6
+        const val ACTION_PREVIOUS: Int = 7
 
+    }
+    var mPosition: Int = -1
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var mSong :Song
+    lateinit var mList : ArrayList<Song>
     private var isPlaying : Boolean = false
     var pauseLength: Int = 0
 
@@ -61,11 +65,18 @@ class MyService : Service() {
         val bundle = intent.extras
         if (bundle != null){
             val song: Song? = bundle.get("item_song") as? Song
-            if (song != null) {
+            val position: Int? = bundle.get("position_song") as? Int
+            val list: ArrayList<Song>? = bundle.get("list_song") as? ArrayList<Song>
+            if (song != null && list != null && position != null) {
                 mSong = song
+                mList = list
+                mPosition = position
 
-                startMusic(mSong)
-                sendNotification(mSong)
+                mList[mPosition] = mSong
+
+                startMusic(mList[mPosition])
+                sendNotification(mList[mPosition])
+                MyLib.showLog("MyService: $list")
             }
         }
 
@@ -101,7 +112,6 @@ class MyService : Service() {
                 setOnPreparedListener { mp -> mp?.start() }
                 prepare()
             }
-
         }catch (e: IOException){
             e.printStackTrace()
         }
@@ -120,6 +130,44 @@ class MyService : Service() {
             ACTION_INFO->{
                 infoMusic()
             }
+            ACTION_NEXT->{
+                nextMusic()
+            }
+            ACTION_PREVIOUS->{
+                previousMusic()
+            }
+        }
+    }
+
+    private fun previousMusic() {
+        nextPrevMusic(isNext = false)
+        sendNotification(mList[mPosition])
+        sendActionToActivity(ACTION_PREVIOUS)
+        MyLib.showLog("MyService: (Previous)"+ mList[mPosition])
+    }
+
+    private fun nextMusic() {
+        nextPrevMusic()
+        sendNotification(mList[mPosition])
+        sendActionToActivity(ACTION_NEXT)
+        MyLib.showLog("MyService: (Next)"+ mList[mPosition])
+    }
+
+    private fun nextPrevMusic(isNext: Boolean = true){
+        if (isNext) setPosition()
+        else setPosition(isIncrement = false)
+        startMusic(mList[mPosition])
+        MyLib.showLog("MyService: "+ mList[mPosition])
+    }
+    private fun setPosition(isIncrement : Boolean = true){
+        if (isIncrement){
+            if (mList.size -1 == mPosition){
+                mPosition = 0
+            }else ++mPosition
+        }else{
+            if (mPosition == 0){
+                mPosition = mList.size -1
+            }else --mPosition
         }
     }
 
@@ -135,7 +183,7 @@ class MyService : Service() {
             mediaPlayer?.seekTo(pauseLength)
             mediaPlayer?.start()
             isPlaying = true
-            sendNotification(mSong)
+            sendNotification(mList[mPosition])
             sendActionToActivity(ACTION_RESUME)
         }
     }
@@ -145,7 +193,7 @@ class MyService : Service() {
             mediaPlayer?.pause()
             pauseLength = mediaPlayer!!.currentPosition
             isPlaying = false
-            sendNotification(mSong)
+            sendNotification(mList[mPosition])
             sendActionToActivity(ACTION_PAUSE)
         }
     }
@@ -175,6 +223,10 @@ class MyService : Service() {
                                         notification)
         remoteView.setImageViewResource(R.id.btnPlayNotification,
                                         R.drawable.ic_baseline_pause_24)
+        remoteView.setImageViewResource(R.id.btnNextNotification,
+                                        R.drawable.ic_next)
+        remoteView.setImageViewResource(R.id.btnPrevNotification,
+                                        R.drawable.ic_previous)
         if (isPlaying){
             remoteView.setOnClickPendingIntent(R.id.btnPlayNotification,
                                             getPendingIntent(this, ACTION_PAUSE))
@@ -186,6 +238,10 @@ class MyService : Service() {
             remoteView.setImageViewResource(R.id.btnPlayNotification,
                                             R.drawable.ic_baseline_play_arrow_24)
         }
+        remoteView.setOnClickPendingIntent(R.id.btnNextNotification,
+                                            getPendingIntent(this, ACTION_NEXT))
+        remoteView.setOnClickPendingIntent(R.id.btnPrevNotification,
+                                            getPendingIntent(this, ACTION_PREVIOUS))
         startForeground(1, notification)
     }
 
@@ -202,6 +258,8 @@ class MyService : Service() {
 
         // gửi dữ liệu đến activity
         bundle.putSerializable("item_song", mSong)
+        bundle.putSerializable("list_song", mList)
+        bundle.putInt("position_song", mPosition)
         bundle.putBoolean("status_player", isPlaying)
         bundle.putInt("action_music", action)
 

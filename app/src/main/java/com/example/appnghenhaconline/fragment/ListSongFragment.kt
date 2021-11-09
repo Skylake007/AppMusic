@@ -26,6 +26,8 @@ import retrofit2.Response
 
 class ListSongFragment: Fragment() {
 
+
+
     internal lateinit var view: View
     lateinit var rcvSong: RecyclerView
     lateinit var tittleAlbum : TextView
@@ -68,11 +70,11 @@ class ListSongFragment: Fragment() {
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
-                    clickStartService(listsong[position])
+                    clickStartService(listsong[position], listsong, position)
                 }else{
-                    clickStartService(listsong[position])
+                    clickStartService(listsong[position], listsong, position)
                 }
-                MyLib.showLog("AlbumFragment: "+ listsong[position].link)
+                MyLib.showLog("AlbumFragment: "+ listsong[position].link +"  position: "+position)
             }
         })
 
@@ -120,11 +122,13 @@ class ListSongFragment: Fragment() {
     }
 
     //call service xử lý xự kiện phát nhạc
-    private fun clickStartService(song: Song) {
+    private fun clickStartService(song: Song, list : ArrayList<Song>, position: Int) {
         val intent = Intent(requireContext(), MyService::class.java)
 
         val bundle = Bundle()
         bundle.putSerializable("item_song", song)
+        bundle.putSerializable("position_song", position)
+        bundle.putSerializable("list_song", list)
         intent.putExtras(bundle)
 
         activity?.startService(intent)

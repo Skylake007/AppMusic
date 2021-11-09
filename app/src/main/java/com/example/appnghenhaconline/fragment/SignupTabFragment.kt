@@ -64,7 +64,6 @@ class SignupTabFragment : Fragment() {
                     callApiSignIn(name,encryptPassword,sex,email.text.toString())
                 }
             }
-
         }
     }
 

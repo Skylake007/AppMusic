@@ -28,10 +28,14 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var gestureDetector : GestureDetector
     private lateinit var menuUser: ImageView
-    lateinit var btnPlayOrPause : ImageView
+    private lateinit var btnPlayOrPause : ImageView
+    lateinit var btnNext : ImageView
+    lateinit var btnPrev : ImageView
     lateinit var imgPlayNav : ImageView
-    lateinit var tvPlayNav : TextView
+    private lateinit var tvPlayNav : TextView
     lateinit var mSong: Song
+    lateinit var mList: ArrayList<Song>
+    var mPosition: Int = 0
     var isPlaying: Boolean = false
 
     private var broadcastReceiver = object: BroadcastReceiver(){
@@ -39,9 +43,12 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             val bundle: Bundle? = intent?.extras
             //nhận dữ liệu action từ MyService
             mSong = bundle?.get("item_song") as Song
+            mPosition = bundle.get("position_song") as Int
+            mList = bundle.get("list_song") as ArrayList<Song>
             isPlaying = bundle.getBoolean("status_player")
             val actionMusic: Int = bundle.getInt("action_music")
 
+            mSong = mList[mPosition]
             handleLayoutMusic(actionMusic)
         }
     }
@@ -69,6 +76,8 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         imgPlayNav = findViewById(R.id.imgPlayNav)
         tvPlayNav = findViewById(R.id.tvPlayNav)
         menuUser = findViewById(R.id.setting)
+        btnNext = findViewById(R.id.btnNext)
+        btnPrev = findViewById(R.id.btnPre)
     }
 
     private fun initMenu(){
@@ -77,7 +86,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                             .replace(R.id.fragmentContainer, PlayNowFragment()).apply {
                                 tvFragment.setText(R.string.action_play_now)
                                 imgTopNav.setImageResource(R.drawable.ic_play_circle)
-                             }.commit()
+                            }.commit()
         //set sự kiện chuyển fragment
         bottomNav.setOnNavigationItemSelectedListener { item ->
             var selectedFragment: Fragment = PlayNowFragment()
@@ -105,7 +114,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             true
 
         }
-        //khởi tạo menu dropdown
+        // chuyển sang userActivity
         menuUser.setOnClickListener {v ->
             intent = Intent(this, UserActivity::class.java)
             startActivity(intent)
@@ -176,6 +185,12 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                 showInfoSong()
                 setStatusButtonPlayOrPause()
             }
+            MyService.ACTION_NEXT->{
+                showInfoSong()
+            }
+            MyService.ACTION_PREVIOUS->{
+                showInfoSong()
+            }
             MyService.ACTION_INFO->{
                 showInfoSong()
                 setStatusButtonPlayOrPause()
@@ -194,6 +209,12 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             }else{
                 sendActionToService(MyService.ACTION_RESUME)
             }
+        }
+        btnNext.setOnClickListener {
+            sendActionToService(MyService.ACTION_NEXT)
+        }
+        btnPrev.setOnClickListener {
+            sendActionToService(MyService.ACTION_PREVIOUS)
         }
     }
 
