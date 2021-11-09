@@ -18,19 +18,18 @@
 
             <EditText
                 android:id="@+id/last_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cm_edittext_bg"
                 android:hint="Họ"
                 android:maxLines="1"
-
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp" />
 
             <EditText
                 android:id="@+id/first_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
