@@ -50,7 +50,7 @@ interface ApiService {
                      @Query("sex") sex: Boolean
     ) : Call<UpdateUser>
 
-    @PUT("UpdateUserPassword")
+    @PUT("UpdateUser/UpdatePassword")
     fun putUdateUserPassword(@Query("email") email: String,
                              @Query("oldPassword") oldPassword :String,
                              @Query("newPassword") newPassword :String

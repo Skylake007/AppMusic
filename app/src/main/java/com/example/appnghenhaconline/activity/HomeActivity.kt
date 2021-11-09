@@ -17,6 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.service.MyService
@@ -28,6 +29,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var gestureDetector : GestureDetector
     private lateinit var menuUser: ImageView
+    lateinit var session : SessionUser
     lateinit var btnPlayOrPause : ImageView
     lateinit var imgPlayNav : ImageView
     lateinit var tvPlayNav : TextView
@@ -55,9 +57,10 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         MyLib.hideSystemUI(window, layoutHomeActivity)
-        val user = intent.getSerializableExtra("User") as? User
+        session = SessionUser(applicationContext)
+        session.checkLogin()
         init()
-        initMenu(user!!)
+        initMenu()
         LocalBroadcastManager.getInstance(this)
                                 .registerReceiver(broadcastReceiver,
                                 IntentFilter("send_action_to_activity"))
@@ -70,7 +73,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         menuUser = findViewById(R.id.setting)
     }
 
-    private fun initMenu(user: User){
+    private fun initMenu(){
         //mặc định load trang là PlayNowFragment
         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, PlayNowFragment()).apply {
@@ -107,7 +110,6 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         //khởi tạo menu dropdown
         menuUser.setOnClickListener {v ->
             intent = Intent(this, UserActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
         }
         //khởi tạo sự kiện click và vuốt cho PlayNav

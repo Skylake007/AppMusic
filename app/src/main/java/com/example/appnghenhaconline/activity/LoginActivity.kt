@@ -8,13 +8,16 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.LoginAdapter
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_login)
         MyLib.hideSystemUI(window, layoutLoginActivity)
         initTabFragment()

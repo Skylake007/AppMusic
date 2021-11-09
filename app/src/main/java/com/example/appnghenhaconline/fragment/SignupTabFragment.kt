@@ -44,12 +44,12 @@ class SignupTabFragment : Fragment() {
         val confirmPassword : EditText = view.findViewById(R.id.confirm_password)
 
         btnSignup.setOnClickListener {
-            if(first_name.text.toString() == ""
-                || last_name.text.toString() == ""
-                || email.text.toString() == ""
-                || password.text.toString() == ""
-                || confirmPassword.text.toString() == ""
-                || etSex.text.toString() == "") {
+            if(first_name.text.toString().trim() == ""
+                || last_name.text.toString().trim() == ""
+                || email.text.toString().trim() == ""
+                || password.text.toString().trim() == ""
+                || confirmPassword.text.toString().trim() == ""
+                || etSex.text.toString().trim() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
@@ -62,9 +62,15 @@ class SignupTabFragment : Fragment() {
                     val encryptPassword = MyLib.md5(password.text.toString())
 
                     callApiSignIn(name,encryptPassword,sex,email.text.toString())
+
+                    firstName.text.clear()
+                    lastName.text.clear()
+                    email.text.clear()
+                    password.text.clear()
+                    confirmPassword.text.clear()
+                    etSex.text.clear()
                 }
             }
-
         }
     }
 

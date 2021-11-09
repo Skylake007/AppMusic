@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
@@ -21,32 +22,34 @@ import retrofit2.Response
 
 class LoginTabFragment: Fragment() {
     internal lateinit var view: View
+    lateinit var session : SessionUser
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.fm_login_tab_fragment, container, false)
 
-        event()
+        view = inflater.inflate(R.layout.fm_login_tab_fragment, container, false)
+        session = SessionUser(this.requireContext())
+        event(session)
         return view
     }
 
-    private fun event(){
+    private fun event(session : SessionUser){
         val btnLogin: Button = view.findViewById(R.id.btnLogin)
         val username : EditText = view.findViewById(R.id.etEmail)
         val password : EditText = view.findViewById(R.id.etPassword)
         btnLogin.setOnClickListener {
-            if (username.text.toString() == "" || password.text.toString() == "") {
+            if (username.text.toString().trim() == "" || password.text.toString().trim() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
                 val encryptPassword = MyLib.md5(password.text.toString())
-                callApiSignIn(username.text.toString(), encryptPassword)
+                callApiSignIn(username.text.toString(), encryptPassword, session)
             }
         }
     }
 
-    private fun callApiSignIn(username : String, password : String) { // call API LogIn
+    private fun callApiSignIn(username : String, password : String, session: SessionUser) { // call API LogIn
         Log.e(null,username.toString() +"\n" + password.toString())
         ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
@@ -54,10 +57,10 @@ class LoginTabFragment: Fragment() {
                 Log.e(null, dataUser.toString())
                 if (dataUser != null) {
                     if (!dataUser.error) {
-                        val listUser: ArrayList<User> = dataUser.listUser
+                        val user: User = dataUser.user
                         MyLib.showToast(requireContext(),dataUser.message)
-                        val intent = Intent(requireContext(),HomeActivity::class.java)
-                        intent.putExtra("User",listUser[0])
+                        var intent = Intent(requireContext(),HomeActivity::class.java)
+                        session.createLoginSession(user.name,user.email,user.sex)
                         startActivity(intent)
                     }
                     else {
