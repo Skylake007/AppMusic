@@ -14,6 +14,7 @@ import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.*
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.models.user.User
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_user.*
@@ -22,40 +23,46 @@ class UserActivity : AppCompatActivity() {
     lateinit var btnBack: ImageView
     lateinit var viewInfo: LinearLayout
     lateinit var viewChangePass: LinearLayout
+    lateinit var signOut : LinearLayout
     lateinit var tvName : TextView
+    private lateinit var session : SessionUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
         MyLib.hideSystemUI(window, layoutUserActivity)
-        val user = intent.getSerializableExtra("User") as? User
-        init(user!!)
-        event(user!!)
+        session = SessionUser(applicationContext)
+        init(session)
+        event(session)
     }
 
-    private fun init(user: User){
+    private fun init(session : SessionUser){
+        val user = session.getUserDetails()
         viewInfo = findViewById(R.id.layout_info)
         viewChangePass = findViewById(R.id.layout_password)
         tvName = findViewById(R.id.tvName)
-        tvName.text = user.name
+        tvName.text = user[session.KEY_NAME]
+        MyLib.showLog(user[session.KEY_SEX].toString())
     }
-    private fun event(user : User){
+    private fun event(session: SessionUser){
         btnBack = findViewById(R.id.btnBack)
+        signOut = findViewById(R.id.SignOut)
         btnBack.setOnClickListener {
             intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
         }
         viewInfo.setOnClickListener {
             intent = Intent(this, UserInfoActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
         }
         //set sự kiện hiện dialog
         viewChangePass.setOnClickListener {
             intent = Intent(this, UserPasswordActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
+        }
+
+        signOut.setOnClickListener {
+            session.logoutUser()
         }
     }
 

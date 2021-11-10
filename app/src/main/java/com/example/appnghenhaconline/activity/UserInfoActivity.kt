@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.*
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.DataUserSignUp
@@ -26,27 +27,31 @@ class UserInfoActivity : AppCompatActivity() {
     lateinit var edtName : TextInputEditText
     lateinit var edtEmail : TextInputEditText
     lateinit var btnSaveInfo : ImageView
+    private lateinit var session : SessionUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
         MyLib.hideSystemUI(window, layoutUserInfoActivity)
-        val user = intent.getSerializableExtra("User") as? User
-        init(user!!)
-        event(user!!)
+        session = SessionUser(applicationContext)
+        init(session)
+        event()
     }
 
 
-    private fun init(user : User){
+    private fun init(session : SessionUser){
+        val user = session.getUserDetails()
+
         btnBack = findViewById(R.id.btnBackUserInfo)
         edtSex = findViewById(R.id.etSex)
         edtName = findViewById(R.id.edtName)
         edtEmail = findViewById(R.id.edtEmail)
         btnSaveInfo = findViewById(R.id.btnSaveInfo)
-        edtName.setText(user.name)
-        edtEmail.setText(user.email)
 
-        if (user.sex) {
+        edtName.setText(user[session.KEY_NAME])
+        edtEmail.setText(user[session.KEY_EMAIL])
+
+        if (user[session.KEY_SEX].toBoolean()) {
             edtSex.setText("Nam")
         }
         else {
@@ -65,12 +70,12 @@ class UserInfoActivity : AppCompatActivity() {
             }
             else {
                 val sex: Boolean = edtSex.text.toString() == "Nam"
-                callApiUpdateUser(user.email,name,sex)
+                callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
             }
         }
     }
 
-    private fun callApiUpdateUser( email : String, name : String, sex : Boolean) { // call API UpdateUser
+    private fun callApiUpdateUser( email : String, name : String, sex : Boolean, session: SessionUser)  { // call API UpdateUser
         ApiService.apiService.putUdateUser(email,name,sex).enqueue(object :
             Callback<UpdateUser> {
             override fun onResponse(call: Call<UpdateUser>, response: Response<UpdateUser>) {
@@ -81,7 +86,9 @@ class UserInfoActivity : AppCompatActivity() {
                         MyLib.showLog(dataUser.toString())
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)
                         intent = Intent(this@UserInfoActivity, UserActivity::class.java)
-                        intent.putExtra("User",user)
+                        session.editor.putString(session.KEY_NAME,user.name)
+                        session.editor.putBoolean(session.KEY_SEX,user.sex)
+                        session.editor.commit()
                         startActivity(intent)
                     }
                     else {
@@ -96,10 +103,9 @@ class UserInfoActivity : AppCompatActivity() {
         })
     }
 
-    private fun event(user : User){
+    private fun event(){
         btnBack.setOnClickListener {
             intent = Intent(this@UserInfoActivity, UserActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
         }
     }

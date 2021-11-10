@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.UpdateUser
 import com.example.appnghenhaconline.models.user.User
@@ -21,17 +22,19 @@ class UserPasswordActivity : AppCompatActivity() {
     lateinit var tpNewPassword : TextInputEditText
     lateinit var tpConfirmNewPassword : TextInputEditText
     lateinit var btnSaveUserPassowrd : ImageView
+    private lateinit var session : SessionUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_password)
         MyLib.hideSystemUI(window, layoutUserPasswordActivity)
-        val user = intent.getSerializableExtra("User") as? User
-        init(user!!)
-        event(user!!)
+        session = SessionUser(applicationContext)
+        init(session)
+        event()
     }
 
-    private fun init(user: User) {
+    private fun init(session : SessionUser) {
+        val user = session.getUserDetails()
         tpOldPassword = findViewById(R.id.oldPassword)
         tpNewPassword = findViewById(R.id.newPassword)
         tpConfirmNewPassword = findViewById(R.id.confirmNewPassowrd)
@@ -53,7 +56,7 @@ class UserPasswordActivity : AppCompatActivity() {
                     val encryptOldPassword = MyLib.md5(oldPassword)
                     val encryptNewPassword = MyLib.md5(newPassowrd)
                     MyLib.showLog(encryptOldPassword + "\n" + encryptNewPassword)
-                    callApiUpdateUserPassowrd(user.email,encryptOldPassword,encryptNewPassword)
+                    callApiUpdateUserPassowrd(user[session.KEY_EMAIL]!!,encryptOldPassword,encryptNewPassword)
                 }
             }
         }
@@ -66,11 +69,8 @@ class UserPasswordActivity : AppCompatActivity() {
                 val dataUser  = response.body()
                 if(dataUser != null) {
                     if (!dataUser.error){
-                        val user : User = dataUser.user
-                        MyLib.showLog(dataUser.toString())
                         MyLib.showToast(this@UserPasswordActivity,dataUser.message)
                         intent = Intent(this@UserPasswordActivity, UserActivity::class.java)
-                        intent.putExtra("User",user)
                         startActivity(intent)
                     }
                     else {
@@ -85,10 +85,9 @@ class UserPasswordActivity : AppCompatActivity() {
         })
     }
 
-    private fun event(user: User) {
+    private fun event() {
         btnBack.setOnClickListener {
             intent = Intent(this, UserActivity::class.java)
-            intent.putExtra("User",user)
             startActivity(intent)
         }
     }

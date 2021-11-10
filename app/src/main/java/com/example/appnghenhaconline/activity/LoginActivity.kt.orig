@@ -5,9 +5,12 @@ import android.os.Bundle
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.LoginAdapter
 import com.example.appnghenhaconline.R
+<<<<<<< HEAD
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.dataLocalManager.MySharePreferences
+=======
 import com.example.appnghenhaconline.SharedPreferences.SessionUser
+>>>>>>> develop
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_login.*
 

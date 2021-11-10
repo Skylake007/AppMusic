@@ -16,8 +16,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
+<<<<<<< HEAD
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
+=======
 import com.example.appnghenhaconline.SharedPreferences.SessionUser
+>>>>>>> develop
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.dataLocalManager.MyService
@@ -29,11 +32,14 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var gestureDetector : GestureDetector
     private lateinit var menuUser: ImageView
+<<<<<<< HEAD
     private lateinit var btnPlayOrPause : ImageView
     lateinit var btnNext : ImageView
     lateinit var btnPrev : ImageView
+=======
     lateinit var session : SessionUser
     lateinit var btnPlayOrPause : ImageView
+>>>>>>> develop
     lateinit var imgPlayNav : ImageView
     private lateinit var tvPlayNav : TextView
     lateinit var mSong: Song

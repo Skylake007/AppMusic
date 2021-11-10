@@ -45,12 +45,21 @@ class SignupTabFragment : Fragment() {
         val confirmPassword : TextInputEditText = view.findViewById(R.id.edtConfirmPassword)
 
         btnSignup.setOnClickListener {
+<<<<<<< HEAD
             if(first_name.text.toString() == "" ||
                 last_name.text.toString() == "" ||
                 email.text.toString() == "" ||
                 password.text.toString() == "" ||
                 confirmPassword.text.toString() == "" ||
                 edtSex.text.toString() == "") {
+=======
+            if(first_name.text.toString().trim() == ""
+                || last_name.text.toString().trim() == ""
+                || email.text.toString().trim() == ""
+                || password.text.toString().trim() == ""
+                || confirmPassword.text.toString().trim() == ""
+                || etSex.text.toString().trim() == "") {
+>>>>>>> develop
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
