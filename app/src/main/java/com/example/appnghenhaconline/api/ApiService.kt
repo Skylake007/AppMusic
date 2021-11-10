@@ -12,10 +12,10 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("listsong")
+    @GET("listsong") //API GET ListSong
     fun getListSong() : Call<DataSong>
 
-    @GET("/listsong/playlist")
+    @GET("/listsong/playlist") // API GET ListSong With ID
     fun getListSongByID(@Query ("id") id : String) : Call<DataSong>
 
     companion object{
@@ -29,34 +29,46 @@ interface ApiService {
             .create(ApiService::class.java)
     }
 
-    @GET("LogIn")
+    @GET("LogIn") //API GET Login
     fun getLogIn(@Query("username") username : String,
                   @Query("password") password : String
     ) : Call<DataUser>
 
-    @POST("SignUp")
+    @POST("SignUp") //API POST SignUp
     fun postSignUp(@Query("name") name : String,
                    @Query("password") password: String,
                    @Query("sex") sex : Boolean,
                    @Query("email") email : String
     ) : Call<DataUserSignUp>
 
-    @GET("getPlayList")
+    @GET("getPlayList") // API GET getPlayList
     fun getPlayList() : Call<DataPlayList>
 
-    @PUT("UpdateUser")
-    fun putUdateUser(@Query("email") email: String,
+    @PUT("UpdateUser") // API PUT UpdateUser
+    fun putUpdateUser(@Query("email") email: String,
                      @Query("name") name: String,
                      @Query("sex") sex: Boolean
     ) : Call<UpdateUser>
 
-    @PUT("UpdateUser/UpdatePassword")
-    fun putUdateUserPassword(@Query("email") email: String,
+    @PUT("UpdateUser/UpdatePassword") // API PUT UpdatePasswordUser
+    fun putUpdateUserPassword(@Query("email") email: String,
                              @Query("oldPassword") oldPassword :String,
                              @Query("newPassword") newPassword :String
 
     ) : Call<UpdateUser>
 
-//    @GET("getPlayList")
-//    fun getPlayList(@Query("id") id : String) : Call<DataPlayList>
+    @PUT("ResetPassword/ReceiveEmail")
+    fun sendEmailForgotPassword(@Query("email") email : String) : Call<UserForgotPassword>
+
+    @GET("ResetPassword/ReceiveEmailAndCode")
+    fun sendResetCodeForgotPassword(@Query("email") email: String,
+                                    @Query("resetCode") resetCode : String
+
+    ) : Call<UserForgotPassword>
+
+    @PUT("ResetPassword/ReceiveEmailCodeAndPassword")
+    fun sendNewPasswordForgotPassword(@Query("email") email: String,
+                                      @Query("resetCode") resetCode: String,
+                                      @Query("password") password: String
+    ) : Call<UserForgotPassword>
 }

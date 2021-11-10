@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.activity.ForgotPassword.ResetPasswordSendEmailActivity
 import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
@@ -38,6 +40,8 @@ class LoginTabFragment: Fragment() {
         val btnLogin: Button = view.findViewById(R.id.btnLogin)
         val username : EditText = view.findViewById(R.id.etEmail)
         val password : EditText = view.findViewById(R.id.etPassword)
+        val btnFogotpassword : TextView = view.findViewById(R.id.tvForgotPassword)
+
         btnLogin.setOnClickListener {
             if (username.text.toString().trim() == "" || password.text.toString().trim() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
@@ -47,10 +51,14 @@ class LoginTabFragment: Fragment() {
                 callApiSignIn(username.text.toString(), encryptPassword, session)
             }
         }
+
+        btnFogotpassword.setOnClickListener {
+            var intent = Intent(requireContext(),ResetPasswordSendEmailActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun callApiSignIn(username : String, password : String, session: SessionUser) { // call API LogIn
-        Log.e(null,username.toString() +"\n" + password.toString())
         ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
                 val dataUser = response.body()

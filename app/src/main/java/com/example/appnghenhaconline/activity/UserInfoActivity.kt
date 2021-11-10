@@ -76,7 +76,7 @@ class UserInfoActivity : AppCompatActivity() {
     }
 
     private fun callApiUpdateUser( email : String, name : String, sex : Boolean, session: SessionUser)  { // call API UpdateUser
-        ApiService.apiService.putUdateUser(email,name,sex).enqueue(object :
+        ApiService.apiService.putUpdateUser(email,name,sex).enqueue(object :
             Callback<UpdateUser> {
             override fun onResponse(call: Call<UpdateUser>, response: Response<UpdateUser>) {
                 val dataUser  = response.body()
