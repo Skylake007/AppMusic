@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".service.MyApplication"
+        android:name=".dataLocalManager.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -50,11 +50,11 @@
             android:exported="true" />
 
         <service
-            android:name=".service.MyService"
+            android:name=".dataLocalManager.MyService"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".service.MyReceiver" />
+        <receiver android:name=".dataLocalManager.MyReceiver" />
     </application>
 
 </manifest>

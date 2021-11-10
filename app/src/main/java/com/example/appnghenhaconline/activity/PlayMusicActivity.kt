@@ -7,27 +7,21 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.models.user.User
-import com.example.appnghenhaconline.service.MyService
+import com.example.appnghenhaconline.dataLocalManager.MyService
+import com.example.appnghenhaconline.dataLocalManager.MySharePreferences
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_play_music.*
 import kotlin.math.abs
 
@@ -42,7 +36,12 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     lateinit var imgPlay : ImageView
     lateinit var imgCardViewPlay : CardView
     lateinit var imgBgPlay : ImageView
+    lateinit var mList: ArrayList<Song>
+    var mPosition: Int = 0
     lateinit var tvSongPlay : TextView
+
+    var songData: Song = MyDataLocalManager.getSong()
+    var isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
 
     companion object{
         const val MIN_DISTANCE = 100
@@ -54,9 +53,12 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             val bundle: Bundle? = intent?.extras
             //nhận dữ liệu action từ MyService
             mSong = bundle?.get("item_song") as Song
+            mPosition = bundle.get("position_song") as Int
+            mList = bundle.get("list_song") as ArrayList<Song>
             isPlaying = bundle.getBoolean("status_player")
             val actionMusic: Int = bundle.getInt("action_music")
 
+            mSong = mList[mPosition]
             handleLayoutMusic(actionMusic)
         }
     }
@@ -70,6 +72,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         LocalBroadcastManager.getInstance(this)
                                 .registerReceiver(broadcastReceiver,
                                 IntentFilter("send_action_to_activity"))
+
+//        initSongInfo()
     }
     private fun init(){
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
@@ -97,18 +101,22 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         when(action){
             MyService.ACTION_PAUSE->{
                 showInfoSong()
+//                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
                 showInfoSong()
+//                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
                 showInfoSong()
+//                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_INFO->{
                 showInfoSong()
+//                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
         }
@@ -187,4 +195,31 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
     }
+
+//    private fun initSongInfo() {
+//        val song: Song = MyDataLocalManager.getSong()
+//        val isPlaying: Boolean = MyDataLocalManager.getIsPlaying()
+//        if (song != null){
+//            tvSongPlay.text = song.title
+//            MyLib.showLog("PlayMusic: "+ song.title)
+//            Picasso.get().load(song.image)
+////                        .resize(450,400)
+//                .into(imgPlay)
+//            Picasso.get().load(song.image)
+//                .resize(480,480)
+//                .into(imgBgPlay)
+//
+//            btnPlayOrPause.setOnClickListener {
+//                if (isPlaying){
+//                    sendActionToService(MyService.ACTION_PAUSE)
+//                    val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
+//                    imgCardViewPlay.startAnimation(animZoomOut)
+//                }else{
+//                    sendActionToService(MyService.ACTION_RESUME)
+//                    val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
+//                    imgCardViewPlay.startAnimation(animZoomIn)
+//                }
+//            }
+//        }
+//    }
 }

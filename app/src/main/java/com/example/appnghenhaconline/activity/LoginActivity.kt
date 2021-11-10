@@ -2,14 +2,12 @@ package com.example.appnghenhaconline.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.LoginAdapter
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
+import com.example.appnghenhaconline.dataLocalManager.MySharePreferences
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -18,6 +16,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         MyLib.hideSystemUI(window, layoutLoginActivity)
         initTabFragment()
+
+        checkFirstInstalled()
     }
 
     private fun initTabFragment(){
@@ -26,15 +26,22 @@ class LoginActivity : AppCompatActivity() {
         TabLayoutMediator(tab_layout,view_pager){tittle, position ->
             when(position){
                 0 ->{
-                    tittle.text = "Login"
+                    tittle.text = "Đăng nhập"
                 }
                 1 -> {
-                    tittle.text = "Sign Up"
+                    tittle.text = "Đăng ký"
                 }
                 else -> {
-                    tittle.text = "Login"
+                    tittle.text = "Đăng nhập"
                 }
             }
         }.attach()
+    }
+
+    private fun checkFirstInstalled() {
+        if (!MyDataLocalManager.getFirstInstalled()){
+            MyLib.showToast(this,"Is First Installed")
+            MyDataLocalManager.setFirstInstalled(true)
+        }
     }
 }

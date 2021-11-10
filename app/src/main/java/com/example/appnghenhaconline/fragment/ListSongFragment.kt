@@ -18,7 +18,7 @@ import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.service.MyService
+import com.example.appnghenhaconline.dataLocalManager.MyService
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback

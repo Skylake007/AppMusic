@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.ImageView
@@ -17,9 +16,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.user.User
-import com.example.appnghenhaconline.service.MyService
+import com.example.appnghenhaconline.dataLocalManager.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlin.math.abs

@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.service
+package com.example.appnghenhaconline.dataLocalManager
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 
 import android.os.Bundle
 import android.os.IBinder
@@ -19,9 +18,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.HomeActivity
-import com.example.appnghenhaconline.activity.PlayMusicActivity
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.service.MyApplication.Companion.CHANNEL_ID
+import com.example.appnghenhaconline.dataLocalManager.MyApplication.Companion.CHANNEL_ID
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import java.io.IOException
 
@@ -73,9 +72,10 @@ class MyService : Service() {
                 mPosition = position
 
                 mList[mPosition] = mSong
-
+//                setSong(mList[mPosition])
                 startMusic(mList[mPosition])
                 sendNotification(mList[mPosition])
+
                 MyLib.showLog("MyService: $list")
             }
         }
@@ -143,6 +143,7 @@ class MyService : Service() {
         nextPrevMusic(isNext = false)
         sendNotification(mList[mPosition])
         sendActionToActivity(ACTION_PREVIOUS)
+//        setSong(mList[mPosition])
         MyLib.showLog("MyService: (Previous)"+ mList[mPosition])
     }
 
@@ -150,6 +151,7 @@ class MyService : Service() {
         nextPrevMusic()
         sendNotification(mList[mPosition])
         sendActionToActivity(ACTION_NEXT)
+//        setSong(mList[mPosition])
         MyLib.showLog("MyService: (Next)"+ mList[mPosition])
     }
 
@@ -157,6 +159,7 @@ class MyService : Service() {
         if (isNext) setPosition()
         else setPosition(isIncrement = false)
         startMusic(mList[mPosition])
+//        setSong(mList[mPosition])
         MyLib.showLog("MyService: "+ mList[mPosition])
     }
     private fun setPosition(isIncrement : Boolean = true){
@@ -263,6 +266,8 @@ class MyService : Service() {
         bundle.putBoolean("status_player", isPlaying)
         bundle.putInt("action_music", action)
 
+        MyDataLocalManager.setSong(mList[mPosition])
+        MyDataLocalManager.setIsPlaying(isPlaying)
         intent.putExtras(bundle)
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)

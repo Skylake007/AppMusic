@@ -15,6 +15,7 @@ import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,8 +34,8 @@ class LoginTabFragment: Fragment() {
 
     private fun event(){
         val btnLogin: Button = view.findViewById(R.id.btnLogin)
-        val username : EditText = view.findViewById(R.id.etEmail)
-        val password : EditText = view.findViewById(R.id.etPassword)
+        val username : TextInputEditText = view.findViewById(R.id.edtEmail)
+        val password : TextInputEditText = view.findViewById(R.id.edtPassword)
         btnLogin.setOnClickListener {
             if (username.text.toString() == "" || password.text.toString() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")

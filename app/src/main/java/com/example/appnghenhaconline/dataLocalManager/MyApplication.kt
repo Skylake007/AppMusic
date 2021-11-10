@@ -1,7 +1,6 @@
-package com.example.appnghenhaconline.service
+package com.example.appnghenhaconline.dataLocalManager
 
 import android.app.Application
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
@@ -12,11 +11,11 @@ class MyApplication: Application() {
         const val CHANNEL_ID : String = "channel_service"
     }
 
-
     override fun onCreate() {
         super.onCreate()
 
         createChannelNotification()
+        MyDataLocalManager.init(applicationContext)
     }
 
     private fun createChannelNotification() {

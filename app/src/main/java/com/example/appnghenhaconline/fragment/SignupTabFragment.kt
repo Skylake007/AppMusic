@@ -12,6 +12,7 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.DataUserSignUp
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fm_signup_tab_fragment.*
 import kotlinx.android.synthetic.main.fm_signup_tab_fragment.view.*
 import retrofit2.Call
@@ -30,26 +31,26 @@ class SignupTabFragment : Fragment() {
 
         val sex = resources.getStringArray(R.array.sex)
         val arrAdapter = ArrayAdapter(requireContext(), R.layout.i_dropdown_sex_item, sex)
-        view.etSex.setAdapter(arrAdapter)
+        view.edtSex.setAdapter(arrAdapter)
         event()
         return view
     }
 
     private fun event() {
         val btnSignup : Button = view.findViewById(R.id.btnSignUp)
-        val firstName : EditText = view.findViewById(R.id.first_name)
-        val lastName : EditText = view.findViewById(R.id.last_name)
-        val email : EditText = view.findViewById(R.id.email)
-        val password : EditText = view.findViewById(R.id.password)
-        val confirmPassword : EditText = view.findViewById(R.id.confirm_password)
+        val firstName : TextInputEditText = view.findViewById(R.id.first_name)
+        val lastName : TextInputEditText = view.findViewById(R.id.last_name)
+        val email : TextInputEditText = view.findViewById(R.id.edtEmail)
+        val password : TextInputEditText = view.findViewById(R.id.edtPassword)
+        val confirmPassword : TextInputEditText = view.findViewById(R.id.edtConfirmPassword)
 
         btnSignup.setOnClickListener {
-            if(first_name.text.toString() == ""
-                || last_name.text.toString() == ""
-                || email.text.toString() == ""
-                || password.text.toString() == ""
-                || confirmPassword.text.toString() == ""
-                || etSex.text.toString() == "") {
+            if(first_name.text.toString() == "" ||
+                last_name.text.toString() == "" ||
+                email.text.toString() == "" ||
+                password.text.toString() == "" ||
+                confirmPassword.text.toString() == "" ||
+                edtSex.text.toString() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
@@ -57,7 +58,7 @@ class SignupTabFragment : Fragment() {
                     MyLib.showToast(requireContext(),"Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
                 }
                 else {
-                    val sex: Boolean = etSex.text.toString() == "Nam"
+                    val sex: Boolean = edtSex.text.toString() == "Nam"
                     val name = firstName.text.toString() + " " + lastName.text.toString()
                     val encryptPassword = MyLib.md5(password.text.toString())
 
