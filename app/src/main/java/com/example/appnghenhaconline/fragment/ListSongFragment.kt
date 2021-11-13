@@ -18,7 +18,7 @@ import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.dataLocalManager.MyService
+import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,8 +36,6 @@ class ListSongFragment: Fragment() {
     lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
     lateinit var songAdapter: SongAdapter
-    lateinit var btnNext: ImageView
-    lateinit var btnPre: ImageView
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -46,8 +44,6 @@ class ListSongFragment: Fragment() {
 
         tittleAlbum = view.findViewById(R.id.tittleAlbumMusic)
         imgAlbum = view.findViewById(R.id.imgAlbumMusic)
-//        btnNext = view.findViewById(R.id.btnNext)
-//        btnPre = view.findViewById(R.id.btnPre)
 
         initPlaylist()
         initSongList()
@@ -70,11 +66,10 @@ class ListSongFragment: Fragment() {
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
-                    clickStartService(listsong[position], listsong, position)
+                    clickStartService(listsong, position)
                 }else{
-                    clickStartService(listsong[position], listsong, position)
+                    clickStartService(listsong, position)
                 }
-                MyLib.showLog("AlbumFragment: "+ listsong[position].link +"  position: "+position)
             }
         })
 
@@ -122,17 +117,15 @@ class ListSongFragment: Fragment() {
     }
 
     //call service xử lý xự kiện phát nhạc
-    private fun clickStartService(song: Song, list : ArrayList<Song>, position: Int) {
+    private fun clickStartService(list : ArrayList<Song>, position: Int) {
         val intent = Intent(requireContext(), MyService::class.java)
 
         val bundle = Bundle()
-        bundle.putSerializable("item_song", song)
         bundle.putSerializable("position_song", position)
         bundle.putSerializable("list_song", list)
         intent.putExtras(bundle)
 
         activity?.startService(intent)
-        MyLib.showLog("AlbumFragment: Running service")
     }
 }
 

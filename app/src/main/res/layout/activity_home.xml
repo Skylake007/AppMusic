@@ -11,7 +11,8 @@
         android:id="@+id/topNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pink">
+        android:background="@color/pink"
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:id="@+id/layoutTopNav"
@@ -19,34 +20,47 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgTopNav"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_search" />
+            <LinearLayout
 
-            <TextView
-                android:id="@+id/tvFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:padding="20dp"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/imgTopNav"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_search" />
+
+                <TextView
+                    android:id="@+id/tvFragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:padding="20dp"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/setting"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_account" />
+            </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/setting"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15sp"
-            android:src="@drawable/ic_account" />
 
         <View
             android:layout_width="match_parent"

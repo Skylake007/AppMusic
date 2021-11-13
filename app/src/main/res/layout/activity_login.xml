@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity"
-    android:id="@+id/layoutLoginActivity">
+    android:id="@+id/layoutLoginActivity"
+    >
 
     <ImageView
         android:id="@+id/imageView"
@@ -15,6 +16,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintVertical_bias="0"
         android:paddingBottom="60dp"
+
 
         android:src="@drawable/img_login_background"
         app:layout_constraintBottom_toBottomOf="parent"

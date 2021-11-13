@@ -41,7 +41,6 @@ class PlaylistSLAdapter(var context: Context,
                         .placeholder(R.drawable.img_loading)
                         .error(R.drawable.img_error)
                         .into(holder.imgPlaylist)
-        MyLib.showLog("PlaylistSLAdapter: " + playlist.image)
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
@@ -49,7 +48,6 @@ class PlaylistSLAdapter(var context: Context,
 
             val bundle = Bundle()
             bundle.putSerializable("object_song", playlist)
-            MyLib.showLog("PlaylistSLA: "+playlist.id)
             albumFragment.arguments = bundle
 
             activity.supportFragmentManager.beginTransaction()

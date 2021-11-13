@@ -1,22 +1,12 @@
 package com.example.appnghenhaconline.activity
 
-import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Window
-import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.MATCH_PARENT
-import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.*
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.SharedPreferences.SessionUser
-import com.example.appnghenhaconline.models.user.User
-import com.google.android.material.textfield.TextInputEditText
+import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import kotlinx.android.synthetic.main.activity_user.*
 
 class UserActivity : AppCompatActivity() {
@@ -34,6 +24,12 @@ class UserActivity : AppCompatActivity() {
         session = SessionUser(applicationContext)
         init(session)
         event(session)
+    }
+
+    override fun onBackPressed() {
+        val a = Intent(this, HomeActivity::class.java)
+        startActivity(a)
+//        super.onBackPressed()
     }
 
     private fun init(session : SessionUser){

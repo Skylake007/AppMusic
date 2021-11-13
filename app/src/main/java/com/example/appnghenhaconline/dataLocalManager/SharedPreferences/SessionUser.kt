@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.SharedPreferences
+package com.example.appnghenhaconline.dataLocalManager.SharedPreferences
 
 import android.content.Context
 import android.content.Intent

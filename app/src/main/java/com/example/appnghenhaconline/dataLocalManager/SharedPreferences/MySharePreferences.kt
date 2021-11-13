@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.dataLocalManager
+package com.example.appnghenhaconline.dataLocalManager.SharedPreferences
 
 import android.content.Context
 
@@ -6,13 +6,10 @@ class MySharePreferences(context: Context) {
 
     companion object{
         private const val KEY_MY_SHARE_PREFERENCES = "MY_SHARE_PREFERENCES"
-
     }
-    private val preferences = context.getSharedPreferences(KEY_MY_SHARE_PREFERENCES,
-                                                    Context.MODE_PRIVATE)
-
-    //
-
+    private val preferences = context.getSharedPreferences(
+        KEY_MY_SHARE_PREFERENCES,
+        Context.MODE_PRIVATE)
 
     //get-set string
     fun getStringValue(key: String): String?{
@@ -34,6 +31,4 @@ class MySharePreferences(context: Context) {
         editor.putBoolean(key, value)
         editor.apply()
     }
-
-
 }

@@ -11,7 +11,8 @@
         android:id="@+id/topNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:id="@+id/tittleTopNav"

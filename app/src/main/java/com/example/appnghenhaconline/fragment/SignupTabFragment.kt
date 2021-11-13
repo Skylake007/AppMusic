@@ -64,12 +64,14 @@ class SignupTabFragment : Fragment() {
 
                     callApiSignIn(name,encryptPassword,sex,email.text.toString())
 
-                    firstName.text.clear()
-                    lastName.text.clear()
-                    email.text.clear()
-                    password.text.clear()
-                    confirmPassword.text.clear()
-                    etSex.text.clear()
+                    firstName.text?.clear()
+                    lastName.text?.clear()
+                    email.text?.clear()
+                    password.text?.clear()
+                    confirmPassword.text?.clear()
+                    edtSex.text.clear()
+
+
                 }
             }
         }

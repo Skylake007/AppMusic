@@ -6,10 +6,9 @@ import android.os.Bundle
 import android.widget.ImageView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.UpdateUser
-import com.example.appnghenhaconline.models.user.User
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_user_password.*
 import retrofit2.Call

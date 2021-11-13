@@ -5,43 +5,46 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.view.size
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.dataLocalManager.MyService
-import com.example.appnghenhaconline.dataLocalManager.MySharePreferences
+import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_play_music.*
+import java.text.SimpleDateFormat
 import kotlin.math.abs
 
 
 class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var gestureDetector : GestureDetector
-    lateinit var mSong: Song
-    var isPlaying: Boolean = false
-
-    lateinit var btnPlayOrPause : ImageView
-    lateinit var imgPlay : ImageView
+    private lateinit var btnNext : ImageView
+    private lateinit var btnPrev : ImageView
     lateinit var imgCardViewPlay : CardView
+    lateinit var btnPlayOrPause : ImageView
     lateinit var imgBgPlay : ImageView
     lateinit var mList: ArrayList<Song>
-    var mPosition: Int = 0
     lateinit var tvSongPlay : TextView
-
-    var songData: Song = MyDataLocalManager.getSong()
-    var isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
+    lateinit var startSeekBar :TextView
+    lateinit var seekBarMusic: SeekBar
+    lateinit var imgPlay : ImageView
+    lateinit var endSeekBar :TextView
+    var isPlaying: Boolean = false
+    val mHandler = Handler()
+    var mPosition: Int = 0
 
     companion object{
         const val MIN_DISTANCE = 100
@@ -52,13 +55,12 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         override fun onReceive(context: Context?, intent: Intent?) {
             val bundle: Bundle? = intent?.extras
             //nhận dữ liệu action từ MyService
-            mSong = bundle?.get("item_song") as Song
-            mPosition = bundle.get("position_song") as Int
+            mPosition = bundle?.get("position_song") as Int
             mList = bundle.get("list_song") as ArrayList<Song>
             isPlaying = bundle.getBoolean("status_player")
+
             val actionMusic: Int = bundle.getInt("action_music")
 
-            mSong = mList[mPosition]
             handleLayoutMusic(actionMusic)
         }
     }
@@ -67,20 +69,29 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
         init()
-        MyLib.hideSystemUI(window, layoutPlayMusic)
         swipeActivity()
-        LocalBroadcastManager.getInstance(this)
-                                .registerReceiver(broadcastReceiver,
-                                IntentFilter("send_action_to_activity"))
-
-//        initSongInfo()
+        initSongInfo()
     }
+
+    override fun onStart() {
+        super.onStart()
+        MyLib.hideSystemUI(window, layoutPlayMusic)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+            IntentFilter("send_action_to_activity"))
+    }
+
     private fun init(){
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
         imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
         tvSongPlay = findViewById(R.id.tvSongNamePlayMusic)
         imgCardViewPlay = findViewById(R.id.imgPlayMusic)
+        btnNext = findViewById(R.id.btnNextPlay)
+        btnPrev = findViewById(R.id.btnPrevPlay)
+        startSeekBar = findViewById(R.id.tvStartSeekbar)
+        endSeekBar = findViewById(R.id.tvEndSeekbar)
+        seekBarMusic = findViewById(R.id.seekbarPlay)
     }
 
     override fun onBackPressed() {
@@ -100,24 +111,27 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun handleLayoutMusic(action: Int) {
         when(action){
             MyService.ACTION_PAUSE->{
-                showInfoSong()
-//                initSongInfo()
+//                showInfoSong()
+                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
-                showInfoSong()
-//                initSongInfo()
+                initSongInfo()
+//                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
-                showInfoSong()
-//                initSongInfo()
+                initSongInfo()
+//                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
-            MyService.ACTION_INFO->{
-                showInfoSong()
-//                initSongInfo()
-                setStatusButtonPlayOrPause()
+            MyService.ACTION_NEXT->{
+                initSongInfo()
+//                showInfoSong()
+            }
+            MyService.ACTION_PREVIOUS->{
+                initSongInfo()
+//                showInfoSong()
             }
         }
     }
@@ -131,24 +145,30 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
 
     private fun showInfoSong(){
-        if (mSong==null) return
-
-        Picasso.get().load(mSong.image)
+//        endSeekBar.text = totalSeekbar
+        Picasso.get().load(mList[mPosition].image)
 //                        .resize(450,400)
                         .into(imgPlay)
-        Picasso.get().load(mSong.image)
+        Picasso.get().load(mList[mPosition].image)
                         .resize(480,480)
                         .into(imgBgPlay)
-        tvSongPlay.text = mSong.title
+        tvSongPlay.text = mList[mPosition].title
+
+        val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
+        val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
+
+        if (isPlaying){
+            imgCardViewPlay.startAnimation(animZoomIn)
+        }else{
+            imgCardViewPlay.startAnimation(animZoomOut)
+        }
 
         btnPlayOrPause.setOnClickListener {
             if (isPlaying){
                 sendActionToService(MyService.ACTION_PAUSE)
-                val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
                 imgCardViewPlay.startAnimation(animZoomOut)
             }else{
                 sendActionToService(MyService.ACTION_RESUME)
-                val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
                 imgCardViewPlay.startAnimation(animZoomIn)
             }
         }
@@ -157,7 +177,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun sendActionToService(action: Int){
         val intent = Intent(this, MyService::class.java)
         intent.putExtra("action_music_service", action)
-
         startService(intent)
     }
 
@@ -196,30 +215,81 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
     }
 
-//    private fun initSongInfo() {
-//        val song: Song = MyDataLocalManager.getSong()
-//        val isPlaying: Boolean = MyDataLocalManager.getIsPlaying()
-//        if (song != null){
-//            tvSongPlay.text = song.title
-//            MyLib.showLog("PlayMusic: "+ song.title)
-//            Picasso.get().load(song.image)
-////                        .resize(450,400)
-//                .into(imgPlay)
-//            Picasso.get().load(song.image)
-//                .resize(480,480)
-//                .into(imgBgPlay)
-//
-//            btnPlayOrPause.setOnClickListener {
-//                if (isPlaying){
-//                    sendActionToService(MyService.ACTION_PAUSE)
-//                    val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
-//                    imgCardViewPlay.startAnimation(animZoomOut)
-//                }else{
-//                    sendActionToService(MyService.ACTION_RESUME)
-//                    val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
-//                    imgCardViewPlay.startAnimation(animZoomIn)
-//                }
-//            }
-//        }
-//    }
+    private var runnable = object: Runnable{
+        @SuppressLint("SimpleDateFormat")
+        override fun run() {
+            val time = SimpleDateFormat("mm:ss")
+            endSeekBar.text = time.format(MyService.mediaPlayer.duration - MyService.mediaPlayer.currentPosition)
+            startSeekBar.text = time.format(MyService.mediaPlayer.currentPosition)
+            seekBarMusic.progress = MyService.mediaPlayer.currentPosition
+
+            MyService.mediaPlayer.setOnCompletionListener {
+                sendActionToService(MyService.ACTION_NEXT)
+            }
+
+            mHandler.postDelayed(this, 1000)
+        }
+    }
+
+    private fun initSongInfo() {
+        seekBarMusic.max = MyService.mediaPlayer.duration
+
+        val songData: Song = MyDataLocalManager.getSong()
+        val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
+
+        tvSongPlay.text = songData.title
+        Picasso.get().load(songData.image)
+                  .resize(450,550)
+                    .into(imgPlay)
+        Picasso.get().load(songData.image)
+                    .resize(480,480)
+                    .into(imgBgPlay)
+
+        val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
+        val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
+
+        if (isPlayingData){
+            imgCardViewPlay.startAnimation(animZoomIn)
+            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
+        }else{
+            imgCardViewPlay.startAnimation(animZoomOut)
+            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+        }
+
+        btnPlayOrPause.setOnClickListener {
+            if (isPlayingData){
+                sendActionToService(MyService.ACTION_PAUSE)
+                imgCardViewPlay.startAnimation(animZoomOut)
+                initSongInfo()
+            }else{
+                sendActionToService(MyService.ACTION_RESUME)
+                imgCardViewPlay.startAnimation(animZoomIn)
+            }
+            runnable.run()
+        }
+
+        btnNext.setOnClickListener {
+            sendActionToService(MyService.ACTION_NEXT)
+            runnable.run()
+        }
+
+        btnPrev.setOnClickListener {
+            sendActionToService(MyService.ACTION_PREVIOUS)
+            runnable.run()
+        }
+
+        seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+       //         TODO("Not yet implemented")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                MyService.mediaPlayer.seekTo(seekBarMusic.progress)
+            }
+        })
+    }
 }

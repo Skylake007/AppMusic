@@ -1,4 +1,4 @@
-package com.example.appnghenhaconline.dataLocalManager
+package com.example.appnghenhaconline.dataLocalManager.Service
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -12,7 +12,9 @@ import android.media.MediaPlayer
 
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View
 import android.widget.RemoteViews
+import android.widget.SeekBar
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
@@ -20,9 +22,11 @@ import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.MyApplication.Companion.CHANNEL_ID
-import com.google.gson.Gson
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
+import com.example.appnghenhaconline.dataLocalManager.Receiver.MyReceiver
 import com.squareup.picasso.Picasso
 import java.io.IOException
+import java.text.SimpleDateFormat
 
 class MyService : Service() {
 
@@ -31,17 +35,16 @@ class MyService : Service() {
         const val ACTION_RESUME: Int = 2
         const val ACTION_CLEAR: Int = 3
         const val ACTION_START: Int = 4
-        const val ACTION_INFO: Int = 5
-        const val ACTION_NEXT: Int = 6
-        const val ACTION_PREVIOUS: Int = 7
+        const val ACTION_NEXT: Int = 5
+        const val ACTION_PREVIOUS: Int = 6
 
+        var mediaPlayer: MediaPlayer = MediaPlayer()
     }
-    var mPosition: Int = -1
-    private var mediaPlayer: MediaPlayer? = null
-    private lateinit var mSong :Song
-    lateinit var mList : ArrayList<Song>
+
+    private lateinit var mList : ArrayList<Song>
     private var isPlaying : Boolean = false
     var pauseLength: Int = 0
+    var mPosition: Int = -1
 
     override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -49,37 +52,32 @@ class MyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        MyLib.showLog("MyService created")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (mediaPlayer!=null){
-            mediaPlayer?.release()
-            mediaPlayer = null
+            mediaPlayer.release()
         }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val bundle = intent.extras
         if (bundle != null){
-            val song: Song? = bundle.get("item_song") as? Song
+            //Nhận dữ liệu bài hát
             val position: Int? = bundle.get("position_song") as? Int
             val list: ArrayList<Song>? = bundle.get("list_song") as? ArrayList<Song>
-            if (song != null && list != null && position != null) {
-                mSong = song
+            if (list != null && position != null) {
+
                 mList = list
                 mPosition = position
 
-                mList[mPosition] = mSong
-//                setSong(mList[mPosition])
                 startMusic(mList[mPosition])
                 sendNotification(mList[mPosition])
-
-                MyLib.showLog("MyService: $list")
             }
         }
 
+//        if (mediaPlayer==null)
         sendActionToActivity(ACTION_START)
         val actionMusic: Int = intent.getIntExtra("action_music_service", 0)
         handleActionMusic(actionMusic)
@@ -87,14 +85,9 @@ class MyService : Service() {
     }
 
     private fun startMusic(song: Song) {
-        if (mediaPlayer!=null){
-            mediaPlayer?.stop()
-            playSong(song.link)
-            MyLib.showLog("MyService: True")
-        }else{
-            playSong(song.link)
-            MyLib.showLog("MyService: False")
-        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+        playSong(song.link)
         isPlaying = true
         sendActionToActivity(ACTION_START)
     }
@@ -118,22 +111,19 @@ class MyService : Service() {
     }
     private fun handleActionMusic(action: Int){
         when(action){
-            ACTION_PAUSE->{
+            ACTION_PAUSE ->{
                 pauseMusic()
             }
-            ACTION_RESUME->{
+            ACTION_RESUME ->{
                 resumeMusic()
             }
-            ACTION_CLEAR->{
+            ACTION_CLEAR ->{
                 stopSelf()
             }
-            ACTION_INFO->{
-                infoMusic()
-            }
-            ACTION_NEXT->{
+            ACTION_NEXT ->{
                 nextMusic()
             }
-            ACTION_PREVIOUS->{
+            ACTION_PREVIOUS ->{
                 previousMusic()
             }
         }
@@ -144,7 +134,6 @@ class MyService : Service() {
         sendNotification(mList[mPosition])
         sendActionToActivity(ACTION_PREVIOUS)
 //        setSong(mList[mPosition])
-        MyLib.showLog("MyService: (Previous)"+ mList[mPosition])
     }
 
     private fun nextMusic() {
@@ -152,7 +141,6 @@ class MyService : Service() {
         sendNotification(mList[mPosition])
         sendActionToActivity(ACTION_NEXT)
 //        setSong(mList[mPosition])
-        MyLib.showLog("MyService: (Next)"+ mList[mPosition])
     }
 
     private fun nextPrevMusic(isNext: Boolean = true){
@@ -160,7 +148,6 @@ class MyService : Service() {
         else setPosition(isIncrement = false)
         startMusic(mList[mPosition])
 //        setSong(mList[mPosition])
-        MyLib.showLog("MyService: "+ mList[mPosition])
     }
     private fun setPosition(isIncrement : Boolean = true){
         if (isIncrement){
@@ -174,17 +161,10 @@ class MyService : Service() {
         }
     }
 
-    private fun infoMusic() {
-        if(mediaPlayer!=null){
-            MyLib.showLog("MyService:  infoMusic")
-            sendActionToActivity(ACTION_INFO)
-        }
-    }
-
     private fun resumeMusic() {
         if (!isPlaying){
-            mediaPlayer?.seekTo(pauseLength)
-            mediaPlayer?.start()
+            mediaPlayer.seekTo(pauseLength)
+            mediaPlayer.start()
             isPlaying = true
             sendNotification(mList[mPosition])
             sendActionToActivity(ACTION_RESUME)
@@ -193,8 +173,9 @@ class MyService : Service() {
 
     private fun pauseMusic() {
         if (isPlaying){
-            mediaPlayer?.pause()
-            pauseLength = mediaPlayer!!.currentPosition
+            mediaPlayer.pause()
+            pauseLength = mediaPlayer.currentPosition
+
             isPlaying = false
             sendNotification(mList[mPosition])
             sendActionToActivity(ACTION_PAUSE)
@@ -260,7 +241,6 @@ class MyService : Service() {
         val bundle = Bundle()
 
         // gửi dữ liệu đến activity
-        bundle.putSerializable("item_song", mSong)
         bundle.putSerializable("list_song", mList)
         bundle.putInt("position_song", mPosition)
         bundle.putBoolean("status_player", isPlaying)

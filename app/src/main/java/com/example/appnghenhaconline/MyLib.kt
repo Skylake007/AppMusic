@@ -36,12 +36,12 @@ class MyLib {
         //Ẩn navigation + status bar + fullscreen
         fun hideSystemUI(window: Window, view: View) {
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowInsetsControllerCompat(window, view).let { controller ->
-                controller.hide(WindowInsetsCompat.Type.statusBars())
-//            controller.hide(WindowInsetsCompat.Type.systemBars())
-                controller.systemBarsBehavior = WindowInsetsControllerCompat
-                    .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
+//            WindowInsetsControllerCompat(window, view).let { controller ->
+//                controller.hide(WindowInsetsCompat.Type.statusBars())
+//                controller.hide(WindowInsetsCompat.Type.systemBars())
+//                controller.systemBarsBehavior = WindowInsetsControllerCompat
+//                    .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+//            }
         }
     }
 }

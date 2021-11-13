@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppNgheNhacOnline"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name=".activity.UserPasswordActivity"
             android:exported="true" />
@@ -44,7 +45,8 @@
         </activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:noHistory="false">
 
         </activity>
         <activity
@@ -52,11 +54,11 @@
             android:exported="true" />
 
         <service
-            android:name=".dataLocalManager.MyService"
+            android:name=".dataLocalManager.Service.MyService"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".dataLocalManager.MyReceiver" />
+        <receiver android:name=".dataLocalManager.Receiver.MyReceiver" />
     </application>
 
 </manifest>

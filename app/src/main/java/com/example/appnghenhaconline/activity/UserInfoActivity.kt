@@ -6,15 +6,12 @@ import android.os.Bundle
 import android.widget.*
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.api.ApiService
-import com.example.appnghenhaconline.models.user.DataUser
-import com.example.appnghenhaconline.models.user.DataUserSignUp
 import com.example.appnghenhaconline.models.user.UpdateUser
 import com.example.appnghenhaconline.models.user.User
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_user_info.*
-import kotlinx.android.synthetic.main.activity_user_info.etSex
 import kotlinx.android.synthetic.main.fm_signup_tab_fragment.*
 import kotlinx.android.synthetic.main.fm_signup_tab_fragment.view.*
 import retrofit2.Call
