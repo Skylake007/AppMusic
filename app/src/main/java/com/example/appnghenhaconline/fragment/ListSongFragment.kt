@@ -90,7 +90,7 @@ class ListSongFragment: Fragment() {
         Picasso.get().load(playlist.image).resize(800,800).into(imgAlbum)
     }
 
-    private fun callApiShowListSongByID(songs : ArrayList<Song>, songAdapter : SongAdapter, id : String ) {
+    private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
         
         ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
@@ -103,6 +103,7 @@ class ListSongFragment: Fragment() {
                         MyLib.showLog(listSong.toString())
 
                         songs.addAll(listSong)
+
                         songAdapter.notifyDataSetChanged()
                     }else MyLib.showLog(dataSong.message)
                 }
