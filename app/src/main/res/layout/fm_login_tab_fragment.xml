@@ -62,6 +62,8 @@
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp"/>
+        <TextView
+            android:id="@+id/tvForgotPassword"
 
                 <TextView
                     android:id="@+id/textView"

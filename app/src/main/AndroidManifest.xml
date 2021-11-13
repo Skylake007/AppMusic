@@ -16,21 +16,26 @@
         android:usesCleartextTraffic="true"
         >
         <activity
+            android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ForgotPassword.ResetPasswordSendResetCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ForgotPassword.ResetPasswordSendEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.UserPasswordActivity"
             android:exported="true" />
         <activity
             android:name=".activity.UserActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activity.SettingActivity"
             android:exported="true" />
         <activity
             android:name=".activity.UserInfoActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activity.PlayMusicActivity"
             android:exported="true" />
