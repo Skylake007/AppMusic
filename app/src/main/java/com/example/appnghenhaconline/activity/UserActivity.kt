@@ -38,7 +38,6 @@ class UserActivity : AppCompatActivity() {
         viewChangePass = findViewById(R.id.layout_password)
         tvName = findViewById(R.id.tvName)
         tvName.text = user[session.KEY_NAME]
-        MyLib.showLog(user[session.KEY_SEX].toString())
     }
     private fun event(session: SessionUser){
         btnBack = findViewById(R.id.btnBack)

@@ -55,19 +55,22 @@ class UserPasswordActivity : AppCompatActivity() {
                     val encryptOldPassword = MyLib.md5(oldPassword)
                     val encryptNewPassword = MyLib.md5(newPassowrd)
                     MyLib.showLog(encryptOldPassword + "\n" + encryptNewPassword)
-                    callApiUpdateUserPassword(user[session.KEY_EMAIL]!!,encryptOldPassword,encryptNewPassword)
+                    callApiUpdateUserPassword(user[session.KEY_EMAIL]!!,encryptOldPassword,encryptNewPassword,session)
                 }
             }
         }
 
     }
 
-    private fun callApiUpdateUserPassword( email : String, oldPassword : String, newPassowrd : String) { // call API UpdateUser
+    private fun callApiUpdateUserPassword( email : String, oldPassword : String, newPassowrd : String, session: SessionUser) { // call API UpdateUser
         ApiService.apiService.putUpdateUserPassword(email,oldPassword,newPassowrd).enqueue(object : Callback<UpdateUser> {
             override fun onResponse(call: Call<UpdateUser>, response: Response<UpdateUser>) {
                 val dataUser  = response.body()
                 if(dataUser != null) {
                     if (!dataUser.error){
+                        val user = dataUser.user
+                        session.editor.putString(session.KEY_PASSWORD,user.password)
+                        session.editor.commit()
                         MyLib.showToast(this@UserPasswordActivity,dataUser.message)
                         intent = Intent(this@UserPasswordActivity, UserActivity::class.java)
                         startActivity(intent)

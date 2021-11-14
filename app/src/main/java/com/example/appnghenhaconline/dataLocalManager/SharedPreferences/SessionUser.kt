@@ -4,7 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import android.util.Log
+import com.example.appnghenhaconline.MyLib
+import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.activity.LoginActivity
+import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.models.user.DataUser
+import com.example.appnghenhaconline.models.user.User
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SessionUser {
     lateinit var pref : SharedPreferences
@@ -18,6 +28,8 @@ class SessionUser {
     val KEY_NAME = "name"
     val KEY_EMAIL = "email"
     val KEY_SEX = "sex"
+    val KEY_PASSWORD = "password"
+    val KEY_PLAYLIST = "playlist"
 
     constructor(context: Context) {
         this.context = context
@@ -25,23 +37,27 @@ class SessionUser {
         editor = pref.edit()
     }
 
-    fun createLoginSession(name : String, email : String, sex : Boolean) {
+    fun createLoginSession(name : String, email : String, sex : Boolean, password : String) {
         editor.putBoolean(IS_LOGIN,true)
         editor.putString(KEY_NAME,name)
         editor.putString(KEY_EMAIL,email)
         editor.putBoolean(KEY_SEX,sex)
-
+        editor.putString(KEY_PASSWORD,password)
         editor.commit()
     }
 
     fun getUserDetails() : HashMap<String, String> {
         var user : HashMap<String, String> = HashMap()
 
-        user[KEY_NAME] = pref.getString(KEY_NAME,null)!!
+        user[KEY_NAME] = pref.getString(KEY_NAME,null).toString()
 
-        user[KEY_EMAIL] = pref.getString(KEY_EMAIL,null)!!
+        user[KEY_EMAIL] = pref.getString(KEY_EMAIL,null).toString()
 
         user[KEY_SEX] = pref.getBoolean(KEY_SEX,  true).toString()
+
+        user[KEY_PASSWORD] = pref.getString(KEY_PASSWORD,null).toString()
+
+        user[KEY_PLAYLIST] = pref.getString(KEY_PLAYLIST,null).toString()
 
         return user
     }
@@ -69,4 +85,5 @@ class SessionUser {
 
         context.startActivity(i)
     }
+
 }
