@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.CategoryAdapter
-import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
-import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist

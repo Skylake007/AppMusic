@@ -21,6 +21,7 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
+import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_play_music.*

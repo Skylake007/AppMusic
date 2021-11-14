@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.song.Song
 import com.squareup.picasso.Picasso
@@ -14,7 +15,7 @@ import com.squareup.picasso.Picasso
 class SongAdapter(var context: Context,
                   private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongAdapter.SongNViewHolder>(){
 
-    lateinit var mListener: IonItemClickListener
+    private lateinit var mListener: IonItemClickListener
     interface IonItemClickListener{
         fun onItemClick(position: Int)
     }
@@ -30,10 +31,15 @@ class SongAdapter(var context: Context,
 
     override fun onBindViewHolder(holder: SongNViewHolder, position: Int) {
         val song: Song = listSong[position]
+        var singerName = StringBuffer()
+        for(i in song.singer) {
+            singerName.append(i.singername)
+        }
 
 
         holder.tvTittle.text = song.title
         Picasso.get().load(song.image).into(holder.imgSong)
+        holder.tvSinger.text  = singerName
     }
 
     override fun getItemCount(): Int {
@@ -43,6 +49,7 @@ class SongAdapter(var context: Context,
     inner class SongNViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
         var tvTittle: TextView = itemView.findViewById(R.id.titleSong)
         var imgSong: ImageView = itemView.findViewById(R.id.imgSong)
+        var tvSinger : TextView = itemView.findViewById(R.id.titleSinger)
 
         init {
             itemView.setOnClickListener {
