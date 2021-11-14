@@ -84,7 +84,9 @@ class ListSongFragment: Fragment() {
 
         tittleAlbum.text = playlist.playlistname
         idPlayList = playlist.id // get id of playlist
-        Picasso.get().load(playlist.image).resize(800,800).into(imgAlbum)
+        Picasso.get().load(playlist.image)
+            .resize(800,800)
+            .into(imgAlbum)
     }
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {

@@ -112,27 +112,27 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun handleLayoutMusic(action: Int) {
         when(action){
             MyService.ACTION_PAUSE->{
-//                showInfoSong()
-                initSongInfo()
+                showInfoSong()
+//                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
-                initSongInfo()
-//                showInfoSong()
+//                initSongInfo()
+                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
-                initSongInfo()
-//                showInfoSong()
+//                initSongInfo()
+                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_NEXT->{
-                initSongInfo()
-//                showInfoSong()
+//                initSongInfo()
+                showInfoSong()
             }
             MyService.ACTION_PREVIOUS->{
-                initSongInfo()
-//                showInfoSong()
+//                initSongInfo()
+                showInfoSong()
             }
         }
     }
@@ -146,7 +146,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
 
     private fun showInfoSong(){
-//        endSeekBar.text = totalSeekbar
+        seekBarMusic.max = MyService.mediaPlayer.duration
+
         Picasso.get().load(mList[mPosition].image)
 //                        .resize(450,400)
                         .into(imgPlay)
@@ -172,7 +173,32 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 sendActionToService(MyService.ACTION_RESUME)
                 imgCardViewPlay.startAnimation(animZoomIn)
             }
+            runnable.run()
         }
+
+        btnNext.setOnClickListener {
+            sendActionToService(MyService.ACTION_NEXT)
+            runnable.run()
+        }
+
+        btnPrev.setOnClickListener {
+            sendActionToService(MyService.ACTION_PREVIOUS)
+            runnable.run()
+        }
+
+        seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                //         TODO("Not yet implemented")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                MyService.mediaPlayer.seekTo(seekBarMusic.progress)
+            }
+        })
     }
 
     private fun sendActionToService(action: Int){

@@ -12,18 +12,19 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.R
-import androidx.core.content.ContextCompat.getSystemService
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
+import com.example.appnghenhaconline.adapter.SingerAdapter
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.models.singer.Singer
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.service.MyService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,8 +36,11 @@ class SearchFragmentSub: Fragment() {
     lateinit var edtSearch: EditText
     lateinit var btnBack: ImageView
     lateinit var listSong : ArrayList<Song>
+    lateinit var listSinger : ArrayList<Singer>
     lateinit var songAdapter: SongAdapter
+    lateinit var singerAdapter: SingerAdapter
     lateinit var rcvSong: RecyclerView
+    lateinit var rcvSinger: RecyclerView
     lateinit var mediaPlayer : MediaPlayer
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +55,7 @@ class SearchFragmentSub: Fragment() {
         edtSearch = view.findViewById(R.id.edtSearch)
         btnBack = view.findViewById(R.id.btnBack)
         initListSong()
+        initListSinger()
     }
 
     private fun  initListSong() {
@@ -73,6 +78,23 @@ class SearchFragmentSub: Fragment() {
                     clickStartService(listSong[position])
                 }
                 MyLib.showLog("AlbumFragment: "+ listSong[position].link)
+            }
+        })
+    }
+
+    private fun  initListSinger() {
+        listSinger = ArrayList()
+        singerAdapter = SingerAdapter(view.context,listSinger)
+
+        rcvSinger = view.findViewById(R.id.rcvSearchSinger)
+        rcvSinger.setHasFixedSize(true)
+        rcvSinger.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.VERTICAL,false)
+        rcvSinger.adapter = singerAdapter
+
+        singerAdapter.setOnItemClickListener(object : SingerAdapter.IonItemClickListener{
+            override fun onItemClick(position: Int) {
+                MyLib.showToast(requireContext(),listSinger[position].singername)
             }
         })
     }
@@ -105,12 +127,13 @@ class SearchFragmentSub: Fragment() {
                 MyLib.showLog(dataSong.toString())
                 if(dataSong!=null){
                     if(!dataSong.error){
-                        var singer = dataSong.singer
+                        val dtListSinger = dataSong.singer
+                        listSinger.addAll(dtListSinger)
+                        singerAdapter.notifyDataSetChanged()
 
-                        val listsong = dataSong.listSong
-                        listSong.addAll(listsong)
+                        val dtListSong = dataSong.listSong
+                        listSong.addAll(dtListSong)
                         songAdapter.notifyDataSetChanged()
-
                     }else MyLib.showLog(dataSong.message)
                 }
             }

@@ -38,7 +38,9 @@ class SongAdapter(var context: Context,
 
 
         holder.tvTittle.text = song.title
-        Picasso.get().load(song.image).into(holder.imgSong)
+        Picasso.get().load(song.image)
+            .resize(80,80)
+            .into(holder.imgSong)
         holder.tvSinger.text  = singerName
     }
 
