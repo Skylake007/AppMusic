@@ -18,11 +18,16 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.Song
+import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.service.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.math.abs
 
 class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
@@ -59,18 +64,24 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         MyLib.hideSystemUI(window, layoutHomeActivity)
         session = SessionUser(applicationContext)
         session.checkLogin()
+        val user = session.getUserDetails()
+        MyLib.showLog("Passowrd: " + user[session.KEY_PASSWORD])
+        checkUser(user[session.KEY_EMAIL]!!, user[session.KEY_PASSWORD]!!,session)
         init()
         initMenu()
         LocalBroadcastManager.getInstance(this)
                                 .registerReceiver(broadcastReceiver,
                                 IntentFilter("send_action_to_activity"))
+        
     }
+
 
     private fun init(){
         btnPlayOrPause = findViewById(R.id.btnPlayOrPause)
         imgPlayNav = findViewById(R.id.imgPlayNav)
         tvPlayNav = findViewById(R.id.tvPlayNav)
         menuUser = findViewById(R.id.setting)
+
     }
 
     private fun initMenu(){
@@ -213,4 +224,30 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         startService(intent)
     }
+
+    private fun checkUser(username : String, password : String, sessionUser: SessionUser) { // call API LogIn check passowrd and load playlist
+        ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
+            override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
+                val dataUser = response.body()
+                Log.e(null, dataUser.toString())
+                if (dataUser != null) {
+                    if (!dataUser.error) {
+                        val user: User = dataUser.user
+                        sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,user.followPlaylist.toString())
+                        sessionUser.editor.commit()
+                        MyLib.showLog(user.followPlaylist.toString())
+                    }
+                    else {
+//                        MyLib.showToast(this@HomeActivity,dataUser.message)
+                        sessionUser.logoutUser()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataUser?>, t: Throwable) {
+                MyLib.showToast(this@HomeActivity,"Call Api Error")
+            }
+        })
+    }
+
 }
