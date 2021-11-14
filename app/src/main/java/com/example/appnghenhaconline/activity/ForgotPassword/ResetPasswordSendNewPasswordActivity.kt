@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.LoginActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.UserForgotPassword
+import kotlinx.android.synthetic.main.activity_reset_password_receive_email.*
+import kotlinx.android.synthetic.main.activity_reset_password_send_new_password.*
+import kotlinx.android.synthetic.main.activity_reset_password_send_reset_code.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,11 +24,13 @@ class ResetPasswordSendNewPasswordActivity : AppCompatActivity() {
     lateinit var btnRestorePassword : Button
     lateinit var email : String
     lateinit var resendCode : String
+    lateinit var btnBack : ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password_send_new_password)
+        MyLib.hideSystemUI(window, resetPasswordSendNewPasswordActivity)
     }
 
     override fun onStart() {
@@ -39,10 +45,20 @@ class ResetPasswordSendNewPasswordActivity : AppCompatActivity() {
         edtNewPassword = findViewById(R.id.edtNewPassword)
         edtConfirmNewPassword = findViewById(R.id.edtConfirmNewPassword)
         btnRestorePassword = findViewById(R.id.btnRestorePassword)
+        btnBack = findViewById(R.id.btnBack)
     }
+
 
     fun event() {
         sendNewPassword()
+        backIntent()
+    }
+
+    private fun backIntent(){
+        btnBack.setOnClickListener {
+            val  intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun sendNewPassword() {

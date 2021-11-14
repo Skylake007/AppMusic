@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.activity.LoginActivity
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.user.UserForgotPassword
+import kotlinx.android.synthetic.main.activity_reset_password_send_reset_code.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,10 +23,12 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
     lateinit var btnConfirmResetCode : Button
     lateinit var tvResendResetCode : TextView
     lateinit var email : String
+    lateinit var btnBack : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password_send_reset_code)
+        MyLib.hideSystemUI(window, resetPasswordSendResetCodeActivity)
     }
 
     override fun onStart() {
@@ -37,15 +42,23 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
         edtResetCode = findViewById(R.id.edtResetcode)
         btnConfirmResetCode = findViewById(R.id.btnSendResetCode)
         tvResendResetCode = findViewById(R.id.tvResendResetCode)
-
+        btnBack = findViewById(R.id.btnBack)
     }
 
     fun event() {
         countDownTimer()
         sendResetCode()
+        backIntent()
     }
 
-    fun sendResetCode() {
+    private fun backIntent(){
+        btnBack.setOnClickListener {
+            val  intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun sendResetCode() {
         btnConfirmResetCode.setOnClickListener {
             if (edtResetCode.text.toString().trim() != "") {
                 callApiSendResetCode(email,edtResetCode.text.toString().trim())

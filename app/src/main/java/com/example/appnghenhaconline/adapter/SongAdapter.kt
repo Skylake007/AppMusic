@@ -31,6 +31,7 @@ class SongAdapter(var context: Context,
     override fun onBindViewHolder(holder: SongNViewHolder, position: Int) {
         val song: Song = listSong[position]
 
+
         holder.tvTittle.text = song.title
         Picasso.get().load(song.image).into(holder.imgSong)
     }

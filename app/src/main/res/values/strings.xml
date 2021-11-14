@@ -35,7 +35,14 @@
     <string name="oldPassword">Mật khẩu cũ</string>
     <string name="newPassword">Mật khẩu mới</string>
     <string name="confirmPassword">Xác nhận mật khẩu</string>
+    <string name="code">Mã xác nhận</string>
 
     //notification
     <string name="required">Bắt buộc*</string>
+
+    //string another
+    <string name="notifi_receive_mail">Hãy nhập địa chỉ email khôi phục bạn đã sử dụng cho tài khoản của mình.</string>
+    <string name="notifi_send_reset_code">Chúng tôi đã gửi email chứa mã xác thực đến địa chỉ email khôi phục
+    của bạn. \nVui lòng kiểm tra email để lấy mã và nhập vào bên dưới.</string>
+    <string name="notifi_send_new_pass"><b>Xác nhận thành công!!!</b> \nBạn hãy nhập mật khẩu mới vào bên dưới.</string>
 </resources>
