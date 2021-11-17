@@ -23,13 +23,17 @@ import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionU
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Type
 import kotlin.math.abs
 
 class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
@@ -70,7 +74,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onStart() {
         super.onStart()
         session.checkLogin()
-        initSongInfo()
+        //initSongInfo()
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                                                 IntentFilter("send_action_to_activity"))
     }
@@ -297,13 +301,26 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
                 val dataUser = response.body()
-                Log.e(null, dataUser.toString())
                 if (dataUser != null) {
+                    MyLib.showLog(dataUser.toString())
+
                     if (!dataUser.error) {
                         val user: User = dataUser.user
-                        sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,user.followPlaylist.toString())
+                        session.createLoginSession(user.name,user.email,user.sex,user.password)
+                        var gson = Gson()
+                        var listPlaylist = gson.toJson(dataUser.user.followPlaylist)
+                        sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
                         sessionUser.editor.commit()
-                        MyLib.showLog(user.followPlaylist.toString())
+
+//                        var getUser = sessionUser.getUserDetails()
+//
+//                        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
+//
+//                        var playlist1 : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
+//
+//                        for (i in playlist1) {
+//                            MyLib.showLog( "bai hat: " + i.playlistname)
+//                        }
                     }
                     else {
 //                        MyLib.showToast(this@HomeActivity,dataUser.message)

@@ -57,7 +57,7 @@ class SessionUser {
 
         user[KEY_PASSWORD] = pref.getString(KEY_PASSWORD,null).toString()
 
-        user[KEY_PLAYLIST] = pref.getString(KEY_PLAYLIST,null).toString()
+        user[KEY_PLAYLIST] = pref.getString(KEY_PLAYLIST, null).toString()
 
         return user
     }
