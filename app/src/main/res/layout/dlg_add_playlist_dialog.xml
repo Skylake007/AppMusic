@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/cm_dialog_top_corner_bg"
         android:padding="12dp"
-        android:text="Nhập mật khẩu"
+        android:text="Tạo playlist"
         android:gravity="center_horizontal"
         android:textSize="20sp"
         android:textColor="@color/white"/>
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Vui lòng nhập mật khẩu hiện tại"
+            android:text="Vui lòng nhập tên playlist"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -35,17 +35,15 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            app:startIconDrawable="@drawable/ic_password"
-            app:endIconMode="password_toggle"
+            android:hint="Tên playlist"
+            app:startIconDrawable="@drawable/ic_queue_music"
+            app:endIconMode="clear_text"
             android:layout_marginTop="15dp">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtPassword"
+                android:id="@+id/edtNamePlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="20"
                 android:maxLines="1"
-                android:hint="@string/password"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout

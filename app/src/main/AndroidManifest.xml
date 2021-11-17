@@ -16,16 +16,16 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".activity.AddPlaylistActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendResetCodeActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendEmailActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activity.UserPasswordActivity"
             android:exported="true" />
@@ -53,10 +53,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
-            android:noHistory="false"></activity>
-        <activity
-            android:name=".ListMusic"
-            android:exported="true" />
+            android:noHistory="false"/>
 
         <service
             android:name=".dataLocalManager.Service.MyService"

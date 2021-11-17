@@ -29,7 +29,6 @@ class UserActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val a = Intent(this, HomeActivity::class.java)
         startActivity(a)
-//        super.onBackPressed()
     }
 
     private fun init(session : SessionUser){
@@ -60,40 +59,4 @@ class UserActivity : AppCompatActivity() {
             session.logoutUser()
         }
     }
-
-    //hàm hiện dialog
-//    private fun openDialogConfirmPassword(gravity: Int, user: User){
-//        val dialog = Dialog(this)
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog.setContentView(R.layout.dlg_confirm_password_dialog)
-//        dialog.setCancelable(true)
-//
-//        val window = dialog.window
-//        window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
-//        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//
-//        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
-//        windowAttributes.gravity = gravity
-//        window.attributes = windowAttributes
-//
-//        val btnExit: Button = dialog.findViewById(R.id.btnExit)
-//        val btnAccept: Button = dialog.findViewById(R.id.btnAccept)
-//        var edtPassword: TextInputEditText = dialog.findViewById(R.id.edtPassword)
-//
-//        btnExit.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//        btnAccept.setOnClickListener {
-//            var encryptPassword = MyLib.md5(edtPassword.text.toString())
-//            if (encryptPassword == user.password) {
-//                intent = Intent(this, UserPasswordActivity::class.java)
-//                intent.putExtra("User",user)
-//                startActivity(intent)
-//            }
-//           else {
-//               MyLib.showToast(this,"Sai mật khẩu")
-//            }
-//        }
-//        dialog.show()
-//    }
 }

@@ -1,10 +1,14 @@
 package com.example.appnghenhaconline.fragment
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.WindowManager.LayoutParams.MATCH_PARENT
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,13 +17,9 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.AddPlaylistActivity
 import com.example.appnghenhaconline.adapter.FollowPlaylistAdapter
-import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
-import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
-import com.example.appnghenhaconline.models.song.DataSong
-import com.example.appnghenhaconline.models.song.Song
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,8 +46,7 @@ class LibraryPlaylistFragment: Fragment() {
 
     private fun event(){
         btnAddPlaylist.setOnClickListener {
-            val intent = Intent(requireContext(),AddPlaylistActivity::class.java)
-            startActivity(intent)
+            openDialogAddPlaylist(Gravity.CENTER)
         }
     }
 
@@ -83,5 +82,34 @@ class LibraryPlaylistFragment: Fragment() {
                 MyLib.showToast(requireContext(),"Call Api Error")
             }
         })
+    }
+
+//    hàm hiện dialog
+    private fun openDialogAddPlaylist(gravity: Int){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dlg_add_playlist_dialog)
+        dialog.setCancelable(true)
+
+        val window = dialog.window
+        window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
+        windowAttributes.gravity = gravity
+        window.attributes = windowAttributes
+
+        val btnExit: Button = dialog.findViewById(R.id.btnExit)
+        val btnAccept: Button = dialog.findViewById(R.id.btnAccept)
+
+        btnExit.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnAccept.setOnClickListener {
+            val intent = Intent(requireContext(),AddPlaylistActivity::class.java)
+            startActivity(intent)
+        }
+        dialog.show()
     }
 }
