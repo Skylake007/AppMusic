@@ -36,6 +36,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private lateinit var btnPrev : ImageView
     lateinit var imgCardViewPlay : CardView
     lateinit var btnPlayOrPause : ImageView
+    lateinit var tvNameSinger: TextView
     lateinit var imgBgPlay : ImageView
     lateinit var mList: ArrayList<Song>
     lateinit var tvSongPlay : TextView
@@ -93,6 +94,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         startSeekBar = findViewById(R.id.tvStartSeekbar)
         endSeekBar = findViewById(R.id.tvEndSeekbar)
         seekBarMusic = findViewById(R.id.seekbarPlay)
+        tvNameSinger = findViewById(R.id.tvAuthorPlayMusic)
     }
 
     override fun onBackPressed() {
@@ -155,6 +157,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                         .resize(480,480)
                         .into(imgBgPlay)
         tvSongPlay.text = mList[mPosition].title
+        tvNameSinger.text = mList[mPosition].singer[0].singername
 
         val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
         val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
@@ -265,6 +268,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
 
         tvSongPlay.text = songData.title
+        tvNameSinger.text = songData.singer[0].singername
+
         Picasso.get().load(songData.image)
                   .resize(450,550)
                     .into(imgPlay)

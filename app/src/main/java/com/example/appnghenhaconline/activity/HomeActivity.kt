@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -47,6 +49,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     lateinit var session : SessionUser
     lateinit var btnNext : ImageView
     lateinit var btnPrev : ImageView
+    lateinit var playNav : RelativeLayout
 
     private var backPressedTime: Long = 0
     private lateinit var backToast: Toast
@@ -74,7 +77,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onStart() {
         super.onStart()
         session.checkLogin()
-        //initSongInfo()
+        initSongInfo()
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                                                 IntentFilter("send_action_to_activity"))
     }
@@ -103,7 +106,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         menuUser = findViewById(R.id.setting)
         btnNext = findViewById(R.id.btnNext)
         btnPrev = findViewById(R.id.btnPre)
-
+        playNav = findViewById(R.id.playNav)
     }
 
     private fun initMenu(){
@@ -257,32 +260,38 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private fun initSongInfo() {
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
-        if (songData ==null && isPlayingData==null) return
-        tvPlayNav.text = songData.title
-
-        Picasso.get().load(songData.image)
-//                  .resize(450,400)
-            .into(imgPlayNav)
-
-        if (isPlayingData){
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
+        if (songData ==null && isPlayingData==null) {
+            MyLib.showToast(this,"NULL")
+            playNav.visibility = View.GONE
         }else{
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
-        }
+            playNav.visibility = View.VISIBLE
+            tvPlayNav.text = songData.title
 
-        btnPlayOrPause.setOnClickListener {
+            Picasso.get().load(songData.image)
+//                  .resize(450,400)
+                .into(imgPlayNav)
+
             if (isPlayingData){
-                sendActionToService(MyService.ACTION_PAUSE)
+                btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
             }else{
-                sendActionToService(MyService.ACTION_RESUME)
+                btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+            }
+
+            btnPlayOrPause.setOnClickListener {
+                if (isPlayingData){
+                    sendActionToService(MyService.ACTION_PAUSE)
+                }else{
+                    sendActionToService(MyService.ACTION_RESUME)
+                }
+            }
+            btnNext.setOnClickListener {
+                sendActionToService(MyService.ACTION_NEXT)
+            }
+            btnPrev.setOnClickListener {
+                sendActionToService(MyService.ACTION_PREVIOUS)
             }
         }
-        btnNext.setOnClickListener {
-            sendActionToService(MyService.ACTION_NEXT)
-        }
-        btnPrev.setOnClickListener {
-            sendActionToService(MyService.ACTION_PREVIOUS)
-        }
+
     }
 
     private var broadcastReceiver = object: BroadcastReceiver(){
@@ -297,6 +306,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             handleLayoutMusic(actionMusic)
         }
     }
+
     private fun checkUser(username : String, password : String, sessionUser: SessionUser) { // call API LogIn check passowrd and load playlist
         ApiService.apiService.getLogIn(username, password).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
