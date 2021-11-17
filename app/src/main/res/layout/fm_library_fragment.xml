@@ -34,32 +34,6 @@
             android:layout_height="1dp"
             android:background="@color/line" />
         <LinearLayout
-            android:id="@+id/layoutLibOfArtist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_singer" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Nghệ sĩ"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_marginStart="10dp"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line" />
-        <LinearLayout
             android:id="@+id/layoutLibOfPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,31 +81,6 @@
                 android:layout_marginStart="10dp"/>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line" />
-        <LinearLayout
-            android:id="@+id/layoutLibOfSong"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_music_note" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Bài hát"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_marginStart="10dp"/>
-        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

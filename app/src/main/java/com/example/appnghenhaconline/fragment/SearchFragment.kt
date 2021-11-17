@@ -31,7 +31,7 @@ class SearchFragment : Fragment() {
         view = inflater.inflate(R.layout.fm_search_fragment, container, false)
 
         init()
-        event()
+
         initCategory()
 
         return view
@@ -40,6 +40,7 @@ class SearchFragment : Fragment() {
     private fun init(){
         tvSearch = view.findViewById(R.id.tvSearch)
         rcvCategory = view.findViewById(R.id.rcvPlaylistSearch)
+        event()
     }
 
     private fun event(){

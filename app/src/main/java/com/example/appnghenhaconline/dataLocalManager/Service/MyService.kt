@@ -64,6 +64,8 @@ class MyService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val bundle = intent.extras
         if (bundle != null){
+
+            MyLib.showLog("AlbumFragment: Running service")
             //Nhận dữ liệu bài hát
             val position: Int? = bundle.get("position_song") as? Int
             val list: ArrayList<Song>? = bundle.get("list_song") as? ArrayList<Song>

@@ -16,8 +16,8 @@ import com.example.appnghenhaconline.fragment.ListSongFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
-class PlaylistSMAdapter(var context: Context,
-                        private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
+class FollowPlaylistAdapter(var context: Context,
+                            private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<FollowPlaylistAdapter.PlaylistSMViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSMViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -44,7 +44,7 @@ class PlaylistSMAdapter(var context: Context,
             listSongFragment.arguments = bundle
 
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.playNowFragmentLayout, listSongFragment)
+                .replace(R.id.layoutFmLibOfPlaylist, listSongFragment)
                 .addToBackStack(null)
                 .commit()
         }

@@ -73,9 +73,9 @@ class SearchFragmentSub: Fragment() {
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
-                    clickStartService(listSong[position])
+                    clickStartService(listSong, position)
                 }else{
-                    clickStartService(listSong[position])
+                    clickStartService(listSong, position)
                 }
                 MyLib.showLog("AlbumFragment: "+ listSong[position].link)
             }
@@ -157,15 +157,15 @@ class SearchFragmentSub: Fragment() {
         })
     }
 
-    private fun clickStartService(song: Song) {
+    private fun clickStartService(list : ArrayList<Song>, position: Int) {
         val intent = Intent(requireContext(), MyService::class.java)
 
         val bundle = Bundle()
-        bundle.putSerializable("item_song", song)
+        bundle.putSerializable("position_song", position)
+        bundle.putSerializable("list_song", list)
         intent.putExtras(bundle)
 
         activity?.startService(intent)
-        MyLib.showLog("AlbumFragment: Running service")
     }
 
 }

@@ -53,14 +53,14 @@ class PlaylistSLAdapter(var context: Context,
 
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
-                val albumFragment = ListSongFragment()
+                val listSongFragment = ListSongFragment()
 
                 val bundle = Bundle()
                 bundle.putSerializable("object_song", itemPlaylist)
-                albumFragment.arguments = bundle
+                listSongFragment.arguments = bundle
 
                 activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.playNowFragmentLayout, albumFragment)
+                    .replace(R.id.playNowFragmentLayout, listSongFragment)
                     .addToBackStack(null)
                     .commit()
             }

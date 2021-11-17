@@ -13,8 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppNgheNhacOnline"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.AddPlaylistActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
             android:exported="false" />
@@ -51,9 +53,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
-            android:noHistory="false">
-
-        </activity>
+            android:noHistory="false"></activity>
         <activity
             android:name=".ListMusic"
             android:exported="true" />
