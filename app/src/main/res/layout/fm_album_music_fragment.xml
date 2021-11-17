@@ -18,11 +18,13 @@
                 android:layout_height="match_parent"
                 android:background="#9E9C9C"
                 android:scaleType="centerCrop" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_alignParentBottom="true"
                 android:background="#9E8E8D8D">
+
                 <TextView
                     android:id="@+id/tittleAlbumMusic"
                     android:layout_width="wrap_content"
@@ -32,12 +34,17 @@
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btnFollow"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_favorite" />
             </RelativeLayout>
-
         </RelativeLayout>
-
-
-
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvSong"
@@ -45,5 +52,4 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

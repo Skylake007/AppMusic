@@ -3,16 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/playNowFragmentLayout"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="15dp">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
         <LinearLayout
             android:id="@+id/rcvLayoutCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NGHE NGAY"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:paddingBottom="10dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -22,10 +37,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Category1"
+                    android:paddingTop="10dp"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:paddingTop="10dp"
-                    android:paddingStart="20dp"/>
+                    android:paddingStart="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory1"
                     android:layout_width="match_parent"
@@ -46,7 +61,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
-                    android:paddingStart="20dp"/>
+                    android:paddingStart="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory2"
                     android:layout_width="match_parent"
@@ -67,7 +82,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
-                    android:paddingStart="20dp"/>
+                    android:paddingStart="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory3"
                     android:layout_width="match_parent"
@@ -87,7 +102,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
-                    android:paddingStart="20dp"/>
+                    android:paddingStart="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCategory4"
                     android:layout_width="match_parent"

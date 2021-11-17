@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -26,8 +27,6 @@ import retrofit2.Response
 
 class ListSongFragment: Fragment() {
 
-
-
     internal lateinit var view: View
     lateinit var rcvSong: RecyclerView
     lateinit var tittleAlbum : TextView
@@ -36,19 +35,40 @@ class ListSongFragment: Fragment() {
     lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
     lateinit var songAdapter: SongAdapter
+    private lateinit var btnFollow: ImageView
+    var isFollow: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_album_music_fragment, container, false)
+        init()
+        return view
+    }
 
+    private fun init(){
         tittleAlbum = view.findViewById(R.id.tittleAlbumMusic)
         imgAlbum = view.findViewById(R.id.imgAlbumMusic)
-
+        btnFollow = view.findViewById(R.id.btnFollow)
         initPlaylist()
         initSongList()
+        event()
+    }
 
-        return view
+    private fun event() {
+//        btnAddPlaylist.setOnClickListener {
+//            val selectedSongs = songAdapter.getSelectedSong()
+//
+//            val showSongs = StringBuffer()
+//            for (i in 0 until selectedSongs.size){
+//                if (i == 0){
+//                    showSongs.append(selectedSongs[i].title)
+//                }else{
+//                    showSongs.append("\n").append(selectedSongs[i].title)
+//                }
+//            }
+//            MyLib.showToast(requireContext(), showSongs.toString())
+//        }
     }
 
     private fun initSongList(){
@@ -87,6 +107,18 @@ class ListSongFragment: Fragment() {
         Picasso.get().load(playlist.image)
             .resize(800,800)
             .into(imgAlbum)
+
+        btnFollow.setOnClickListener {
+            if (!isFollow){
+                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+                isFollow = true
+                MyLib.showToast(requireContext(),"Đang theo dỗi")
+            }else{
+                btnFollow.setImageResource(R.drawable.ic_favorite)
+                isFollow = false
+                MyLib.showToast(requireContext(),"Hủy theo dỗi")
+            }
+        }
     }
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {

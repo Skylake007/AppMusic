@@ -31,30 +31,7 @@ class PlaylistSLAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: PlaylistSLViewHolder, position: Int) {
-
-        val playlist: Playlist = playlists[position]
-
-        holder.tvPlaylistTitle.text =playlist.playlistname
-
-        Picasso.get().load(playlist.image)
-                        .resize(480,500)
-                        .placeholder(R.drawable.img_loading)
-                        .error(R.drawable.img_error)
-                        .into(holder.imgPlaylist)
-        //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {v->
-            val activity = v.context as AppCompatActivity
-            val albumFragment = ListSongFragment()
-
-            val bundle = Bundle()
-            bundle.putSerializable("object_song", playlist)
-            albumFragment.arguments = bundle
-
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.playNowFragmentLayout, albumFragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        holder.bindPlaylist(playlists[position])
     }
 
     override fun getItemCount(): Int {
@@ -65,5 +42,28 @@ class PlaylistSLAdapter(var context: Context,
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSL)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSL)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSL)
+
+        fun bindPlaylist(itemPlaylist: Playlist){
+            tvPlaylistTitle.text = itemPlaylist.playlistname
+
+            Picasso.get().load(itemPlaylist.image).resize(480,500)
+                                            .placeholder(R.drawable.img_loading)
+                                            .error(R.drawable.img_error)
+                                            .into(imgPlaylist)
+
+            layoutItem.setOnClickListener {v->
+                val activity = v.context as AppCompatActivity
+                val albumFragment = ListSongFragment()
+
+                val bundle = Bundle()
+                bundle.putSerializable("object_song", itemPlaylist)
+                albumFragment.arguments = bundle
+
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.playNowFragmentLayout, albumFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 }
