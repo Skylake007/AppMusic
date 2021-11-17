@@ -74,8 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/playNav"
-        android:layout_below="@id/topNav"
-        android:paddingTop="10dp" />
+        android:layout_below="@id/topNav" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
