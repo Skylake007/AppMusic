@@ -16,13 +16,17 @@ import com.example.appnghenhaconline.adapter.FollowPlaylistAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Type
 
 class LibraryPlaylistFragment: Fragment() {
     internal lateinit var view: View
@@ -30,17 +34,24 @@ class LibraryPlaylistFragment: Fragment() {
     lateinit var listFollowPlaylist: ArrayList<Playlist>
     lateinit var rcvFollowPlaylist: RecyclerView
     lateinit var followPlaylistAdapter: FollowPlaylistAdapter
+    lateinit var session: SessionUser
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_library_playlist_fragment, container, false)
-        init()
+
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        session = SessionUser(this.requireContext())
+        init()
+        event()
     }
 
     private fun init(){
         btnAddPlaylist = view.findViewById(R.id.btnAddPlaylist)
-        event()
         initFollowPlaylist()
     }
 
@@ -61,27 +72,17 @@ class LibraryPlaylistFragment: Fragment() {
                     LinearLayoutManager.HORIZONTAL, false)
         rcvFollowPlaylist.adapter = followPlaylistAdapter
 
-        callApiPlayListSM(listFollowPlaylist, followPlaylistAdapter)
+        showFollowPlaylist(listFollowPlaylist, followPlaylistAdapter)
     }
 
-    private fun callApiPlayListSM(list : ArrayList<Playlist>, adapter : FollowPlaylistAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                var dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-                    }
-                }
-            }
+    private fun showFollowPlaylist(list : ArrayList<Playlist>, adapter : FollowPlaylistAdapter) {
+        var getPlaylist = session.getUserDetails()
+        var gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
+        var playlistFollow : ArrayList<Playlist> = gson.fromJson(getPlaylist[session.KEY_PLAYLIST],type)
+        list.addAll(playlistFollow)
+        adapter.notifyDataSetChanged()
 
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-        })
     }
+
 }
