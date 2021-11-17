@@ -21,3 +21,4 @@ class Song(
         return "Song(id='$id', image='$image', link='$link', title='$title', category=$category, singer=$singer, playlistId=$playlistId)"
     }
 }
+
