@@ -68,7 +68,7 @@ class LoginTabFragment: Fragment() {
                         val user: User = dataUser.user
                         MyLib.showToast(requireContext(),dataUser.message)
                         var intent = Intent(requireContext(),HomeActivity::class.java)
-                        session.createLoginSession(user.name,user.email,user.sex,user.password)
+                        session.createLoginSession(user.id,user.name,user.email,user.sex,user.password)
                         MyLib.showLog(user.password)
                         startActivity(intent)
                     }

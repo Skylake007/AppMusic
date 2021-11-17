@@ -25,6 +25,7 @@ class SessionUser {
 
     val PREF_NAME = "AndroidUser"
     val IS_LOGIN =  "IsLoggedIn"
+    val KEY_ID = "id"
     val KEY_NAME = "name"
     val KEY_EMAIL = "email"
     val KEY_SEX = "sex"
@@ -37,8 +38,9 @@ class SessionUser {
         editor = pref.edit()
     }
 
-    fun createLoginSession(name : String, email : String, sex : Boolean, password : String) {
+    fun createLoginSession(id : String, name : String, email : String, sex : Boolean, password : String) {
         editor.putBoolean(IS_LOGIN,true)
+        editor.putString(KEY_ID,id)
         editor.putString(KEY_NAME,name)
         editor.putString(KEY_EMAIL,email)
         editor.putBoolean(KEY_SEX,sex)
@@ -48,6 +50,8 @@ class SessionUser {
 
     fun getUserDetails() : HashMap<String, String> {
         var user : HashMap<String, String> = HashMap()
+
+        user[KEY_ID] = pref.getString(KEY_ID,null).toString()
 
         user[KEY_NAME] = pref.getString(KEY_NAME,null).toString()
 

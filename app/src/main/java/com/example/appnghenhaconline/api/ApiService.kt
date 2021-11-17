@@ -74,4 +74,10 @@ interface ApiService {
 
     @GET("search")
     fun searchSongAndSinger(@Query("q") q : String) : Call<DataSong>
+
+    @PUT("UpdateUser/AddLoveOrRemovePlaylist")
+    fun followOrUnfollowPlayList(@Query("userId") userId : String,
+                                 @Query("playlistId") playListId : String,
+                                 @Query("status") status : Boolean
+    ) : Call<DataUser>
 }

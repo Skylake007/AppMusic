@@ -20,10 +20,15 @@ import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.models.user.DataUser
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Type
 
 class ListSongFragment: Fragment() {
 
@@ -37,13 +42,20 @@ class ListSongFragment: Fragment() {
     lateinit var songAdapter: SongAdapter
     private lateinit var btnFollow: ImageView
     var isFollow: Boolean = false
+    lateinit var sessionUser : SessionUser
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_album_music_fragment, container, false)
-        init()
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        sessionUser = SessionUser(this.requireContext())
+        init()
+        checkFollowed()
     }
 
     private fun init(){
@@ -69,6 +81,7 @@ class ListSongFragment: Fragment() {
 //            }
 //            MyLib.showToast(requireContext(), showSongs.toString())
 //        }
+        clickFollow()
     }
 
     private fun initSongList(){
@@ -108,17 +121,6 @@ class ListSongFragment: Fragment() {
             .resize(800,800)
             .into(imgAlbum)
 
-        btnFollow.setOnClickListener {
-            if (!isFollow){
-                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
-                isFollow = true
-                MyLib.showToast(requireContext(),"Đang theo dỗi")
-            }else{
-                btnFollow.setImageResource(R.drawable.ic_favorite)
-                isFollow = false
-                MyLib.showToast(requireContext(),"Hủy theo dỗi")
-            }
-        }
     }
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
@@ -161,6 +163,67 @@ class ListSongFragment: Fragment() {
         intent.putExtras(bundle)
 
         activity?.startService(intent)
+    }
+
+    private fun checkFollowed () {
+        var getUser = sessionUser.getUserDetails()
+        var gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
+        var playlist : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
+
+        for (i in playlist) {
+            if (i.id == idPlayList) {
+                isFollow = true
+                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+            }
+        }
+    }
+
+    private fun clickFollow() {
+        val getUser = sessionUser.getUserDetails()
+        btnFollow.setOnClickListener {
+
+            if (!isFollow){
+                isFollow = true
+                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+
+            }
+
+            else{
+                isFollow = false
+                btnFollow.setImageResource(R.drawable.ic_favorite)
+                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+            }
+
+        }
+    }
+
+    private fun callApiFollowOrUnfollow(userId : String, playlistId : String, status : Boolean ) {
+        ApiService.apiService.followOrUnfollowPlayList(userId,playlistId,status).enqueue(object : Callback<DataUser?> {
+            override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
+
+                val followStatus = response.body()
+                MyLib.showLog(followStatus.toString())
+                if(followStatus!=null){
+                    if (!followStatus.error) {
+                        MyLib.showToast(requireContext(),followStatus.message)
+                        var gson = Gson()
+                        var listPlaylist = gson.toJson(followStatus.user.followPlaylist)
+                        sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
+                        sessionUser.editor.commit()
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),followStatus.message)
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+        })
     }
 }
 

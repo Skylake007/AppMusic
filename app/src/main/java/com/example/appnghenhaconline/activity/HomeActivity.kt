@@ -306,24 +306,13 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
                     if (!dataUser.error) {
                         val user: User = dataUser.user
-                        session.createLoginSession(user.name,user.email,user.sex,user.password)
+                        session.createLoginSession(user.id,user.name,user.email,user.sex,user.password)
                         var gson = Gson()
                         var listPlaylist = gson.toJson(dataUser.user.followPlaylist)
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
                         sessionUser.editor.commit()
-
-//                        var getUser = sessionUser.getUserDetails()
-//
-//                        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
-//
-//                        var playlist1 : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
-//
-//                        for (i in playlist1) {
-//                            MyLib.showLog( "bai hat: " + i.playlistname)
-//                        }
                     }
                     else {
-//                        MyLib.showToast(this@HomeActivity,dataUser.message)
                         sessionUser.logoutUser()
                     }
                 }
