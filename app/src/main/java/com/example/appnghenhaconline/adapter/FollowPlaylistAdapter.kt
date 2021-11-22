@@ -17,15 +17,15 @@ import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
 class FollowPlaylistAdapter(var context: Context,
-                            private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<FollowPlaylistAdapter.PlaylistSMViewHolder>() {
+                            private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<FollowPlaylistAdapter.FollowPlaylistViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSMViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowPlaylistViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.i_playlist_sm_item, parent, false)
-        return PlaylistSMViewHolder(view)
+        return FollowPlaylistViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PlaylistSMViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FollowPlaylistViewHolder, position: Int) {
         val playlist: Playlist = playlists[position]
 
         holder.tvPlaylistTitle.text =playlist.playlistname
@@ -50,14 +50,11 @@ class FollowPlaylistAdapter(var context: Context,
         }
     }
 
-    private fun onClickShowInfo(playlist: Playlist) {
-        Log.e("Task", playlist.playlistname)
-    }
     override fun getItemCount(): Int {
         return playlists.size
     }
 
-    class PlaylistSMViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class FollowPlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)

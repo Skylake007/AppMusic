@@ -1,11 +1,12 @@
 package com.example.appnghenhaconline.fragment
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,12 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -37,9 +40,11 @@ class ListSongFragment: Fragment() {
     lateinit var tittleAlbum : TextView
     lateinit var imgAlbum : ImageView
     lateinit var listsong : ArrayList<Song>
+    lateinit var listPlaylistSelected : ArrayList<Playlist>
     lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
     lateinit var songAdapter: SongAdapter
+    lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
     private lateinit var btnFollow: ImageView
     var isFollow: Boolean = false
     lateinit var sessionUser : SessionUser
@@ -68,22 +73,11 @@ class ListSongFragment: Fragment() {
     }
 
     private fun event() {
-//        btnAddPlaylist.setOnClickListener {
-//            val selectedSongs = songAdapter.getSelectedSong()
-//
-//            val showSongs = StringBuffer()
-//            for (i in 0 until selectedSongs.size){
-//                if (i == 0){
-//                    showSongs.append(selectedSongs[i].title)
-//                }else{
-//                    showSongs.append("\n").append(selectedSongs[i].title)
-//                }
-//            }
-//            MyLib.showToast(requireContext(), showSongs.toString())
-//        }
         clickFollow()
     }
 
+    //===========================================================
+    //region INIT ADAPTER
     private fun initSongList(){
         //khởi tạo danh sách bài hát
         listsong = ArrayList()
@@ -104,6 +98,9 @@ class ListSongFragment: Fragment() {
                     clickStartService(listsong, position)
                 }
             }
+            override fun onItemSelected(position: Int) {
+                openDialogAddPlaylist(Gravity.CENTER)
+            }
         })
 
         callApiShowListSongByID(listsong,songAdapter,idPlayList)
@@ -122,6 +119,107 @@ class ListSongFragment: Fragment() {
             .into(imgAlbum)
 
     }
+
+    private fun initListPlaylist(rcvPlaylistSelected: RecyclerView) {
+        listPlaylistSelected = ArrayList()
+        playlistSelectedAdapter = PlaylistSelectedAdapter(requireContext(),listPlaylistSelected)
+
+        rcvPlaylistSelected.setHasFixedSize(true)
+        rcvPlaylistSelected.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.VERTICAL,false)
+        rcvPlaylistSelected.adapter = playlistSelectedAdapter
+
+        playlistSelectedAdapter.setOnItemClickListener(object : PlaylistSelectedAdapter.IonItemClickListener{
+            override fun onItemClick(position: Int) {
+                MyLib.showToast(requireContext(), listPlaylistSelected[position].playlistname)
+            }
+        })
+        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
+    }
+    //endregion
+    //===========================================================
+    //region ANOTHER FUNCTION
+
+    // mở dialog thêm vào playlist
+    private fun openDialogAddPlaylist(gravity: Int){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dlg_select_playlist_dialog)
+        dialog.setCancelable(true)
+
+        val window = dialog.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
+        windowAttributes.gravity = gravity
+        window.attributes = windowAttributes
+
+        val btnExit: Button = dialog.findViewById(R.id.btnExit)
+        val rcvPlaylistSelected: RecyclerView = dialog.findViewById(R.id.rcvPlaylistSelect)
+
+        initListPlaylist(rcvPlaylistSelected)
+
+        btnExit.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //call service xử lý xự kiện phát nhạc
+    private fun clickStartService(list : ArrayList<Song>, position: Int) {
+        val intent = Intent(requireContext(), MyService::class.java)
+
+        val bundle = Bundle()
+        bundle.putSerializable("position_song", position)
+        bundle.putSerializable("list_song", list)
+        intent.putExtras(bundle)
+
+        activity?.startService(intent)
+    }
+
+    // kiểm tra follow
+    private fun checkFollowed () {
+        val getUser = sessionUser.getUserDetails()
+        val gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
+        val playlist : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
+
+        for (i in playlist) {
+            if (i.id == idPlayList) {
+                isFollow = true
+                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+            }
+        }
+    }
+
+    // sự kiện click để follow
+    private fun clickFollow() {
+        val getUser = sessionUser.getUserDetails()
+        btnFollow.setOnClickListener {
+
+            if (!isFollow){
+                isFollow = true
+                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+
+            }
+
+            else{
+                isFollow = false
+                btnFollow.setImageResource(R.drawable.ic_favorite)
+                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+            }
+
+        }
+    }
+    //endregion
+    //===========================================================
+    //region CALL API
 
     private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
         
@@ -148,55 +246,25 @@ class ListSongFragment: Fragment() {
         })
     }
 
-    private fun clickStopService() {
-        val intent = Intent(requireContext(), MyService::class.java)
-        activity?.stopService(intent)
-    }
-
-    //call service xử lý xự kiện phát nhạc
-    private fun clickStartService(list : ArrayList<Song>, position: Int) {
-        val intent = Intent(requireContext(), MyService::class.java)
-
-        val bundle = Bundle()
-        bundle.putSerializable("position_song", position)
-        bundle.putSerializable("list_song", list)
-        intent.putExtras(bundle)
-
-        activity?.startService(intent)
-    }
-
-    private fun checkFollowed () {
-        var getUser = sessionUser.getUserDetails()
-        var gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
-        var playlist : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
-
-        for (i in playlist) {
-            if (i.id == idPlayList) {
-                isFollow = true
-                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
-            }
-        }
-    }
-
-    private fun clickFollow() {
-        val getUser = sessionUser.getUserDetails()
-        btnFollow.setOnClickListener {
-
-            if (!isFollow){
-                isFollow = true
-                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
-                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
-
+    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
+        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+                val dataPlayList = response.body()
+                if(dataPlayList != null) {
+                    if(!dataPlayList.error) {
+                        list.addAll(dataPlayList.listPlayList)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+                    }
+                }
             }
 
-            else{
-                isFollow = false
-                btnFollow.setImageResource(R.drawable.ic_favorite)
-                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
             }
-
-        }
+        })
     }
 
     private fun callApiFollowOrUnfollow(userId : String, playlistId : String, status : Boolean ) {
@@ -208,8 +276,8 @@ class ListSongFragment: Fragment() {
                 if(followStatus!=null){
                     if (!followStatus.error) {
                         MyLib.showToast(requireContext(),followStatus.message)
-                        var gson = Gson()
-                        var listPlaylist = gson.toJson(followStatus.user.followPlaylist)
+                        val gson = Gson()
+                        val listPlaylist = gson.toJson(followStatus.user.followPlaylist)
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
                         sessionUser.editor.commit()
                     }
@@ -225,6 +293,12 @@ class ListSongFragment: Fragment() {
             }
         })
     }
+    //endregion
+
+
+
+
+
 }
 
 

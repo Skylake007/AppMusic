@@ -79,6 +79,10 @@ class SearchFragmentSub: Fragment() {
                 }
                 MyLib.showLog("AlbumFragment: "+ listSong[position].link)
             }
+
+            override fun onItemSelected(position: Int) {
+//                TODO("Not yet implemented")
+            }
         })
     }
 

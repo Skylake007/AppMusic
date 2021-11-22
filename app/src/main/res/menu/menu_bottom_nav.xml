@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_play_now"
             android:title="@string/action_play_now"
-            android:icon="@drawable/ic_play_circle"/>
+            android:icon="@drawable/ic_play_circle_white"/>
 
     <item android:id="@+id/action_radio"
         android:title="@string/action_library"

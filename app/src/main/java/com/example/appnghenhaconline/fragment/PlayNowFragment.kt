@@ -30,9 +30,10 @@ class PlayNowFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_play_now_fragment, container, false)
        initCategoryList()
-
         return view
     }
+
+    //region INIT ADAPTER
 
     private fun initCategoryList(){
         //Khởi tạo danh sách playlist
@@ -68,7 +69,11 @@ class PlayNowFragment : Fragment() {
         createCategorySM(rcvCategory, playlistAdapterSM)
         callApiPlayListSM(listPlaylist,playlistAdapterSM)
     }
+    //endregion
+    //===========================================================
+    //region ANOTHER FUNCTION
 
+    // set adapter cho Playlist SL
     private fun createCategorySL(rcv: RecyclerView, adapter: PlaylistSLAdapter){
         rcv.layoutManager = LinearLayoutManager(view.context,
                             LinearLayoutManager.HORIZONTAL, false)
@@ -76,12 +81,16 @@ class PlayNowFragment : Fragment() {
         rcv.adapter = adapter
     }
 
+    // set adapter cho Playlist SM
     private fun createCategorySM(rcv: RecyclerView, adapter: PlaylistSMAdapter){
         rcv.layoutManager = LinearLayoutManager(view.context,
             LinearLayoutManager.HORIZONTAL, false)
         rcv.setHasFixedSize(true)
         rcv.adapter = adapter
     }
+    //endregion
+    //===========================================================
+    //region CALL API
 
     private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter) {
         ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
@@ -124,4 +133,5 @@ class PlayNowFragment : Fragment() {
             }
         })
     }
+    //endregion
 }

@@ -14,14 +14,14 @@ import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.song.Song
 import com.squareup.picasso.Picasso
 
-class SongAdapter(var context: Context,
-                  private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongAdapter.SongNViewHolder>(){
+class SongAddAdapter(var context: Context,
+                     private var listSong: ArrayList<Song>) : RecyclerView.Adapter<SongAddAdapter.SongNViewHolder>(){
 
     private lateinit var mListener: IonItemClickListener
 
     interface IonItemClickListener{
         fun onItemClick(position: Int)
-        fun onItemSelected(position: Int)
+//        fun onItemSelected(isSelected: Boolean)
     }
 
     fun setOnItemClickListener(listener: IonItemClickListener){
@@ -30,7 +30,7 @@ class SongAdapter(var context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongNViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.i_song_item, parent, false)
+            .inflate(R.layout.i_song_add_item, parent, false)
         return SongNViewHolder(view, mListener)
     }
 
@@ -61,11 +61,8 @@ class SongAdapter(var context: Context,
 //        var layoutSong: ConstraintLayout = itemView.findViewById(R.id.layoutSong)
 
         init {
-            itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
-            }
             imgSelected.setOnClickListener {
-                listener.onItemSelected(adapterPosition)
+                listener.onItemClick(adapterPosition)
             }
         }
         fun bindSong(itemSong: Song){

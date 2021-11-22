@@ -5,12 +5,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -21,7 +21,6 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
-import com.example.appnghenhaconline.models.user.User
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_play_music.*
@@ -39,20 +38,27 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     lateinit var tvNameSinger: TextView
     lateinit var imgBgPlay : ImageView
     lateinit var mList: ArrayList<Song>
-    lateinit var tvSongPlay : TextView
+    private lateinit var tvSongPlay : TextView
     lateinit var startSeekBar :TextView
     lateinit var seekBarMusic: SeekBar
     lateinit var imgPlay : ImageView
     lateinit var endSeekBar :TextView
+    lateinit var btnRepeat : ImageView
+    lateinit var btnShuffle : ImageView
     var isPlaying: Boolean = false
+
+
     val mHandler = Handler()
     var mPosition: Int = 0
 
     companion object{
         const val MIN_DISTANCE = 100
         const val MIN_VELOCITY = 100
+        var isShuffle: Boolean = false
+        var isRepeat: Boolean = false
     }
 
+    //region broadcastReceiver
     private var broadcastReceiver = object: BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
             val bundle: Bundle? = intent?.extras
@@ -66,24 +72,27 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             handleLayoutMusic(actionMusic)
         }
     }
+    //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+            IntentFilter("send_action_to_activity"))
         init()
-        swipeActivity()
         initSongInfo()
+//        showInfoSong()
     }
 
     override fun onStart() {
         super.onStart()
-        MyLib.hideSystemUI(window, layoutPlayMusic)
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-            IntentFilter("send_action_to_activity"))
     }
 
     private fun init(){
+        mList = ArrayList()
+        MyLib.hideSystemUI(window, layoutPlayMusic)
+        swipeActivity()
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
         imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
@@ -95,6 +104,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         endSeekBar = findViewById(R.id.tvEndSeekbar)
         seekBarMusic = findViewById(R.id.seekbarPlay)
         tvNameSinger = findViewById(R.id.tvAuthorPlayMusic)
+        btnRepeat = findViewById(R.id.btnRepeat)
+        btnShuffle = findViewById(R.id.btnShuffle)
     }
 
     override fun onBackPressed() {
@@ -114,36 +125,42 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun handleLayoutMusic(action: Int) {
         when(action){
             MyService.ACTION_PAUSE->{
-                showInfoSong()
-//                initSongInfo()
+//                showInfoSong()
+                initSongInfo()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
-//                initSongInfo()
-                showInfoSong()
+                initSongInfo()
+//                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
-//                initSongInfo()
-                showInfoSong()
+                initSongInfo()
+//                showInfoSong()
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_NEXT->{
-//                initSongInfo()
-                showInfoSong()
+                initSongInfo()
+//                showInfoSong()
             }
             MyService.ACTION_PREVIOUS->{
+                initSongInfo()
+//                showInfoSong()
+            }
+            MyService.ACTION_REPEAT->{
+                initSongInfo()
+            }
+            MyService.ACTION_SHUFFLE->{
 //                initSongInfo()
-                showInfoSong()
             }
         }
     }
 
     private fun setStatusButtonPlayOrPause(){
         if (isPlaying){
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
+            btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
         }else{
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+            btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
         }
     }
 
@@ -176,17 +193,25 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 sendActionToService(MyService.ACTION_RESUME)
                 imgCardViewPlay.startAnimation(animZoomIn)
             }
-            runnable.run()
+//            runnable.run()
         }
 
         btnNext.setOnClickListener {
             sendActionToService(MyService.ACTION_NEXT)
-            runnable.run()
+//            runnable.run()
         }
 
         btnPrev.setOnClickListener {
             sendActionToService(MyService.ACTION_PREVIOUS)
-            runnable.run()
+//            runnable.run()
+        }
+        btnRepeat.setOnClickListener {
+            repeatSong()
+//            runnable.run()
+        }
+        btnShuffle.setOnClickListener {
+            shuffleSong()
+//            runnable.run()
         }
 
         seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
@@ -209,7 +234,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         intent.putExtra("action_music_service", action)
         startService(intent)
     }
-
+    //===============================================
+    //region SỰ KIỆN VUỐT MÀN HÌNH
     override fun onDown(e: MotionEvent?): Boolean {
         return false
     }
@@ -239,10 +265,28 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
         return false
     }
+    //endregion
+    //===============================================
+    private fun repeatSong(){
+        if (!isRepeat){
+            isRepeat = true
+            btnRepeat.setImageResource(R.drawable.ic_repeat)
+        }else{
+            isRepeat = false
+            btnRepeat.setImageResource(R.drawable.ic_repeat_white)
+        }
+        MyDataLocalManager.setIsRepeat(isRepeat)
+    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+    private fun shuffleSong(){
+        if (!isShuffle){
+            isShuffle = true
+            btnShuffle.setImageResource(R.drawable.ic_shuffle)
+        }else{
+            isShuffle = false
+            btnShuffle.setImageResource(R.drawable.ic_shuffle_white)
+        }
+        MyDataLocalManager.setIsShuffle(isShuffle)
     }
 
     private var runnable = object: Runnable{
@@ -254,24 +298,30 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             seekBarMusic.progress = MyService.mediaPlayer.currentPosition
 
             MyService.mediaPlayer.setOnCompletionListener {
-                sendActionToService(MyService.ACTION_NEXT)
+                if (isRepeat){
+                    sendActionToService(MyService.ACTION_REPEAT)
+                }else{
+                    sendActionToService(MyService.ACTION_NEXT)
+                }
             }
-
             mHandler.postDelayed(this, 1000)
         }
     }
 
     private fun initSongInfo() {
         seekBarMusic.max = MyService.mediaPlayer.duration
+        runnable.run()
 
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
+        val isRepeatData: Boolean = MyDataLocalManager.getIsRepeat()
+        val isShuffleData: Boolean = MyDataLocalManager.getIsShuffle()
 
         tvSongPlay.text = songData.title
         tvNameSinger.text = songData.singer[0].singername
 
         Picasso.get().load(songData.image)
-                  .resize(450,550)
+                    .resize(450,550)
                     .into(imgPlay)
         Picasso.get().load(songData.image)
                     .resize(480,480)
@@ -282,32 +332,54 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
         if (isPlayingData){
             imgCardViewPlay.startAnimation(animZoomIn)
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
+            btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
         }else{
             imgCardViewPlay.startAnimation(animZoomOut)
-            btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+            btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
+        }
+
+        if (isRepeatData){
+            btnRepeat.setImageResource(R.drawable.ic_repeat)
+        }else{
+            btnRepeat.setImageResource(R.drawable.ic_repeat_white)
+        }
+
+        if (isShuffleData){
+            btnShuffle.setImageResource(R.drawable.ic_shuffle)
+        }else{
+            btnShuffle.setImageResource(R.drawable.ic_shuffle_white)
         }
 
         btnPlayOrPause.setOnClickListener {
             if (isPlayingData){
                 sendActionToService(MyService.ACTION_PAUSE)
                 imgCardViewPlay.startAnimation(animZoomOut)
-                initSongInfo()
             }else{
                 sendActionToService(MyService.ACTION_RESUME)
                 imgCardViewPlay.startAnimation(animZoomIn)
             }
-            runnable.run()
+//            runnable.run()
         }
 
         btnNext.setOnClickListener {
             sendActionToService(MyService.ACTION_NEXT)
-            runnable.run()
+//            runnable.run()
         }
 
         btnPrev.setOnClickListener {
             sendActionToService(MyService.ACTION_PREVIOUS)
-            runnable.run()
+//            runnable.run()
+        }
+
+        btnRepeat.setOnClickListener {
+            repeatSong()
+//            runnable.run()
+        }
+
+        btnShuffle.setOnClickListener {
+            shuffleSong()
+//            sendActionToService(MyService.ACTION_SHUFFLE)
+//            runnable.run()
         }
 
         seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
@@ -323,5 +395,9 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 MyService.mediaPlayer.seekTo(seekBarMusic.progress)
             }
         })
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
     }
 }

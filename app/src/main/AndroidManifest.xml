@@ -15,7 +15,10 @@
         android:theme="@style/Theme.AppNgheNhacOnline"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.AddPlaylistActivity"
+            android:name=".activity.AddPlaylist.SearchToAddPlaylistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddPlaylist.AddPlaylistActivity"
             android:exported="true" />
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
@@ -53,7 +56,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
-            android:noHistory="false"/>
+            android:noHistory="false" />
 
         <service
             android:name=".dataLocalManager.Service.MyService"

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -25,17 +24,15 @@ import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionU
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
-import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.fragment.Library.LibraryFragment
 import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.reflect.Type
 import kotlin.math.abs
 
 class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
@@ -114,7 +111,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, PlayNowFragment()).apply {
                                 tvFragment.setText(R.string.action_play_now)
-                                imgTopNav.setImageResource(R.drawable.ic_play_circle)
+                                imgTopNav.setImageResource(R.drawable.ic_play_circle_white)
                             }.commit()
         //set sự kiện chuyển fragment
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -123,7 +120,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                 R.id.action_play_now -> {
                     selectedFragment = PlayNowFragment()
                     tvFragment.setText(R.string.action_play_now)
-                    imgTopNav.setImageResource(R.drawable.ic_play_circle)
+                    imgTopNav.setImageResource(R.drawable.ic_play_circle_white)
                 }
 
                 R.id.action_radio -> {

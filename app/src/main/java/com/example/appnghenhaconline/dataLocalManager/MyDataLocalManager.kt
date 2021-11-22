@@ -13,6 +13,8 @@ class MyDataLocalManager {
         private const val KEY_PREF_FIRST_INSTALL = "PREF_FIRST_INSTALL"
         private const val KEY_PREF_OBJECT_SONG = "PREF_OBJECT_SONG"
         private const val KEY_PREF_IS_PLAYING = "PREF_IS_PLAYING"
+        private const val KEY_PREF_IS_REPEAT = "PREF_IS_REPEAT"
+        private const val KEY_PREF_IS_SHUFFLE = "PREF_IS_SHUFFLE"
 
         private lateinit var instance: MyDataLocalManager
 
@@ -49,6 +51,28 @@ class MyDataLocalManager {
         fun setIsPlaying(isPlaying: Boolean){
             getInstance().mySharePreferences
                 .setBooleanValue(KEY_PREF_IS_PLAYING, isPlaying)
+        }
+
+        //Check đang repeat
+        fun getIsRepeat(): Boolean {
+            return getInstance().mySharePreferences
+                .getBooleanValue(KEY_PREF_IS_REPEAT)
+        }
+
+        fun setIsRepeat(isRepeat: Boolean){
+            getInstance().mySharePreferences
+                .setBooleanValue(KEY_PREF_IS_REPEAT, isRepeat)
+        }
+
+        //Check đang shuffle
+        fun getIsShuffle(): Boolean {
+            return getInstance().mySharePreferences
+                .getBooleanValue(KEY_PREF_IS_SHUFFLE)
+        }
+
+        fun setIsShuffle(isShuffle: Boolean){
+            getInstance().mySharePreferences
+                .setBooleanValue(KEY_PREF_IS_SHUFFLE, isShuffle)
         }
 
         //Check lần đăng nhập đầu tiên
