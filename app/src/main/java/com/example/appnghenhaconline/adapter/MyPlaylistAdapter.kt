@@ -14,11 +14,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.fragment.Library.Playlist.AddPlaylistFragment
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
 class MyPlaylistAdapter(var context: Context,
-                        private var playlists: ArrayList<Playlist>): RecyclerView.Adapter<MyPlaylistAdapter.MyPlaylistViewHolder>() {
+                        private var playlists: ArrayList<PlayListUser>): RecyclerView.Adapter<MyPlaylistAdapter.MyPlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPlaylistViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -28,7 +29,7 @@ class MyPlaylistAdapter(var context: Context,
 
     override fun onBindViewHolder(holder: MyPlaylistViewHolder, position: Int) {
         holder.bindMyPlaylist(playlists[position])
-        }
+    }
 
     override fun getItemCount(): Int {
         return playlists.size
@@ -39,20 +40,20 @@ class MyPlaylistAdapter(var context: Context,
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
 
-        fun bindMyPlaylist(itemPlaylist: Playlist){
-            tvPlaylistTitle.text = itemPlaylist.playlistname
+        fun bindMyPlaylist(itemPlaylist: PlayListUser){
+            tvPlaylistTitle.text = itemPlaylist.playlistName
 
-            Picasso.get().load(itemPlaylist.image).resize(480,500)
-                                                    .placeholder(R.drawable.img_loading)
-                                                    .error(R.drawable.img_error)
-                                                    .into(imgPlaylist)
+//            Picasso.get().load(itemPlaylist.image).resize(480,500)
+//                                                    .placeholder(R.drawable.img_loading)
+//                                                    .error(R.drawable.img_error)
+//                                                    .into(imgPlaylist)
 
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
                 val addPlaylistFragment = AddPlaylistFragment()
 
                 val bundle = Bundle()
-                bundle.putSerializable("object_my_playlist", itemPlaylist)
+                bundle.putSerializable("id_playlist", itemPlaylist.id)
                 addPlaylistFragment.arguments = bundle
 
                 activity.supportFragmentManager.beginTransaction()

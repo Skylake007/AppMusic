@@ -19,7 +19,9 @@ import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
-import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.models.playlist.DataPlayList
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.google.android.material.textfield.TextInputEditText
@@ -32,12 +34,13 @@ class AddPlaylistFragment: Fragment() {
     lateinit var btnBack: ImageView
     lateinit var tvNamePlaylist: TextView
     lateinit var addPlaylistNav: LinearLayout
-    lateinit var mPlaylistInfo: Playlist
+//    lateinit var mPlaylistInfo: PlayListUser
     lateinit var mediaPlayer : MediaPlayer
     lateinit var listsong : ArrayList<Song>
     lateinit var songAdapter: SongAdapter
     lateinit var rcvSong: RecyclerView
     lateinit var idPlayList : String
+    lateinit var btnDeletePlayListUser : ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -51,6 +54,7 @@ class AddPlaylistFragment: Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         tvNamePlaylist = view.findViewById(R.id.tvNamePlaylist)
         addPlaylistNav = view.findViewById(R.id.addPlaylistNav)
+        btnDeletePlayListUser = view.findViewById(R.id.btnDeletePlaylistUser)
         initPlaylistInfo()
 
         event()
@@ -65,7 +69,7 @@ class AddPlaylistFragment: Fragment() {
         addPlaylistNav.setOnClickListener {
             val bundleReceive = Bundle()
             val fragmentLayout = SearchToAddPlaylistFragment()
-            bundleReceive.putSerializable("__object_my_playlist", mPlaylistInfo)
+            bundleReceive.putSerializable("id_playlist", idPlayList)
             fragmentLayout.arguments = bundleReceive
 
             MyLib.changeFragment(requireActivity(), fragmentLayout)
@@ -73,6 +77,10 @@ class AddPlaylistFragment: Fragment() {
 
         tvNamePlaylist.setOnClickListener {
             openDialogEditNamePlaylist(Gravity.CENTER)
+        }
+
+        btnDeletePlayListUser.setOnClickListener{
+            callApiDeletePlaylistUser(idPlayList)
         }
     }
 
@@ -82,15 +90,9 @@ class AddPlaylistFragment: Fragment() {
     private fun initPlaylistInfo(){
         val bundle = requireArguments()
         if (bundle != null){
-            if (bundle.getString("_name_playlist") == null){
-                val playlistInfo = bundle.get("object_my_playlist")
-                mPlaylistInfo = playlistInfo as Playlist
-                tvNamePlaylist.text = mPlaylistInfo.playlistname
-                idPlayList = mPlaylistInfo.id
-                initSongList()
-            }else{
-                tvNamePlaylist.text = bundle.getString("_name_playlist")
-            }
+            idPlayList = bundle.getString("id_playlist")!!
+            initSongList()
+            callApiShowSongFromPlaylistUser(listsong,songAdapter,idPlayList)
         }
     }
 
@@ -115,11 +117,10 @@ class AddPlaylistFragment: Fragment() {
                 }
             }
             override fun onItemSelected(position: Int) {
-//                openDialogAddPlaylist(Gravity.CENTER)
+                callApiDeleteSongFromPlaylistUser(idPlayList,listsong[position].id)
             }
         })
 
-        callApiShowListSongByID(listsong,songAdapter,idPlayList)
         mediaPlayer = MediaPlayer()
     }
     //endregion
@@ -155,8 +156,15 @@ class AddPlaylistFragment: Fragment() {
         }
 
         btnAccept.setOnClickListener {
-            tvNamePlaylist.text = edtNamePlaylist.text
-            dialog.dismiss()
+            var namePlaylist = edtNamePlaylist.text.toString().trim()
+            if ( namePlaylist == "") {
+                MyLib.showToast(requireContext(),"Vui Lòng không để trống Tên playList")
+            }
+            else {
+                callApiUpdateNameFromPlayListUser(idPlayList,namePlaylist)
+                dialog.dismiss()
+            }
+
         }
         dialog.show()
     }
@@ -176,29 +184,142 @@ class AddPlaylistFragment: Fragment() {
     //===========================================================
     //region CALL API
 
-    private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
+//    private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
+//        ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
+//            override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
+//                val dataSong = response.body()
+//                MyLib.showLog(dataSong.toString())
+//                if(dataSong!=null){
+//                    if(!dataSong.error){
+//                        val listSong: ArrayList<Song> = dataSong.listSong
+//
+//                        MyLib.showLog(listSong.toString())
+//
+//                        songs.addAll(listSong)
+//
+//                        songAdapter.notifyDataSetChanged()
+//                    }else MyLib.showLog(dataSong.message)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataSong?>, t: Throwable) {
+//                MyLib.showLog(t.toString())
+//            }
+//        })
+//    }
 
-        ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
-            override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
-                val dataSong = response.body()
-                MyLib.showLog(dataSong.toString())
-                if(dataSong!=null){
-                    if(!dataSong.error){
-                        val listSong: ArrayList<Song> = dataSong.listSong
-
-                        MyLib.showLog(listSong.toString())
-
+    //Show list song in playlist
+    private fun callApiShowSongFromPlaylistUser(songs : ArrayList<Song>,songAdapter : SongAdapter, idPlaylistUser : String ) {
+        ApiService.apiService.showSongFromPlaylistUser(idPlaylistUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse( call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        var playListUser = dataPlayListUser.playlistUser
+                        var listSong : ArrayList<Song> = playListUser.listSong
+                        MyLib.showLog(playListUser.toString())
+                        tvNamePlaylist.text = playListUser.playlistName
                         songs.addAll(listSong)
-
                         songAdapter.notifyDataSetChanged()
-                    }else MyLib.showLog(dataSong.message)
+
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<DataSong?>, t: Throwable) {
-                MyLib.showLog(t.toString())
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
             }
         })
     }
+
+    // update name playlist
+    private fun callApiUpdateNameFromPlayListUser(idPlaylistUser : String, namePlaylistUser : String ) {
+        ApiService.apiService.updateNameFromPlayListUser(idPlaylistUser,namePlaylistUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse( call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                        val fragmentLayout = AddPlaylistFragment()
+
+                        val bundle = Bundle()
+                        bundle.putSerializable("id_playlist",idPlayList)
+                        fragmentLayout.arguments = bundle
+
+                        MyLib.changeFragment(requireActivity(), fragmentLayout)
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+        })
+    }
+
+    // Delete playlist
+    private fun callApiDeletePlaylistUser(idPlaylistUser: String) {
+        ApiService.apiService.deletePlaylistUser(idPlaylistUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                        val fragmentLayout = LibraryPlaylistFragment()
+
+                        val bundle = Bundle()
+
+                        fragmentLayout.arguments = bundle
+
+                        MyLib.changeFragment(requireActivity(), fragmentLayout)
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+
+        })
+    }
+
+    // delete song from playlist
+    private fun callApiDeleteSongFromPlaylistUser(idPlaylistUser: String, idSong : String) {
+        ApiService.apiService.deleteSongFromPlaylistUser(idPlaylistUser,idSong).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                        val fragmentLayout = AddPlaylistFragment()
+
+                        val bundle = Bundle()
+                        bundle.putSerializable("id_playlist",idPlayList)
+                        fragmentLayout.arguments = bundle
+
+                        MyLib.changeFragment(requireActivity(), fragmentLayout)
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+
+        })
+    }
+
     //endregion
 }

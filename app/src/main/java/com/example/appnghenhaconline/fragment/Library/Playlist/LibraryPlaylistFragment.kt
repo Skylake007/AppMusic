@@ -20,6 +20,8 @@ import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.models.playlist.DataPlayList
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
@@ -33,14 +35,13 @@ class LibraryPlaylistFragment: Fragment() {
     internal lateinit var view: View
     private lateinit var btnAddPlaylist: ImageView
     private lateinit var listFollowPlaylist: ArrayList<Playlist>
-    private lateinit var listMyPlaylist: ArrayList<Playlist>
+    private lateinit var listMyPlaylist: ArrayList<PlayListUser>
     private lateinit var rcvFollowPlaylist: RecyclerView
     private lateinit var rcvMyPlaylist: RecyclerView
     private lateinit var followPlaylistAdapter: FollowPlaylistAdapter
     private lateinit var myPlaylistAdapter: MyPlaylistAdapter
     private lateinit var session: SessionUser
     private lateinit var mPlaylist: Playlist
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -58,8 +59,8 @@ class LibraryPlaylistFragment: Fragment() {
 
     private fun init(){
         btnAddPlaylist = view.findViewById(R.id.btnAddPlaylist)
-        initFollowPlaylist()
         initMyPlaylist()
+        initFollowPlaylist()
     }
 
     private fun event(){
@@ -90,27 +91,31 @@ class LibraryPlaylistFragment: Fragment() {
         rcvMyPlaylist.layoutManager = LinearLayoutManager(view.context,
             LinearLayoutManager.HORIZONTAL, false)
         rcvMyPlaylist.adapter = myPlaylistAdapter
-        callApiPlayList(listMyPlaylist, myPlaylistAdapter)
+        var getUser = session.getUserDetails()
+        callApiLoadPlayListUser(listMyPlaylist, myPlaylistAdapter, getUser[session.KEY_ID].toString())
 
     }
 
-    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : MyPlaylistAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+    // load Playlist User created
+    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
+        ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
                 val dataPlayList = response.body()
                 if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
+                    if (!dataPlayList.error) {
+                        val dataPlayListUser = dataPlayList.listPlayListUser
+
+                        list.addAll(dataPlayListUser)
                         adapter.notifyDataSetChanged()
                     }
                     else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+                        MyLib.showToast(requireContext(),dataPlayList.message)
                     }
                 }
             }
 
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error" )
             }
         })
     }
@@ -148,15 +153,45 @@ class LibraryPlaylistFragment: Fragment() {
         }
 
         btnAccept.setOnClickListener {
-            val fragmentLayout = AddPlaylistFragment()
-
-            val bundle = Bundle()
-            bundle.putSerializable("_name_playlist", tvNamePlaylist.text.toString())
-            fragmentLayout.arguments = bundle
-
-            MyLib.changeFragment(requireActivity(), fragmentLayout)
-            dialog.dismiss()
+            if (tvNamePlaylist.text.toString().trim() != "") {
+                var getUser = session.getUserDetails()
+                callApiCreatePlaylistUser(getUser[session.KEY_ID]!!,tvNamePlaylist.text.toString())
+                dialog.dismiss()
+            }
+            else {
+                MyLib.showToast(requireContext(),"Vui Lòng Điền tên PlayList")
+            }
         }
         dialog.show()
+    }
+
+    //call Api Create playlist user
+    private fun callApiCreatePlaylistUser(userId : String, playlistName : String ) {
+        ApiService.apiService.createPlaylistUser(userId, playlistName).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val playList = response.body()
+                if (playList != null) {
+                    if (!playList.error) {
+                        val playlist : PlayListUser = playList.playlistUser
+
+                        val fragmentLayout = AddPlaylistFragment()
+
+                        val bundle = Bundle()
+                        bundle.putSerializable("id_playlist",playlist.id)
+                        fragmentLayout.arguments = bundle
+
+                        MyLib.changeFragment(requireActivity(), fragmentLayout)
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),playList.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+
+        })
     }
 }

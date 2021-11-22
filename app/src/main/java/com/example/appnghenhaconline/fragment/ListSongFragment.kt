@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -23,7 +24,8 @@ import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
-import com.example.appnghenhaconline.models.playlist.DataPlayList
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -134,7 +136,9 @@ class ListSongFragment: Fragment() {
                 MyLib.showToast(requireContext(), listPlaylistSelected[position].playlistname)
             }
         })
-        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
+//        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
+        var user = sessionUser.getUserDetails()
+//        callApiLoadPlayListUser(listPlaylistSelected,playlistSelectedAdapter, user[sessionUser.KEY_ID]!!)
     }
     //endregion
     //===========================================================
@@ -246,26 +250,26 @@ class ListSongFragment: Fragment() {
         })
     }
 
-    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                val dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-        })
-    }
+//    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
+//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+//                val dataPlayList = response.body()
+//                if(dataPlayList != null) {
+//                    if(!dataPlayList.error) {
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                    else {
+//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//        })
+//    }
 
     private fun callApiFollowOrUnfollow(userId : String, playlistId : String, status : Boolean ) {
         ApiService.apiService.followOrUnfollowPlayList(userId,playlistId,status).enqueue(object : Callback<DataUser?> {
@@ -290,6 +294,29 @@ class ListSongFragment: Fragment() {
 
             override fun onFailure(call: Call<DataUser?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error")
+            }
+        })
+    }
+
+    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
+        ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayList = response.body()
+                if(dataPlayList != null) {
+                    if (!dataPlayList.error) {
+                        val dataPlayListUser = dataPlayList.listPlayListUser
+
+                        list.addAll(dataPlayListUser)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayList.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error" )
             }
         })
     }

@@ -17,6 +17,8 @@ import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
 import com.example.appnghenhaconline.adapter.SongAddAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.DataPlayList
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -28,7 +30,7 @@ class SearchToAddPlaylistFragment: Fragment() {
     internal lateinit var view: View
     private lateinit var edtSearch: EditText
     private lateinit var btnBack: ImageView
-    private lateinit var mPlaylistInfo: Playlist
+    private lateinit var idPlaylist : String
     private lateinit var listSong : ArrayList<Song>
     private lateinit var listPlaylistSelected : ArrayList<Playlist>
     private lateinit var songAdapter: SongAddAdapter
@@ -55,21 +57,19 @@ class SearchToAddPlaylistFragment: Fragment() {
         btnBack.setOnClickListener {
             val bundleReceive = Bundle()
             val fragmentLayout = AddPlaylistFragment()
-            bundleReceive.putSerializable("object_my_playlist", mPlaylistInfo)
+            bundleReceive.putSerializable("id_playlist", idPlaylist)
             fragmentLayout.arguments = bundleReceive
 
             MyLib.changeFragment(requireActivity(), fragmentLayout)
         }
         myEnter()
     }
-
     //===========================================================
     //region INIT ADAPTER
     private fun initObjectPlaylist(){
         val bundle = requireArguments()
         if (bundle != null){
-            val playlistInfo = bundle.get("__object_my_playlist")
-            mPlaylistInfo = playlistInfo as Playlist
+            idPlaylist = bundle.getString("id_playlist")!!
         }
     }
 
@@ -85,60 +85,62 @@ class SearchToAddPlaylistFragment: Fragment() {
 
         songAdapter.setOnItemClickListener(object : SongAddAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
-                openDialogAddPlaylist(Gravity.CENTER)
+//                openDialogAddPlaylist(Gravity.CENTER)
+                callApiAddPlaylistUser(idPlaylist,listSong[position].id)
             }
         })
     }
 
-    private fun  initListPlaylist(rcvPlaylistSelected: RecyclerView) {
-        listPlaylistSelected = ArrayList()
-        playlistSelectedAdapter = PlaylistSelectedAdapter(requireContext(),listPlaylistSelected)
+//    private fun  initListPlaylist(rcvPlaylistSelected: RecyclerView) { // Vì thêm vào play list  đã nhấn vào nền ko cần show play list
+//        listPlaylistSelected = ArrayList()
+//        playlistSelectedAdapter = PlaylistSelectedAdapter(requireContext(),listPlaylistSelected)
+//
+//        rcvPlaylistSelected.setHasFixedSize(true)
+//        rcvPlaylistSelected.layoutManager = LinearLayoutManager(requireContext(),
+//            LinearLayoutManager.VERTICAL,false)
+//        rcvPlaylistSelected.adapter = playlistSelectedAdapter
+//
+//        playlistSelectedAdapter.setOnItemClickListener(object : PlaylistSelectedAdapter.IonItemClickListener{
+//            override fun onItemClick(position: Int) {
+//                MyLib.showToast(requireContext(), listPlaylistSelected[position].playlistname)
+//            }
+//        })
+//        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
+//    }
 
-        rcvPlaylistSelected.setHasFixedSize(true)
-        rcvPlaylistSelected.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL,false)
-        rcvPlaylistSelected.adapter = playlistSelectedAdapter
-
-        playlistSelectedAdapter.setOnItemClickListener(object : PlaylistSelectedAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
-                MyLib.showToast(requireContext(), listPlaylistSelected[position].playlistname)
-            }
-        })
-        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
-    }
     //endregion
     //===========================================================
     //region ANOTHER FUNCTION
 
     // mở dialog thêm vào playlist
-    private fun openDialogAddPlaylist(gravity: Int){
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dlg_select_playlist_dialog)
-        dialog.setCancelable(true)
-
-        val window = dialog.window
-        window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
-        windowAttributes.gravity = gravity
-        window.attributes = windowAttributes
-
-        val btnExit: Button = dialog.findViewById(R.id.btnExit)
-        val rcvPlaylistSelected: RecyclerView = dialog.findViewById(R.id.rcvPlaylistSelect)
-
-        initListPlaylist(rcvPlaylistSelected)
-
-        btnExit.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
+//    private fun openDialogAddPlaylist(gravity: Int){
+//        val dialog = Dialog(requireContext())
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setContentView(R.layout.dlg_select_playlist_dialog)
+//        dialog.setCancelable(true)
+//
+//        val window = dialog.window
+//        window?.setLayout(
+//            WindowManager.LayoutParams.MATCH_PARENT,
+//            WindowManager.LayoutParams.WRAP_CONTENT
+//        )
+//        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//
+//        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
+//        windowAttributes.gravity = gravity
+//        window.attributes = windowAttributes
+//
+//        val btnExit: Button = dialog.findViewById(R.id.btnExit)
+//        val rcvPlaylistSelected: RecyclerView = dialog.findViewById(R.id.rcvPlaylistSelect)
+//
+//        initListPlaylist(rcvPlaylistSelected)
+//
+//        btnExit.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
+//        dialog.show()
+//    }
 
     // sự kiện bấm nút tìm
     private fun myEnter () {
@@ -176,25 +178,46 @@ class SearchToAddPlaylistFragment: Fragment() {
         })
     }
 
-    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                val dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
+//    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
+//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+//                val dataPlayList = response.body()
+//                if(dataPlayList != null) {
+//                    if(!dataPlayList.error) {
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                    else {
+//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//        })
+//    }
+
+    private fun callApiAddPlaylistUser(idPlayList : String, idSong : String) {
+        ApiService.apiService.addPlaylistUser(idPlayList,idSong).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse( call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
                     }
                     else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
                     }
                 }
             }
 
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error")
             }
         })
     }
+
     //endregion
 }

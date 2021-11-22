@@ -1,6 +1,8 @@
 package com.example.appnghenhaconline.api
 
 import com.example.appnghenhaconline.models.playlist.DataPlayList
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.user.*
 import com.google.gson.Gson
@@ -19,9 +21,9 @@ interface ApiService {
     fun getListSongByID(@Query ("id") id : String) : Call<DataSong>
 
     companion object{
-        private val baseUrl = "http://192.168.1.4:3000/"
+//        private val baseUrl = "http://192.168.1.4:3000/"
         //private val baseUrl = "http://192.168.10.62:3000/"
-//      private val baseUrl = "http://192.168.0.31:3000/"
+      private val baseUrl = "http://192.168.0.31:3000/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val apiService: ApiService = Retrofit.Builder()
             .baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson))
@@ -80,4 +82,35 @@ interface ApiService {
                                  @Query("playlistId") playListId : String,
                                  @Query("status") status : Boolean
     ) : Call<DataUser>
+
+    @POST("updateuser/CreatePlaylistUser")
+    fun createPlaylistUser(@Query("idUser") idUser : String,
+                           @Query("playlistName") playlistName : String
+
+    ) : Call<DataPlayListUser>
+
+    @GET("updateuser/LoadPlaylistUser")
+    fun loadPlaylistUser(@Query("idUser") idUser: String) : Call<DataPlayListUser>
+
+    @POST("updateuser/AddNewSongToPlaylistUser")
+    fun addPlaylistUser(@Query("idPlaylist") idPlaylist : String,
+                        @Query("idSong") idSong : String
+
+    ) : Call<DataPlayListUser>
+
+    @GET ("updateuser/ShowSongFromPlaylistUser")
+    fun showSongFromPlaylistUser(@Query("idPlaylist") idPlaylist: String) : Call<DataPlayListUser>
+
+    @PUT("/updateuser/UpdateNameFromPlaylistUser")
+    fun updateNameFromPlayListUser(@Query("idPlaylist") idPlaylist: String,
+                               @Query("namePlaylist") namePlayList : String
+    ) : Call<DataPlayListUser>
+
+    @DELETE("updateuser/RemovePlaylistUser")
+    fun deletePlaylistUser(@Query("idPlaylist") idPlaylist: String) : Call<DataPlayListUser>
+
+    @DELETE("updateuser/RemoveSongFromPlaylistUser")
+    fun deleteSongFromPlaylistUser(@Query("idPlaylist") idPlaylist: String,
+                                   @Query("idSong") idSong: String
+    ) : Call<DataPlayListUser>
 }
