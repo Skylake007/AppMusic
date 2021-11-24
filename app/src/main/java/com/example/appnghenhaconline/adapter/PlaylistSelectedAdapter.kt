@@ -11,12 +11,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.Song
 import com.squareup.picasso.Picasso
 
 class PlaylistSelectedAdapter(var context: Context,
-                              private var listPlaylistSelected: ArrayList<Playlist>)
+                              private var listPlaylistSelected: ArrayList<PlayListUser>)
     : RecyclerView.Adapter<PlaylistSelectedAdapter.PlaylistSelectedViewHolder>(){
 
     private lateinit var mListener: IonItemClickListener
@@ -45,7 +46,6 @@ class PlaylistSelectedAdapter(var context: Context,
 
     inner class PlaylistSelectedViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
         var tvTittle: TextView = itemView.findViewById(R.id.titlePlaylistSelected)
-        var imgSong: ImageView = itemView.findViewById(R.id.imgPlaylistSelected)
         var imgSelected : ImageView = itemView.findViewById(R.id.imgSelected)
 
         init {
@@ -54,10 +54,8 @@ class PlaylistSelectedAdapter(var context: Context,
             }
         }
 
-        fun bindSong(itemPlaylist: Playlist){
-            tvTittle.text = itemPlaylist.playlistname
-            Picasso.get().load(itemPlaylist.image)
-                        .into(imgSong)
+        fun bindSong(itemPlaylist: PlayListUser){
+            tvTittle.text = itemPlaylist.playlistName
         }
     }
 }

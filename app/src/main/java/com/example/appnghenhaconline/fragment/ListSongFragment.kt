@@ -42,14 +42,14 @@ class ListSongFragment: Fragment() {
     lateinit var tittleAlbum : TextView
     lateinit var imgAlbum : ImageView
     lateinit var listsong : ArrayList<Song>
-    lateinit var listPlaylistSelected : ArrayList<Playlist>
+    lateinit var listPlaylistSelected : ArrayList<PlayListUser>
+    lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
     lateinit var idPlayList : String
     lateinit var mediaPlayer : MediaPlayer
     lateinit var songAdapter: SongAdapter
-    lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
     private lateinit var btnFollow: ImageView
-    var isFollow: Boolean = false
     lateinit var sessionUser : SessionUser
+    var isFollow: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -101,7 +101,7 @@ class ListSongFragment: Fragment() {
                 }
             }
             override fun onItemSelected(position: Int) {
-                openDialogAddPlaylist(Gravity.CENTER)
+                openDialogAddPlaylist(Gravity.CENTER, listsong[position].id)
             }
         })
 
@@ -122,7 +122,8 @@ class ListSongFragment: Fragment() {
 
     }
 
-    private fun initListPlaylist(rcvPlaylistSelected: RecyclerView) {
+    //khởi tạo danh sách playlist của tôi
+    private fun initListPlaylist(rcvPlaylistSelected: RecyclerView, idSong: String) {
         listPlaylistSelected = ArrayList()
         playlistSelectedAdapter = PlaylistSelectedAdapter(requireContext(),listPlaylistSelected)
 
@@ -133,19 +134,18 @@ class ListSongFragment: Fragment() {
 
         playlistSelectedAdapter.setOnItemClickListener(object : PlaylistSelectedAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
-                MyLib.showToast(requireContext(), listPlaylistSelected[position].playlistname)
+                callApiAddPlaylistUser(listPlaylistSelected[position].id, idSong)
             }
         })
-//        callApiPlayList(listPlaylistSelected, playlistSelectedAdapter)
-        var user = sessionUser.getUserDetails()
-//        callApiLoadPlayListUser(listPlaylistSelected,playlistSelectedAdapter, user[sessionUser.KEY_ID]!!)
+        val user = sessionUser.getUserDetails()
+        callApiLoadPlayListUser(listPlaylistSelected,playlistSelectedAdapter, user[sessionUser.KEY_ID]!!)
     }
     //endregion
     //===========================================================
     //region ANOTHER FUNCTION
 
     // mở dialog thêm vào playlist
-    private fun openDialogAddPlaylist(gravity: Int){
+    private fun openDialogAddPlaylist(gravity: Int, idSong: String){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dlg_select_playlist_dialog)
@@ -165,7 +165,7 @@ class ListSongFragment: Fragment() {
         val btnExit: Button = dialog.findViewById(R.id.btnExit)
         val rcvPlaylistSelected: RecyclerView = dialog.findViewById(R.id.rcvPlaylistSelect)
 
-        initListPlaylist(rcvPlaylistSelected)
+        initListPlaylist(rcvPlaylistSelected, idSong)
 
         btnExit.setOnClickListener {
             dialog.dismiss()
@@ -250,27 +250,6 @@ class ListSongFragment: Fragment() {
         })
     }
 
-//    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSelectedAdapter) {
-//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-//                val dataPlayList = response.body()
-//                if(dataPlayList != null) {
-//                    if(!dataPlayList.error) {
-//                        list.addAll(dataPlayList.listPlayList)
-//                        adapter.notifyDataSetChanged()
-//                    }
-//                    else {
-//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-//                MyLib.showToast(requireContext(),"Call Api Error")
-//            }
-//        })
-//    }
-
     private fun callApiFollowOrUnfollow(userId : String, playlistId : String, status : Boolean ) {
         ApiService.apiService.followOrUnfollowPlayList(userId,playlistId,status).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
@@ -298,7 +277,7 @@ class ListSongFragment: Fragment() {
         })
     }
 
-    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
+    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : PlaylistSelectedAdapter, idUser : String) {
         ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
             override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
                 val dataPlayList = response.body()
@@ -317,6 +296,26 @@ class ListSongFragment: Fragment() {
 
             override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error" )
+            }
+        })
+    }
+
+    private fun callApiAddPlaylistUser(idPlayList : String, idSong : String) {
+        ApiService.apiService.addPlaylistUser(idPlayList,idSong).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse( call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayListUser = response.body()
+                if (dataPlayListUser != null) {
+                    if (!dataPlayListUser.error) {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
             }
         })
     }

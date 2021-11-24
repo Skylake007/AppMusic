@@ -41,7 +41,6 @@ class LibraryPlaylistFragment: Fragment() {
     private lateinit var followPlaylistAdapter: FollowPlaylistAdapter
     private lateinit var myPlaylistAdapter: MyPlaylistAdapter
     private lateinit var session: SessionUser
-    private lateinit var mPlaylist: Playlist
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -68,6 +67,8 @@ class LibraryPlaylistFragment: Fragment() {
             openDialogAddPlaylist(Gravity.CENTER)
         }
     }
+
+    //region INIT ADAPTER
 
     private fun initFollowPlaylist(){
         listFollowPlaylist = ArrayList()
@@ -96,30 +97,6 @@ class LibraryPlaylistFragment: Fragment() {
 
     }
 
-    // load Playlist User created
-    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
-        ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
-            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
-                val dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if (!dataPlayList.error) {
-                        val dataPlayListUser = dataPlayList.listPlayListUser
-
-                        list.addAll(dataPlayListUser)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showToast(requireContext(),dataPlayList.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error" )
-            }
-        })
-    }
-
     private fun showFollowPlaylist(list : ArrayList<Playlist>, adapter : FollowPlaylistAdapter) {
         val getPlaylist = session.getUserDetails()
         val gson = Gson()
@@ -128,8 +105,11 @@ class LibraryPlaylistFragment: Fragment() {
         list.addAll(playlistFollow)
         adapter.notifyDataSetChanged()
     }
+    //endregion
+    //===========================================================
+    //region ANOTHER FUNCTION
 
-//    hàm hiện dialog
+    //  hàm hiện dialog
     private fun openDialogAddPlaylist(gravity: Int){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -164,6 +144,33 @@ class LibraryPlaylistFragment: Fragment() {
         }
         dialog.show()
     }
+    //endregion
+    //===========================================================
+    //region CALL API
+
+    // load Playlist User created
+    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
+        ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
+            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+                val dataPlayList = response.body()
+                if(dataPlayList != null) {
+                    if (!dataPlayList.error) {
+                        val dataPlayListUser = dataPlayList.listPlayListUser
+
+                        list.addAll(dataPlayListUser)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataPlayList.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error" )
+            }
+        })
+    }
 
     //call Api Create playlist user
     private fun callApiCreatePlaylistUser(userId : String, playlistName : String ) {
@@ -194,4 +201,6 @@ class LibraryPlaylistFragment: Fragment() {
 
         })
     }
+
+    //endregion
 }
