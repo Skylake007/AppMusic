@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_play_now"
+            android:title="@string/action_play_now"
+            android:icon="@drawable/ic_play_circle_white"/>
+
+    <item android:id="@+id/action_radio"
+        android:title="@string/action_library"
+        android:icon="@drawable/ic_library"/>
+
+    <item android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search"/>
+</menu>

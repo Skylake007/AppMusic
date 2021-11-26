@@ -1,7 +1,48 @@
 <resources>
-    <string name="app_name">AppNgheNhacOnline</string>
+    <string name="app_name">Tea Music</string>
     <string name="test">TestView</string>
 
     <!--   Descript in listview_row_song.xml-->
     <string name="description_row_song">this is a description for layout listview_row_song</string>
+
+    <string-array name="sex">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
+
+    //menu bottom nav
+    <string name="action_play_now">Nghe ngay</string>
+    <string name="action_library">Thư viện</string>
+    <string name="action_search">Tìm kiếm</string>
+
+    //menu setting
+    <string name="menu_user">Tài khoản</string>
+    <string name="menu_setting">Cài đặt</string>
+
+    //tab menu user
+    <string name="i_user_info">Thông tin tài khoản</string>
+    <string name="i_change_user_password">Đổi mật khẩu</string>
+
+    //tab menu setting
+    <string name="i_setting">Cài đặt</string>
+
+    //user info
+    <string name="name">Tên</string>
+    <string name="username">Tên người dùng</string>
+    <string name="sex">Giới tính</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="oldPassword">Mật khẩu cũ</string>
+    <string name="newPassword">Mật khẩu mới</string>
+    <string name="confirmPassword">Xác nhận mật khẩu</string>
+    <string name="code">Mã xác nhận</string>
+
+    //notification
+    <string name="required">Bắt buộc*</string>
+
+    //string another
+    <string name="notifi_receive_mail">Hãy nhập địa chỉ email khôi phục bạn đã sử dụng cho tài khoản của mình.</string>
+    <string name="notifi_send_reset_code">Chúng tôi đã gửi email chứa mã xác thực đến địa chỉ email khôi phục
+    của bạn. \nVui lòng kiểm tra email để lấy mã và nhập vào bên dưới.</string>
+    <string name="notifi_send_new_pass"><b>Xác nhận thành công!!!</b> \nBạn hãy nhập mật khẩu mới vào bên dưới.</string>
 </resources>
