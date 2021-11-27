@@ -75,30 +75,6 @@ class SongAddAdapter(var context: Context,
             tvSinger.text = singerName
             Picasso.get().load(itemSong.image)
                 .into(imgSong)
-
-//            if (itemSong.isSelected){
-//                viewBackground.setBackgroundResource(R.drawable.cm_show_selected_background)
-//                imgSelected.visibility = View.VISIBLE
-//            }else{
-//                viewBackground.setBackgroundResource(R.drawable.cm_show_background)
-//                imgSelected.visibility = View.GONE
-//            }
-//            layoutSong.setOnLongClickListener {
-//                if (itemSong.isSelected){
-//                    viewBackground.setBackgroundResource(R.drawable.cm_show_background)
-//                    imgSelected.visibility = View.GONE
-//                    itemSong.isSelected = false
-//                    if (getSelectedSong().size == 0){
-//                        mListener.onItemSelected(false)
-//                    }
-//                }else{
-//                    viewBackground.setBackgroundResource(R.drawable.cm_show_selected_background)
-//                    imgSelected.visibility = View.VISIBLE
-//                    itemSong.isSelected = true
-//                    mListener.onItemSelected(true)
-//                }
-//                true
-//            }
         }
     }
 }

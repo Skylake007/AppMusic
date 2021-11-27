@@ -76,9 +76,11 @@ class MyService : Service() {
                 sendNotification(mList[mPosition])
             }
         }
+
         sendActionToActivity(ACTION_START)
         val actionMusic: Int = intent.getIntExtra("action_music_service", 0)
         handleActionMusic(actionMusic)
+
         return START_NOT_STICKY
     }
 
@@ -296,6 +298,7 @@ class MyService : Service() {
         bundle.putInt("action_music", action)
 
         // lưu dữ liệu vào SharePreference
+        MyDataLocalManager.setPlaylist(mList)
         MyDataLocalManager.setSong(mList[mPosition])
         MyDataLocalManager.setIsPlaying(isPlaying)
         MyDataLocalManager.setIsRepeat(isRepeat)

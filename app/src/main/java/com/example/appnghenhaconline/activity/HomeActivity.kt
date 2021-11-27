@@ -257,10 +257,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private fun initSongInfo() {
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
-        if (songData ==null && isPlayingData==null) {
-            MyLib.showToast(this,"NULL")
-            playNav.visibility = View.GONE
-        }else{
+//        if (isFirstInstalled) {
+//            playNav.visibility = View.GONE
+//        }else{
             playNav.visibility = View.VISIBLE
             tvPlayNav.text = songData.title
 
@@ -287,8 +286,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             btnPrev.setOnClickListener {
                 sendActionToService(MyService.ACTION_PREVIOUS)
             }
-        }
-
+//        }
     }
 
     private var broadcastReceiver = object: BroadcastReceiver(){

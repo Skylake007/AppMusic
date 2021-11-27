@@ -19,6 +19,9 @@ import com.example.appnghenhaconline.adapter.FollowPlaylistAdapter
 import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.fragment.Library.LibraryFragment
+import com.example.appnghenhaconline.fragment.ListSongFragment
+import com.example.appnghenhaconline.fragment.PlayNowFragment
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
@@ -41,6 +44,7 @@ class LibraryPlaylistFragment: Fragment() {
     private lateinit var followPlaylistAdapter: FollowPlaylistAdapter
     private lateinit var myPlaylistAdapter: MyPlaylistAdapter
     private lateinit var session: SessionUser
+    private lateinit var btnBack: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -53,18 +57,23 @@ class LibraryPlaylistFragment: Fragment() {
         super.onStart()
         session = SessionUser(this.requireContext())
         init()
-        event()
     }
 
     private fun init(){
         btnAddPlaylist = view.findViewById(R.id.btnAddPlaylist)
+        btnBack = view.findViewById(R.id.btnBack)
         initMyPlaylist()
         initFollowPlaylist()
+        event()
     }
 
     private fun event(){
         btnAddPlaylist.setOnClickListener {
             openDialogAddPlaylist(Gravity.CENTER)
+        }
+        btnBack.setOnClickListener {
+            val fragmentLayout = LibraryFragment()
+            MyLib.changeFragment(requireActivity(), fragmentLayout)
         }
     }
 

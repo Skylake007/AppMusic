@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.fragment.Library.Album.LibraryAlbumFragment
 import com.example.appnghenhaconline.fragment.Library.Playlist.LibraryPlaylistFragment
 
 class LibraryFragment : Fragment() {

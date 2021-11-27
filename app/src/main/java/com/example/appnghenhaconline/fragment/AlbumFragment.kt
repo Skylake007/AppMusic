@@ -26,8 +26,6 @@ import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
-import com.example.appnghenhaconline.fragment.Library.Playlist.LibraryPlaylistFragment
-import com.example.appnghenhaconline.fragment.Library.Playlist.SearchToAddPlaylistFragment
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.user.DataUser
@@ -41,7 +39,7 @@ import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListSongFragment: Fragment() {
+class AlbumFragment: Fragment() {
 
     internal lateinit var view: View
     private lateinit var rcvSong: RecyclerView
@@ -57,7 +55,7 @@ class ListSongFragment: Fragment() {
     private lateinit var lavFollow : LottieAnimationView
     private lateinit var btnPlayPlaylist : Button
     private lateinit var btnShufflePlaylist : Button
-    private lateinit var btnBack : ImageView
+    private lateinit var btnBack: ImageView
     private var isFollow: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -148,6 +146,11 @@ class ListSongFragment: Fragment() {
             MyDataLocalManager.setIsShuffle(isShuffle)
         }
         callApiShowListSongByID(listsong,songAdapter,idPlayList)
+    }
+
+    private fun randomPosition(i: Int): Int{
+        val random = Random()
+        return random.nextInt(i + 1)
     }
 
     private fun sendActionToService(action: Int){

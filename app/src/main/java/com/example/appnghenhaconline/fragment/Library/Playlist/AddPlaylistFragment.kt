@@ -35,7 +35,7 @@ class AddPlaylistFragment: Fragment() {
     lateinit var tvNamePlaylist: TextView
     lateinit var addPlaylistNav: LinearLayout
 //    lateinit var mPlaylistInfo: PlayListUser
-    lateinit var mediaPlayer : MediaPlayer
+    var mediaPlayer : MediaPlayer = MediaPlayer()
     lateinit var listsong : ArrayList<Song>
     lateinit var songAdapter: SongAdapter
     lateinit var rcvSong: RecyclerView
@@ -111,6 +111,7 @@ class AddPlaylistFragment: Fragment() {
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
+                    mediaPlayer.release()
                     clickStartService(listsong, position)
                 }else{
                     clickStartService(listsong, position)
@@ -120,8 +121,6 @@ class AddPlaylistFragment: Fragment() {
                 callApiDeleteSongFromPlaylistUser(idPlayList,listsong[position].id)
             }
         })
-
-        mediaPlayer = MediaPlayer()
     }
     //endregion
     //===========================================================
@@ -164,7 +163,6 @@ class AddPlaylistFragment: Fragment() {
                 callApiUpdateNameFromPlayListUser(idPlayList,namePlaylist)
                 dialog.dismiss()
             }
-
         }
         dialog.show()
     }
@@ -183,30 +181,6 @@ class AddPlaylistFragment: Fragment() {
     //endregion
     //===========================================================
     //region CALL API
-
-//    private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
-//        ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
-//            override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
-//                val dataSong = response.body()
-//                MyLib.showLog(dataSong.toString())
-//                if(dataSong!=null){
-//                    if(!dataSong.error){
-//                        val listSong: ArrayList<Song> = dataSong.listSong
-//
-//                        MyLib.showLog(listSong.toString())
-//
-//                        songs.addAll(listSong)
-//
-//                        songAdapter.notifyDataSetChanged()
-//                    }else MyLib.showLog(dataSong.message)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<DataSong?>, t: Throwable) {
-//                MyLib.showLog(t.toString())
-//            }
-//        })
-//    }
 
     //Show list song in playlist
     private fun callApiShowSongFromPlaylistUser(songs : ArrayList<Song>,songAdapter : SongAdapter, idPlaylistUser : String ) {

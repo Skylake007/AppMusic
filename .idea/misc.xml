@@ -14,6 +14,7 @@
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_button_ic.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_button_pink_corner.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_button_pink_corner_16.xml" value="0.23697916666666666" />
+        <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_button_white_corner.xml" value="0.21064814814814814" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_dialog_bg.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_dialog_grey_corner.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/cm_dialog_grey_corner_16.xml" value="0.23697916666666666" />
@@ -42,6 +43,7 @@
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_back.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.23697916666666666" />
+        <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_baseline_play_arrow_24_white.xml" value="0.21064814814814814" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_check.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_check_circle.xml" value="0.21064814814814814" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_favorite.xml" value="0.21064814814814814" />
@@ -63,6 +65,7 @@
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_settings.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_sex.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_sex_focused.xml" value="0.23697916666666666" />
+        <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_shuffle_black.xml" value="0.21064814814814814" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_singer.xml" value="0.21064814814814814" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_user.xml" value="0.23697916666666666" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/drawable/ic_user_focused.xml" value="0.23697916666666666" />
@@ -86,6 +89,7 @@
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/dlg_confirm_password_dialog.xml" value="0.264" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/dropdown_item_sex.xml" value="0.4" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/dropdown_sex_item.xml" value="0.1816123188405797" />
+        <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_add_playlist_fragment.xml" value="0.15172101449275363" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_album_music_fragment.xml" value="0.16893115942028986" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_artist_fragment.xml" value="0.1763888888888889" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_change_user_password_fragment.xml" value="0.2151268115942029" />
@@ -95,6 +99,7 @@
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_library_fragment.xml" value="0.18342391304347827" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_library_playlist_fragment.xml" value="0.18478260869565216" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_library_song_fragment.xml" value="0.18478260869565216" />
+        <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_listsong_music_fragment.xml" value="0.18070652173913043" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_login_tab_fragment.xml" value="0.264" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_play_now_fragment.xml" value="0.16893115942028986" />
         <entry key="..\:/DoAn/MusicApp/app/src/main/res/layout/fm_radio_fragment.xml" value="0.16893115942028986" />

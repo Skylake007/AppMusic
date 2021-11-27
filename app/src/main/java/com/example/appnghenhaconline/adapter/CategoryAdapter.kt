@@ -40,7 +40,7 @@ class CategoryAdapter (var context: Context,
 
         Picasso.get().load(playlist.image)
                         .resize(480,500)
-                        .placeholder(R.drawable.img_loading)
+                        .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
                         .into(holder.imgCategory)
     }
