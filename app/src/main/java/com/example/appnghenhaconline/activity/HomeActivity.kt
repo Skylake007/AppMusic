@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onStart() {
         super.onStart()
         session.checkLogin()
-        initSongInfo()
+        //initSongInfo()
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                                                 IntentFilter("send_action_to_activity"))
     }

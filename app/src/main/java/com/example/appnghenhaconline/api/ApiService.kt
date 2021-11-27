@@ -43,7 +43,7 @@ interface ApiService {
                    @Query("email") email : String
     ) : Call<DataUserSignUp>
 
-    @GET("getPlayList") // API GET getPlayList
+    @GET("PlayList") // API GET getPlayList
     fun getPlayList() : Call<DataPlayList>
 
     @PUT("UpdateUser") // API PUT UpdateUser
@@ -113,4 +113,6 @@ interface ApiService {
     fun deleteSongFromPlaylistUser(@Query("idPlaylist") idPlaylist: String,
                                    @Query("idSong") idSong: String
     ) : Call<DataPlayListUser>
+
+
 }
