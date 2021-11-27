@@ -34,6 +34,7 @@ import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,6 +92,8 @@ class ListSongFragment: Fragment() {
         btnBack.setOnClickListener {
             val fragmentLayout = PlayNowFragment()
             MyLib.changeFragment(requireActivity(), fragmentLayout)
+            requireActivity().tvFragment.setText(R.string.action_play_now)
+            requireActivity().imgTopNav.setImageResource(R.drawable.ic_play_circle_white)
         }
     }
 

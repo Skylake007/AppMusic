@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="260dp"
-        android:layout_height="270dp">
+        android:layout_height="300dp">
 
         <ImageView
             android:id="@+id/imgPlaylistSL"
@@ -22,11 +22,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:background="#A6555555"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvPlaylistTittleSL"
@@ -34,8 +34,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="13sp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

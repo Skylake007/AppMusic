@@ -11,26 +11,29 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.fragment.AlbumFragment
 import com.example.appnghenhaconline.fragment.ListSongFragment
+import com.example.appnghenhaconline.models.album.Album
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
-class PlaylistSMAdapter(var context: Context,
-                        private var playlists: ArrayList<Playlist>)
-    : RecyclerView.Adapter<PlaylistSMAdapter.PlaylistSMViewHolder>() {
+class FollowAlbumAdapter(var context: Context,
+                         private var albums: ArrayList<Album>)
+    : RecyclerView.Adapter<FollowAlbumAdapter.FollowAlbumViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistSMViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowAlbumViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.i_playlist_sm_item, parent, false)
-        return PlaylistSMViewHolder(view)
+        return FollowAlbumViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PlaylistSMViewHolder, position: Int) {
-        val playlist: Playlist = playlists[position]
+    override fun onBindViewHolder(holder: FollowAlbumViewHolder, position: Int) {
+        val album: Album = albums[position]
 
-        holder.tvPlaylistTitle.text =playlist.playlistname
-        Picasso.get().load(playlist.image)
+        holder.tvPlaylistTitle.text =album.albumname
+        Picasso.get().load(album.imageAlbum)
                         .resize(480,500)
                         .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
@@ -38,27 +41,21 @@ class PlaylistSMAdapter(var context: Context,
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
-            val listSongFragment = ListSongFragment()
+            val layoutFragment = AlbumFragment()
 
             val bundle = Bundle()
-            bundle.putSerializable("object_song", playlist)
-            listSongFragment.arguments = bundle
+            bundle.putSerializable("object_album", album)
+            layoutFragment.arguments = bundle
 
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.playNowFragmentLayout, listSongFragment)
-                .addToBackStack(null)
-                .commit()
+            MyLib.changeFragment(activity, layoutFragment)
         }
     }
 
-    private fun onClickShowInfo(playlist: Playlist) {
-        Log.e("Task", playlist.playlistname)
-    }
     override fun getItemCount(): Int {
-        return playlists.size
+        return albums.size
     }
 
-    class PlaylistSMViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class FollowAlbumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)

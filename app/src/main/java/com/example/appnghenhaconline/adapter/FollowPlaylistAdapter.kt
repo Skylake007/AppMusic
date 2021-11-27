@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.fragment.ListSongFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -37,16 +38,13 @@ class FollowPlaylistAdapter(var context: Context,
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
-            val listSongFragment = ListSongFragment()
+            val layoutFragment = ListSongFragment()
 
             val bundle = Bundle()
             bundle.putSerializable("object_song", playlist)
-            listSongFragment.arguments = bundle
+            layoutFragment.arguments = bundle
 
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.layoutFmLibOfPlaylist, listSongFragment)
-                .addToBackStack(null)
-                .commit()
+            MyLib.changeFragment(activity, layoutFragment)
         }
     }
 

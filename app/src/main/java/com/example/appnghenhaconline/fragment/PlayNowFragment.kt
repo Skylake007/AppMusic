@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.adapter.AlbumAdapter
+import com.example.appnghenhaconline.adapter.FollowAlbumAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
+import com.example.appnghenhaconline.models.album.Album
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
 import retrofit2.Call
@@ -20,16 +23,18 @@ import retrofit2.Response
 
 class PlayNowFragment : Fragment() {
     internal lateinit var view: View
-    lateinit var rcvCategory: RecyclerView
-    lateinit var listPlaylist : ArrayList<Playlist>
-    lateinit var playlistAdapterSL : PlaylistSLAdapter
-    lateinit var playlistAdapterSM : PlaylistSMAdapter
+    private lateinit var rcvCategory: RecyclerView
+    private lateinit var listPlaylist : ArrayList<Playlist>
+    private lateinit var listAlbum : ArrayList<Album>
+    private lateinit var playlistAdapterSL : PlaylistSLAdapter
+    private lateinit var playlistAdapterSM : PlaylistSMAdapter
+    private lateinit var albumAdapter: AlbumAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_play_now_fragment, container, false)
-       initCategoryList()
+        initCategoryList()
         return view
     }
 
@@ -53,21 +58,21 @@ class PlayNowFragment : Fragment() {
         createCategorySM(rcvCategory, playlistAdapterSM)
         callApiPlayListSM(listPlaylist,playlistAdapterSM)
 
-        //Playlist_3
-        listPlaylist = ArrayList()
-        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        //Album_1
+        listAlbum = ArrayList()
+        albumAdapter = AlbumAdapter(view.context,listAlbum)
         rcvCategory = view.findViewById(R.id.rcvCategory3)
 
-        createCategorySM(rcvCategory, playlistAdapterSM)
-        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+        createAlbumSM(rcvCategory, albumAdapter)
+//        callApiAlbum(listAlbum,albumAdapter)
 
-        //Playlist_4
-        listPlaylist = ArrayList()
-        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        //Album_2
+        listAlbum = ArrayList()
+        albumAdapter = AlbumAdapter(view.context,listAlbum)
         rcvCategory = view.findViewById(R.id.rcvCategory4)
 
-        createCategorySM(rcvCategory, playlistAdapterSM)
-        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+        createAlbumSM(rcvCategory, albumAdapter)
+//        callApiAlbum(listAlbum,albumAdapter)
     }
     //endregion
     //===========================================================
@@ -83,6 +88,14 @@ class PlayNowFragment : Fragment() {
 
     // set adapter cho Playlist SM
     private fun createCategorySM(rcv: RecyclerView, adapter: PlaylistSMAdapter){
+        rcv.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.HORIZONTAL, false)
+        rcv.setHasFixedSize(true)
+        rcv.adapter = adapter
+    }
+
+    // set adapter cho Album
+    private fun createAlbumSM(rcv: RecyclerView, adapter: AlbumAdapter){
         rcv.layoutManager = LinearLayoutManager(view.context,
             LinearLayoutManager.HORIZONTAL, false)
         rcv.setHasFixedSize(true)
@@ -133,5 +146,26 @@ class PlayNowFragment : Fragment() {
             }
         })
     }
+
+//    private fun callApiAlbum(list : ArrayList<Album>, adapter : FollowAlbumAdapter) {
+//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+//                var dataPlayList = response.body()
+//                if(dataPlayList != null) {
+//                    if(!dataPlayList.error) {
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                    else {
+//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//        })
+//    }
     //endregion
 }
