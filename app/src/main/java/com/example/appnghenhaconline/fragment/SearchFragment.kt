@@ -12,6 +12,8 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.models.playlist.Category
+import com.example.appnghenhaconline.models.playlist.DataCategories
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
 import retrofit2.Call
@@ -22,7 +24,7 @@ class SearchFragment : Fragment() {
     internal lateinit var view: View
     private lateinit var tvSearch: TextView
     lateinit var rcvCategory: RecyclerView
-    lateinit var listCategory : ArrayList<Playlist>
+    lateinit var listCategory : ArrayList<Category>
     lateinit var categoryAdapter : CategoryAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -74,18 +76,39 @@ class SearchFragment : Fragment() {
         })
     }
 
-    //Tạm thời khởi tạo danh sách playlist
-    private fun callApiCategory(list : ArrayList<Playlist>, adapter : CategoryAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                var dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
+    //Get all category
+    private fun callApiCategory(list : ArrayList<Category>, adapter : CategoryAdapter) {
+        ApiService.apiService.getListCategories().enqueue(object : Callback<DataCategories?> {
+            override fun onResponse(call: Call<DataCategories?>, response: Response<DataCategories?>) {
+                var dataCategory = response.body()
+                if(dataCategory != null) {
+                    if(!dataCategory.error) {
+                        list.addAll(dataCategory.listCategory)
                         adapter.notifyDataSetChanged()
                     }
                     else {
-                        MyLib.showLog("SearchFragment.kt: " + dataPlayList.message)
+                        MyLib.showLog("SearchFragment.kt: " + dataCategory.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataCategories?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+        })
+    }
+
+    // hàm này sử lý sau sự kiện click vào category lấy categoryID sang Fragment mới chạy
+    private fun callApiGetPlaylistByCategoryID(categoryId : String) {
+        ApiService.apiService.getPlaylistByCategoryID(categoryId).enqueue(object : Callback<DataPlayList?> {
+            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+                var dataPlaylist = response.body()
+                if(dataPlaylist != null) {
+                    if(!dataPlaylist.error) {
+                        // Chỗ Nãy nghĩa lấy list playlist với adaptor xuất lên nhé
+                    }
+                    else {
+                        MyLib.showLog("SearchFragment.kt: " + dataPlaylist.message)
                     }
                 }
             }

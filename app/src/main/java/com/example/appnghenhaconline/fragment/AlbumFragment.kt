@@ -26,6 +26,7 @@ import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.models.album.Album
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.user.DataUser
@@ -48,7 +49,7 @@ class AlbumFragment: Fragment() {
     private lateinit var listsong : ArrayList<Song>
     private lateinit var listPlaylistSelected : ArrayList<PlayListUser>
     private lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
-    private lateinit var idPlayList : String
+    private lateinit var idAlbum : String
     private var mediaPlayer : MediaPlayer = MediaPlayer()
     private lateinit var songAdapter: SongAdapter
     private lateinit var sessionUser : SessionUser
@@ -145,7 +146,7 @@ class AlbumFragment: Fragment() {
 //            sendActionToService(MyService.ACTION_NEXT)
             MyDataLocalManager.setIsShuffle(isShuffle)
         }
-        callApiShowListSongByID(listsong,songAdapter,idPlayList)
+        callApiShowListSongByAlbumID(listsong,songAdapter,idAlbum)
     }
 
     private fun randomPosition(i: Int): Int{
@@ -162,11 +163,11 @@ class AlbumFragment: Fragment() {
     private fun initPlaylist(){
         // Nhận dữ liệu playlist từ PlayNowFragment
         val bundleReceive : Bundle = requireArguments()
-        val playlist : Playlist = bundleReceive["object_song"] as Playlist
+        val album : Album = bundleReceive["object_album"] as Album
 
-        tittleAlbum.text = playlist.playlistname
-        idPlayList = playlist.id // get id of playlist
-        Picasso.get().load(playlist.image)
+        tittleAlbum.text = album.albumname
+        idAlbum = album.id // get id of playlist
+        Picasso.get().load(album.imageAlbum)
             .resize(800,800)
             .into(imgAlbum)
 
@@ -244,7 +245,7 @@ class AlbumFragment: Fragment() {
         val playlist : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
 
         for (i in playlist) {
-            if (i.id == idPlayList) {
+            if (i.id == idAlbum) {
                 isFollow = true
                 lavFollow.setMinAndMaxProgress(1f, 1f)
                 lavFollow.speed = 1f
@@ -265,7 +266,7 @@ class AlbumFragment: Fragment() {
                 lavFollow.speed = 1f
                 lavFollow.playAnimation()
 //                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
-                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+                callApiFollowOrUnfollowAlbum(getUser[sessionUser.KEY_ID]!!,idAlbum,isFollow)
 
             }
 
@@ -275,7 +276,7 @@ class AlbumFragment: Fragment() {
                 lavFollow.speed = -1f
                 lavFollow.playAnimation()
 //                btnFollow.setImageResource(R.drawable.ic_favorite)
-                callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
+                callApiFollowOrUnfollowAlbum(getUser[sessionUser.KEY_ID]!!,idAlbum,isFollow)
             }
 
         }
@@ -284,9 +285,9 @@ class AlbumFragment: Fragment() {
     //===========================================================
     //region CALL API
 
-    private fun callApiShowListSongByID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
+    private fun callApiShowListSongByAlbumID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
         
-        ApiService.apiService.getListSongByID(id).enqueue(object : Callback<DataSong?> {
+        ApiService.apiService.getListSongByAlbumId(id).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
                 val dataSong = response.body()
                 MyLib.showLog(dataSong.toString())
@@ -309,8 +310,8 @@ class AlbumFragment: Fragment() {
         })
     }
 
-    private fun callApiFollowOrUnfollow(userId : String, playlistId : String, status : Boolean ) {
-        ApiService.apiService.followOrUnfollowPlayList(userId,playlistId,status).enqueue(object : Callback<DataUser?> {
+    private fun callApiFollowOrUnfollowAlbum(userId : String, albumId : String, status : Boolean ) {
+        ApiService.apiService.followOrUnfollowALbum(userId,albumId,status).enqueue(object : Callback<DataUser?> {
             override fun onResponse(call: Call<DataUser?>, response: Response<DataUser?>) {
 
                 val followStatus = response.body()
@@ -319,8 +320,8 @@ class AlbumFragment: Fragment() {
                     if (!followStatus.error) {
                         MyLib.showToast(requireContext(),followStatus.message)
                         val gson = Gson()
-                        val listPlaylist = gson.toJson(followStatus.user.followPlaylist)
-                        sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
+                        val listAlbum = gson.toJson(followStatus.user.followAlbum)
+                        sessionUser.editor.putString(sessionUser.KEY_ALBUM,listAlbum)
                         sessionUser.editor.commit()
                     }
                     else {

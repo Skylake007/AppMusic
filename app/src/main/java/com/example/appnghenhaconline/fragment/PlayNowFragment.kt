@@ -15,6 +15,7 @@ import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSMAdapter
 import com.example.appnghenhaconline.models.album.Album
+import com.example.appnghenhaconline.models.album.DataAlbum
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
 import retrofit2.Call
@@ -64,7 +65,7 @@ class PlayNowFragment : Fragment() {
         rcvCategory = view.findViewById(R.id.rcvCategory3)
 
         createAlbumSM(rcvCategory, albumAdapter)
-//        callApiAlbum(listAlbum,albumAdapter)
+        callApiAlbum(listAlbum,albumAdapter)
 
         //Album_2
         listAlbum = ArrayList()
@@ -72,7 +73,7 @@ class PlayNowFragment : Fragment() {
         rcvCategory = view.findViewById(R.id.rcvCategory4)
 
         createAlbumSM(rcvCategory, albumAdapter)
-//        callApiAlbum(listAlbum,albumAdapter)
+        callApiAlbum(listAlbum,albumAdapter)
     }
     //endregion
     //===========================================================
@@ -147,25 +148,26 @@ class PlayNowFragment : Fragment() {
         })
     }
 
-//    private fun callApiAlbum(list : ArrayList<Album>, adapter : FollowAlbumAdapter) {
-//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-//                var dataPlayList = response.body()
-//                if(dataPlayList != null) {
-//                    if(!dataPlayList.error) {
-//                        list.addAll(dataPlayList.listPlayList)
-//                        adapter.notifyDataSetChanged()
-//                    }
-//                    else {
-//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-//                MyLib.showToast(requireContext(),"Call Api Error")
-//            }
-//        })
-//    }
+    private fun callApiAlbum(list : ArrayList<Album>, adapter : AlbumAdapter) {
+        ApiService.apiService.getAllAlbum().enqueue(object : Callback<DataAlbum?> {
+            override fun onResponse(call: Call<DataAlbum?>, response: Response<DataAlbum?>) {
+                var dataAlbum = response.body()
+                if(dataAlbum != null) {
+                    if (!dataAlbum.error) {
+                        list.addAll(dataAlbum.albums)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showLog("PlayNowFragment.kt: " + dataAlbum.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataAlbum?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error")
+            }
+
+        })
+    }
     //endregion
 }

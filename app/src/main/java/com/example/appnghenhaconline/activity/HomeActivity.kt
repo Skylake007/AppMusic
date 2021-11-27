@@ -314,7 +314,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                         session.createLoginSession(user.id,user.name,user.email,user.sex,user.password)
                         var gson = Gson()
                         var listPlaylist = gson.toJson(dataUser.user.followPlaylist)
+                        var listAlbum = gson.toJson(dataUser.user.followAlbum)
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
+                        sessionUser.editor.putString(sessionUser.KEY_ALBUM,listAlbum)
                         sessionUser.editor.commit()
                     }
                     else {
@@ -328,5 +330,6 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             }
         })
     }
+
 
 }

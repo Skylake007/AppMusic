@@ -9,11 +9,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
 class CategoryAdapter (var context: Context,
-                       private var playlists: ArrayList<Playlist>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
+                       private var categories: ArrayList<Category>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
 
     internal lateinit var view: View
     lateinit var mListener: IonItemClickListener
@@ -34,11 +35,11 @@ class CategoryAdapter (var context: Context,
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val playlist: Playlist = playlists[position]
+        val category: Category = categories[position]
 
-        holder.tvCategoryTitle.text =playlist.playlistname
+        holder.tvCategoryTitle.text = category.categoryname
 
-        Picasso.get().load(playlist.image)
+        Picasso.get().load(category.imageCategory)
                         .resize(480,500)
                         .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
@@ -46,7 +47,7 @@ class CategoryAdapter (var context: Context,
     }
 
     override fun getItemCount(): Int {
-        return playlists.size
+        return categories.size
     }
 
     class CategoryViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
