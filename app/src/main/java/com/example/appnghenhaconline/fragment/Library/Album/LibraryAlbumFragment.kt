@@ -67,15 +67,15 @@ class LibraryAlbumFragment: Fragment() {
             LinearLayoutManager.HORIZONTAL, false)
         rcvFollowPlaylist.adapter = followAlbumAdapter
 
-//        showFollowPlaylist(listFollowPlaylist, followPlaylistAdapter)
+        showFollowAlbum(listFollowAlbum, followAlbumAdapter)
     }
 
-//    private fun showFollowPlaylist(list : ArrayList<Album>, adapter : FollowAlbumAdapter) {
-//        val getPlaylist = session.getUserDetails()
-//        val gson = Gson()
-//        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
-//        val playlistFollow : ArrayList<Playlist> = gson.fromJson(getPlaylist[session.KEY_PLAYLIST],type)
-//        list.addAll(playlistFollow)
-//        adapter.notifyDataSetChanged()
-//    }
+    private fun showFollowAlbum(list : ArrayList<Album>, adapter : FollowAlbumAdapter) {
+        val getPlaylist = session.getUserDetails()
+        val gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<Album?>?>() {}.type
+        val albumFollow : ArrayList<Album> = gson.fromJson(getPlaylist[session.KEY_ALBUM],type)
+        list.addAll(albumFollow)
+        adapter.notifyDataSetChanged()
+    }
 }

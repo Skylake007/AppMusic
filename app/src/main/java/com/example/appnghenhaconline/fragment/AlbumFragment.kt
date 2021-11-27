@@ -241,10 +241,10 @@ class AlbumFragment: Fragment() {
     private fun checkFollowed () {
         val getUser = sessionUser.getUserDetails()
         val gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
-        val playlist : ArrayList<Playlist> = gson.fromJson(getUser[sessionUser.KEY_PLAYLIST],type)
+        val type: Type = object : TypeToken<ArrayList<Album?>?>() {}.type
+        val album : ArrayList<Album> = gson.fromJson(getUser[sessionUser.KEY_ALBUM],type)
 
-        for (i in playlist) {
+        for (i in album) {
             if (i.id == idAlbum) {
                 isFollow = true
                 lavFollow.setMinAndMaxProgress(1f, 1f)
