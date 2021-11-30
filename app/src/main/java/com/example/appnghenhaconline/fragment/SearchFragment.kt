@@ -59,21 +59,23 @@ class SearchFragment : Fragment() {
         listCategory = ArrayList()
         categoryAdapter = CategoryAdapter(view.context,listCategory)
 
-        createCategory(rcvCategory, categoryAdapter)
-        callApiCategory(listCategory,categoryAdapter)
-    }
+        rcvCategory.layoutManager = GridLayoutManager(view.context,2)
+        rcvCategory.setHasFixedSize(true)
+        rcvCategory.adapter = categoryAdapter
 
-    private fun createCategory(rcv: RecyclerView, adapter: CategoryAdapter){
-        rcv.layoutManager = GridLayoutManager(view.context,2)
-        rcv.setHasFixedSize(true)
-        rcv.adapter = adapter
-
-        adapter.setOnItemClickListener(object :CategoryAdapter.IonItemClickListener{
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
-//                TODO("Not yet implemented")
-            }
+                val fragmentLayout = PlaylistByCategoryFragment()
 
+                val bundle = Bundle()
+                bundle.putSerializable("id_category", listCategory[position].id)
+                fragmentLayout.arguments = bundle
+
+                MyLib.changeFragment(requireActivity(), fragmentLayout)
+            }
         })
+
+        callApiCategory(listCategory,categoryAdapter)
     }
 
     //Get all category

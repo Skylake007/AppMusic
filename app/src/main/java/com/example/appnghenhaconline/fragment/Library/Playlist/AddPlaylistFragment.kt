@@ -195,7 +195,6 @@ class AddPlaylistFragment: Fragment() {
                         tvNamePlaylist.text = playListUser.playlistName
                         songs.addAll(listSong)
                         songAdapter.notifyDataSetChanged()
-
                     }
                     else {
                         MyLib.showToast(requireContext(),dataPlayListUser.message)
