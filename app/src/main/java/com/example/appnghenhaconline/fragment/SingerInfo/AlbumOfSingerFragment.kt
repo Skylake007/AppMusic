@@ -18,6 +18,7 @@ import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.album.Album
 import com.example.appnghenhaconline.models.album.DataAlbum
+import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +60,7 @@ class AlbumOfSingerFragment(idSinger: String): Fragment() {
         rcvAlbum.setHasFixedSize(true)
         rcvAlbum.adapter = albumAdapter
 
-        callApiAlbum(listAlbum,albumAdapter)
+        callApiShowListAlbumByIdSinger(listAlbum,albumAdapter,idSinger)
     }
 
     private fun callApiAlbum(list : ArrayList<Album>, adapter : AlbumAdapter) {
@@ -81,6 +82,28 @@ class AlbumOfSingerFragment(idSinger: String): Fragment() {
                 MyLib.showToast(requireContext(),"Call Api Error")
             }
 
+        })
+    }
+
+    private fun callApiShowListAlbumByIdSinger(album : ArrayList<Album>,albumAdapter : AlbumAdapter, idSinger : String ) {
+        ApiService.apiService.getListAlbumBySingerId(idSinger).enqueue(object : Callback<DataAlbum?> {
+            override fun onResponse(call: Call<DataAlbum?>, response: Response<DataAlbum?>) {
+                val dataAlbum = response.body()
+                MyLib.showLog(dataAlbum.toString())
+                if(dataAlbum!=null){
+                    if(!dataAlbum.error){
+                        val listAlbum: ArrayList<Album> = dataAlbum.albums
+
+                        album.addAll(listAlbum)
+
+                        albumAdapter.notifyDataSetChanged()
+                    }else MyLib.showLog(dataAlbum.message)
+                }
+            }
+
+            override fun onFailure(call: Call<DataAlbum?>, t: Throwable) {
+                MyLib.showLog(t.toString())
+            }
         })
     }
 }

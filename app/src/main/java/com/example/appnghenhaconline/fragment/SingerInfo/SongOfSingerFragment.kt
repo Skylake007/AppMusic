@@ -16,8 +16,13 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.SongAdapter
+import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SongOfSingerFragment(idSinger: String): Fragment() {
 
@@ -58,14 +63,16 @@ class SongOfSingerFragment(idSinger: String): Fragment() {
             LinearLayoutManager.VERTICAL,false)
         rcvSong.adapter = songAdapter
 
+        callApiShowListSongByIdSinger(listSong,songAdapter,idSinger)
+
         songAdapter.setOnItemClickListener(object: SongAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
-//                if (mediaPlayer.isPlaying){
-//                    mediaPlayer.stop()
-//                    clickStartService(listSong, position)
-//                }else{
-//                    clickStartService(listSong, position)
-//                }
+                if (mediaPlayer.isPlaying){
+                    mediaPlayer.stop()
+                    clickStartService(listSong, position)
+                }else{
+                    clickStartService(listSong, position)
+                }
             }
 
             override fun onItemSelected(position: Int) {
@@ -119,5 +126,28 @@ class SongOfSingerFragment(idSinger: String): Fragment() {
         intent.putExtras(bundle)
 
         activity?.startService(intent)
+    }
+
+    private fun callApiShowListSongByIdSinger(songs : ArrayList<Song>,songAdapter : SongAdapter, idSinger : String ) {
+
+        ApiService.apiService.getListSongBySingerId(idSinger).enqueue(object : Callback<DataSong?> {
+            override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
+                val dataSong = response.body()
+                MyLib.showLog(dataSong.toString())
+                if(dataSong!=null){
+                    if(!dataSong.error){
+                        val listSong: ArrayList<Song> = dataSong.songs
+
+                        songs.addAll(listSong)
+
+                        songAdapter.notifyDataSetChanged()
+                    }else MyLib.showLog(dataSong.message)
+                }
+            }
+
+            override fun onFailure(call: Call<DataSong?>, t: Throwable) {
+                MyLib.showLog(t.toString())
+            }
+        })
     }
 }
