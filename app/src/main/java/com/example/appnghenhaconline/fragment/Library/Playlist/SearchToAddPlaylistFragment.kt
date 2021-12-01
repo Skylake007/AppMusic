@@ -38,8 +38,7 @@ class SearchToAddPlaylistFragment: Fragment() {
     private fun init(){
         btnBack = view.findViewById(R.id.btnBack)
         edtSearch = view.findViewById(R.id.edtSearch)
-        initObjectPlaylist()
-        initListSong()
+
         event()
     }
 
@@ -90,6 +89,8 @@ class SearchToAddPlaylistFragment: Fragment() {
         edtSearch.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    initObjectPlaylist()
+                    initListSong()
                     callApiSearchSong(edtSearch.text.toString())
                     MyLib.showLog(edtSearch.text.toString())
                     return true

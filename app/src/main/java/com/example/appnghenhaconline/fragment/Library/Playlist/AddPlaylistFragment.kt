@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.SongAdapter
+import com.example.appnghenhaconline.adapter.SongRemoveAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.models.playlist.DataPlayList
@@ -37,7 +38,7 @@ class AddPlaylistFragment: Fragment() {
 //    lateinit var mPlaylistInfo: PlayListUser
     var mediaPlayer : MediaPlayer = MediaPlayer()
     lateinit var listsong : ArrayList<Song>
-    lateinit var songAdapter: SongAdapter
+    lateinit var songRemoveAdapter: SongRemoveAdapter
     lateinit var rcvSong: RecyclerView
     lateinit var idPlayList : String
     lateinit var btnDeletePlayListUser : ImageView
@@ -92,22 +93,23 @@ class AddPlaylistFragment: Fragment() {
         if (bundle != null){
             idPlayList = bundle.getString("id_playlist")!!
             initSongList()
-            callApiShowSongFromPlaylistUser(listsong,songAdapter,idPlayList)
+            callApiShowSongFromPlaylistUser(listsong,songRemoveAdapter,idPlayList)
         }
     }
 
     private fun initSongList(){
         //khởi tạo danh sách bài hát
         listsong = ArrayList()
-        songAdapter = SongAdapter(requireContext(),listsong)
+        songRemoveAdapter = SongRemoveAdapter(requireContext(),listsong)
 
         rcvSong = view.findViewById(R.id.rcvMyPlaylistSong)
         rcvSong.setHasFixedSize(true)
         rcvSong.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL,false)
-        rcvSong.adapter = songAdapter
+        rcvSong.adapter = songRemoveAdapter
+
         //Sự kiện onItemClick
-        songAdapter.setOnItemClickListener(object : SongAdapter.IonItemClickListener{
+        songRemoveAdapter.setOnItemClickListener(object : SongRemoveAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
@@ -183,7 +185,7 @@ class AddPlaylistFragment: Fragment() {
     //region CALL API
 
     //Show list song in playlist
-    private fun callApiShowSongFromPlaylistUser(songs : ArrayList<Song>,songAdapter : SongAdapter, idPlaylistUser : String ) {
+    private fun callApiShowSongFromPlaylistUser(songs : ArrayList<Song>,songAdapter : SongRemoveAdapter, idPlaylistUser : String ) {
         ApiService.apiService.showSongFromPlaylistUser(idPlaylistUser).enqueue(object : Callback<DataPlayListUser?> {
             override fun onResponse( call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
                 val dataPlayListUser = response.body()

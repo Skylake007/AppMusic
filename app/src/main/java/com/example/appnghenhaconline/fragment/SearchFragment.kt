@@ -101,24 +101,4 @@ class SearchFragment : Fragment() {
         })
     }
 
-    // hàm này sử lý sau sự kiện click vào category lấy categoryID sang Fragment mới chạy
-//    private fun callApiGetPlaylistByCategoryID(categoryId : String) {
-//        ApiService.apiService.getPlaylistByCategoryID(categoryId).enqueue(object : Callback<DataPlayList?> {
-//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-//                var dataPlaylist = response.body()
-//                if(dataPlaylist != null) {
-//                    if(!dataPlaylist.error) {
-//                        // Chỗ Nãy nghĩa lấy list playlist với adaptor xuất lên nhé
-//                    }
-//                    else {
-//                        MyLib.showLog("SearchFragment.kt: " + dataPlaylist.message)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-//                MyLib.showToast(requireContext(),"Call Api Error")
-//            }
-//        })
-//    }
 }

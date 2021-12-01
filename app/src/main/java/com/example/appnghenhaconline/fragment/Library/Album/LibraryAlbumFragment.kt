@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
@@ -63,8 +64,7 @@ class LibraryAlbumFragment: Fragment() {
 
         rcvFollowPlaylist =view.findViewById(R.id.rcvFollowAlbum)
         rcvFollowPlaylist.setHasFixedSize(true)
-        rcvFollowPlaylist.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.HORIZONTAL, false)
+        rcvFollowPlaylist.layoutManager = GridLayoutManager(view.context, 2)
         rcvFollowPlaylist.adapter = followAlbumAdapter
 
         showFollowAlbum(listFollowAlbum, followAlbumAdapter)

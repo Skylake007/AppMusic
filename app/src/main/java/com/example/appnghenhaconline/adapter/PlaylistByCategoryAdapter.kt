@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.ListSongFragment
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.fragment.ListSongFromCategoryFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
@@ -53,10 +54,11 @@ class PlaylistByCategoryAdapter(var context: Context,
 
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
-                val layoutFragment = ListSongFragment()
+                val layoutFragment = ListSongFromCategoryFragment()
 
                 val bundle = Bundle()
                 bundle.putSerializable("object_song", itemPlaylist)
+                bundle.putSerializable("id_category", itemPlaylist.category.id)
                 layoutFragment.arguments = bundle
 
                 MyLib.changeFragment(activity, layoutFragment)

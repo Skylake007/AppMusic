@@ -42,7 +42,7 @@ import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListSongFragment: Fragment() {
+class ListSongFromCategoryFragment: Fragment() {
 
     internal lateinit var view: View
     private lateinit var rcvSong: RecyclerView
@@ -59,6 +59,7 @@ class ListSongFragment: Fragment() {
     private lateinit var btnPlayPlaylist : Button
     private lateinit var btnShufflePlaylist : Button
     private lateinit var btnBack : ImageView
+    private lateinit var idCategory : String
     private var isFollow: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -84,13 +85,25 @@ class ListSongFragment: Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         initPlaylist()
         initSongList()
+        initCategoryId()
         event()
+    }
+    private fun initCategoryId(){
+        val bundle = requireArguments()
+        if (bundle != null){
+            idCategory = bundle.getString("id_category")!!
+        }
     }
 
     private fun event() {
         clickFollow()
         btnBack.setOnClickListener {
-            val fragmentLayout = PlayNowFragment()
+            val fragmentLayout = PlaylistByCategoryFragment()
+
+            val bundle = Bundle()
+            bundle.putSerializable("id_category", idCategory)
+            fragmentLayout.arguments = bundle
+
             MyLib.changeFragment(requireActivity(), fragmentLayout)
         }
     }

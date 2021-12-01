@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imgPlByCategory"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:scaleType="centerCrop"
             android:src="@drawable/img_avatar_3"
             app:layout_constraintBottom_toBottomOf="parent"

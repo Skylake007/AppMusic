@@ -42,7 +42,7 @@ import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListSongFragment: Fragment() {
+class ListSongFromLibFragment: Fragment() {
 
     internal lateinit var view: View
     private lateinit var rcvSong: RecyclerView
@@ -90,7 +90,7 @@ class ListSongFragment: Fragment() {
     private fun event() {
         clickFollow()
         btnBack.setOnClickListener {
-            val fragmentLayout = PlayNowFragment()
+            val fragmentLayout = LibraryPlaylistFragment()
             MyLib.changeFragment(requireActivity(), fragmentLayout)
         }
     }

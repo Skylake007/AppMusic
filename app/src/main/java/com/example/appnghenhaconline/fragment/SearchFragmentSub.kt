@@ -1,6 +1,5 @@
 package com.example.appnghenhaconline.fragment
 
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.media.MediaPlayer
@@ -22,6 +21,9 @@ import com.example.appnghenhaconline.adapter.SingerAdapter
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.fragment.SingerInfo.AlbumOfSingerFragment
+import com.example.appnghenhaconline.fragment.SingerInfo.SingerInfoFragment
+import com.example.appnghenhaconline.fragment.SingerInfo.SongOfSingerFragment
 import com.example.appnghenhaconline.models.singer.Singer
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -42,20 +44,20 @@ class SearchFragmentSub: Fragment() {
     lateinit var rcvSong: RecyclerView
     lateinit var rcvSinger: RecyclerView
     lateinit var mediaPlayer : MediaPlayer
+    private lateinit var idSinger: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_search_fragment_sub, container, false)
         init()
-        event()
+
         return view
     }
 
     private fun init(){
         edtSearch = view.findViewById(R.id.edtSearch)
         btnBack = view.findViewById(R.id.btnBack)
-        initListSong()
-        initListSinger()
+        event()
     }
 
     private fun  initListSong() {
@@ -98,7 +100,14 @@ class SearchFragmentSub: Fragment() {
 
         singerAdapter.setOnItemClickListener(object : SingerAdapter.IonItemClickListener{
             override fun onItemClick(position: Int) {
-                MyLib.showToast(requireContext(),listSinger[position].singername)
+                idSinger = listSinger[position].id
+                val fragmentLayout = SingerInfoFragment()
+
+                val bundle1 = Bundle()
+                bundle1.putSerializable("object_singer_info", listSinger[position])
+                fragmentLayout.arguments = bundle1
+
+                MyLib.changeFragment(requireActivity(), fragmentLayout)
             }
         })
     }
@@ -109,10 +118,10 @@ class SearchFragmentSub: Fragment() {
         edtSearch.showSoftKeyboard()
         //set back cho button
         btnBack.setOnClickListener {
-            val fragmentTransaction = fragmentManager?.beginTransaction()
-            fragmentTransaction?.replace(R.id.fragmentContainer, SearchFragment())
-            fragmentTransaction?.addToBackStack(null)
-            fragmentTransaction?.commit()
+            val fragmentLayout = SearchFragment()
+            MyLib.changeFragment(requireActivity(), fragmentLayout)
+
+            edtSearch.closeSoftKeyboard()
         }
 
         myEnter()
@@ -123,6 +132,12 @@ class SearchFragmentSub: Fragment() {
         (this.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
             .toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
     }
+
+    private fun EditText.closeSoftKeyboard(){
+        (this.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+            .toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0)
+    }
+
 
     private fun callApiSearchSong(q : String) {
         ApiService.apiService.searchSongAndSinger(q).enqueue(object : Callback<DataSong?> {
@@ -152,8 +167,10 @@ class SearchFragmentSub: Fragment() {
         edtSearch.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    initListSong()
+                    initListSinger()
                     callApiSearchSong(edtSearch.text.toString())
-                    MyLib.showLog(edtSearch.text.toString())
+                    edtSearch.closeSoftKeyboard()
                     return true
                 }
                 return false
