@@ -140,4 +140,16 @@ interface ApiService {
 
     @GET("/album/getSingerAlbum")
     fun getListAlbumBySingerId(@Query("idSinger") SingerId: String) : Call<DataAlbum>
+
+    @PUT("updateuser/AddFavoriteSinger")
+    fun followSinger(@Query("singerid") SingerId: String,
+                     @Query("userid") UserId : String
+
+    )  : Call<DataUser>
+
+    @PUT("/updateuser/removeFavoriteSinger")
+    fun unFollowSinger(@Query("singerid") SingerId: String,
+                     @Query("userid") UserId : String
+
+    )  : Call<DataUser>
 }

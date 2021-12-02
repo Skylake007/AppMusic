@@ -315,8 +315,10 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                         var gson = Gson()
                         var listPlaylist = gson.toJson(dataUser.user.followPlaylist)
                         var listAlbum = gson.toJson(dataUser.user.followAlbum)
+                        var listSinger = gson.toJson(dataUser.user.favoriteSinger)
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
                         sessionUser.editor.putString(sessionUser.KEY_ALBUM,listAlbum)
+                        sessionUser.editor.putString(sessionUser.KEY_SINGER,listSinger)
                         sessionUser.editor.commit()
                     }
                     else {

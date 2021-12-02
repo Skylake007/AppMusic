@@ -286,7 +286,6 @@ class AlbumFragment: Fragment() {
     //region CALL API
 
     private fun callApiShowListSongByAlbumID(songs : ArrayList<Song>,songAdapter : SongAdapter, id : String ) {
-        
         ApiService.apiService.getListSongByAlbumId(id).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
                 val dataSong = response.body()

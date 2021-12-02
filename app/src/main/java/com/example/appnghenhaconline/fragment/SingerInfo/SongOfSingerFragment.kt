@@ -12,7 +12,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.SongAdapter
@@ -34,10 +33,10 @@ class SongOfSingerFragment(idSinger: String): Fragment() {
 
     private var mediaPlayer : MediaPlayer = MediaPlayer()
 
-    private lateinit var lavFollow : LottieAnimationView
+
     private lateinit var btnPlayPlaylist : Button
     private lateinit var btnShufflePlaylist : Button
-    private var isFollow: Boolean = false
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

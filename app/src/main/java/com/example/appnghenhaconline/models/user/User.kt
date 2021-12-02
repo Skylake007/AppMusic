@@ -14,9 +14,10 @@ class User  (
     var sex : Boolean,
     var email : String,
     var followPlaylist : ArrayList<Playlist>,
-    var followAlbum : ArrayList<Album>
+    var followAlbum : ArrayList<Album>,
+    var favoriteSinger : ArrayList<String>
 ) : Serializable {
     override fun toString(): String {
-        return "User(id='$id', username='$username', password='$password', name='$name', sex=$sex, email='$email', followPlaylist=$followPlaylist, followAlbum=$followAlbum)"
+        return "User(id='$id', username='$username', password='$password', name='$name', sex=$sex, email='$email', followPlaylist=$followPlaylist, followAlbum=$followAlbum, favoriteSinger=$favoriteSinger)"
     }
 }

@@ -32,6 +32,7 @@ class SessionUser {
     val KEY_PASSWORD = "password"
     val KEY_PLAYLIST = "playlist"
     val KEY_ALBUM = "album"
+    val KEY_SINGER = "singer"
 
     constructor(context: Context) {
         this.context = context
@@ -65,6 +66,8 @@ class SessionUser {
         user[KEY_PLAYLIST] = pref.getString(KEY_PLAYLIST, null).toString()
 
         user[KEY_ALBUM] = pref.getString(KEY_ALBUM, null).toString()
+
+        user[KEY_SINGER] = pref.getString(KEY_SINGER, null).toString()
 
         return user
     }
