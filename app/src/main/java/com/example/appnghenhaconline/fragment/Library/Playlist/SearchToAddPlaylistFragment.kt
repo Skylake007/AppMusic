@@ -1,7 +1,9 @@
 package com.example.appnghenhaconline.fragment.Library.Playlist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
@@ -43,6 +45,7 @@ class SearchToAddPlaylistFragment: Fragment() {
     }
 
     private fun event() {
+        edtSearch.showSoftKeyboard()
         btnBack.setOnClickListener {
             val bundleReceive = Bundle()
             val fragmentLayout = AddPlaylistFragment()
@@ -50,6 +53,7 @@ class SearchToAddPlaylistFragment: Fragment() {
             fragmentLayout.arguments = bundleReceive
 
             MyLib.changeFragment(requireActivity(), fragmentLayout)
+            edtSearch.closeSoftKeyboard()
         }
         myEnter()
     }
@@ -60,6 +64,16 @@ class SearchToAddPlaylistFragment: Fragment() {
         if (bundle != null){
             idPlaylist = bundle.getString("id_playlist")!!
         }
+    }
+
+    private fun EditText.closeSoftKeyboard(){
+        (this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0)
+    }
+
+    private fun EditText.showSoftKeyboard(){
+        (this.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
     }
 
     private fun  initListSong() {
@@ -93,6 +107,7 @@ class SearchToAddPlaylistFragment: Fragment() {
                     initListSong()
                     callApiSearchSong(edtSearch.text.toString())
                     MyLib.showLog(edtSearch.text.toString())
+                    edtSearch.closeSoftKeyboard()
                     return true
                 }
                 return false

@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.activity.PlayMusicActivity
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
@@ -47,10 +49,10 @@ class SongOfSingerFragment(idSinger: String): Fragment() {
     }
 
     private fun init(){
-
+        btnPlayPlaylist = view.findViewById(R.id.btnPlayPlaylist)
+        btnShufflePlaylist = view.findViewById(R.id.btnShufflePlaylist)
         initSongOfSinger()
     }
-
 
     private fun initSongOfSinger(){
         listSong = ArrayList()
@@ -78,6 +80,32 @@ class SongOfSingerFragment(idSinger: String): Fragment() {
 //                openDialogAddPlaylist(Gravity.CENTER, listSong[position].id)
             }
         })
+        btnPlayPlaylist.setOnClickListener {
+            PlayMusicActivity.isShuffle = false
+            if (mediaPlayer.isPlaying){
+                mediaPlayer.stop()
+                mediaPlayer.release()
+                clickStartService(listSong,position = 0)
+            }else{
+                clickStartService(listSong,position = 0)
+            }
+            MyDataLocalManager.setIsShuffle(PlayMusicActivity.isShuffle)
+        }
+
+        btnShufflePlaylist.setOnClickListener {
+            PlayMusicActivity.isShuffle = true
+            if (mediaPlayer.isPlaying){
+                mediaPlayer.stop()
+                mediaPlayer.release()
+                sendActionToService(MyService.ACTION_NEXT)
+            }else{
+                clickStartService(listSong,position = 0)
+                sendActionToService(MyService.ACTION_NEXT)
+            }
+//            clickStartService(listsong, randomPosition(listsong.size-1))
+//            sendActionToService(MyService.ACTION_NEXT)
+            MyDataLocalManager.setIsShuffle(PlayMusicActivity.isShuffle)
+        }
     }
 
     private fun sendActionToService(action: Int){
