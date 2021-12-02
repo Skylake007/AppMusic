@@ -37,13 +37,13 @@ class MyPlaylistAdapter(var context: Context,
 
     class MyPlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
-        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
+//        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
 
         fun bindMyPlaylist(itemPlaylist: PlayListUser){
             tvPlaylistTitle.text = itemPlaylist.playlistName
 
-//            Picasso.get().load(itemPlaylist.image).resize(480,500)
+//            Picasso.get().load(itemPlaylist.).resize(480,500)
 //                                                    .placeholder(R.drawable.img_loading)
 //                                                    .error(R.drawable.img_error)
 //                                                    .into(imgPlaylist)

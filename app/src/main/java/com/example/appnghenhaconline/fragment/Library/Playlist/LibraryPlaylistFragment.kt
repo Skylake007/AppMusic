@@ -13,16 +13,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.FollowPlaylistAdapter
 import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
+import com.example.appnghenhaconline.adapter.TabOfLibPlaylistAdapter
+import com.example.appnghenhaconline.adapter.TabOfSingerAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.fragment.Library.LibraryFragment
+import com.example.appnghenhaconline.fragment.ListSongFragment
+import com.example.appnghenhaconline.fragment.PlayNowFragment
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,14 +42,12 @@ import java.lang.reflect.Type
 
 class LibraryPlaylistFragment: Fragment() {
     internal lateinit var view: View
-    private lateinit var btnAddPlaylist: ImageView
-    private lateinit var listFollowPlaylist: ArrayList<Playlist>
-    private lateinit var listMyPlaylist: ArrayList<PlayListUser>
-    private lateinit var rcvFollowPlaylist: RecyclerView
-    private lateinit var rcvMyPlaylist: RecyclerView
-    private lateinit var followPlaylistAdapter: FollowPlaylistAdapter
-    private lateinit var myPlaylistAdapter: MyPlaylistAdapter
+    private lateinit var btnBack: ImageView
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
     private lateinit var session: SessionUser
+
+    private lateinit var btnAddPlaylist: FloatingActionButton
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -51,63 +58,63 @@ class LibraryPlaylistFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        session = SessionUser(this.requireContext())
         init()
-        event()
     }
 
     private fun init(){
-        btnAddPlaylist = view.findViewById(R.id.btnAddPlaylist)
-        initMyPlaylist()
-        initFollowPlaylist()
+        session = SessionUser(this.requireContext())
+        btnBack = view.findViewById(R.id.btnBack)
+        btnAddPlaylist = view.findViewById(R.id.fabAddPlaylist)
+        viewPager = view.findViewById(R.id.viewPager)
+        tabLayout = view.findViewById(R.id.tabLayout)
+        initTabFragment()
+        event()
     }
 
     private fun event(){
+        btnBack.setOnClickListener {
+            val fragmentLayout = LibraryFragment()
+            MyLib.changeFragment(requireActivity(), fragmentLayout)
+        }
         btnAddPlaylist.setOnClickListener {
             openDialogAddPlaylist(Gravity.CENTER)
         }
     }
 
-    //region INIT ADAPTER
+    private fun initTabFragment(){
+        val tabOfSingerAdapter = TabOfLibPlaylistAdapter(requireActivity())
+        viewPager.adapter = tabOfSingerAdapter
 
-    private fun initFollowPlaylist(){
-        listFollowPlaylist = ArrayList()
-        followPlaylistAdapter = FollowPlaylistAdapter(view.context, listFollowPlaylist)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 0){
+                    btnAddPlaylist.show()
+                }else{
+                    btnAddPlaylist.hide()
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//                TODO("Not yet implemented")
+            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+//                TODO("Not yet implemented")
+            }
+        })
 
-        rcvFollowPlaylist =view.findViewById(R.id.rcvFollowPlaylist)
-        rcvFollowPlaylist.setHasFixedSize(true)
-        rcvFollowPlaylist.layoutManager = LinearLayoutManager(view.context,
-                    LinearLayoutManager.HORIZONTAL, false)
-        rcvFollowPlaylist.adapter = followPlaylistAdapter
-
-        showFollowPlaylist(listFollowPlaylist, followPlaylistAdapter)
+        TabLayoutMediator(tabLayout,viewPager){tittle, position ->
+            when(position){
+                0 ->{
+                    tittle.text = "Playlist của tôi"
+                }
+                1 -> {
+                    tittle.text = "Playlist ưa thích"
+                }
+                else -> {
+                    tittle.text = "Playlist của tôi"
+                }
+            }
+        }.attach()
     }
-
-    private fun initMyPlaylist(){
-        listMyPlaylist = ArrayList()
-        myPlaylistAdapter = MyPlaylistAdapter(view.context, listMyPlaylist)
-
-        rcvMyPlaylist =view.findViewById(R.id.rcvMyPlaylist)
-        rcvMyPlaylist.setHasFixedSize(true)
-        rcvMyPlaylist.layoutManager = LinearLayoutManager(view.context,
-            LinearLayoutManager.HORIZONTAL, false)
-        rcvMyPlaylist.adapter = myPlaylistAdapter
-        var getUser = session.getUserDetails()
-        callApiLoadPlayListUser(listMyPlaylist, myPlaylistAdapter, getUser[session.KEY_ID].toString())
-
-    }
-
-    private fun showFollowPlaylist(list : ArrayList<Playlist>, adapter : FollowPlaylistAdapter) {
-        val getPlaylist = session.getUserDetails()
-        val gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<Playlist?>?>() {}.type
-        val playlistFollow : ArrayList<Playlist> = gson.fromJson(getPlaylist[session.KEY_PLAYLIST],type)
-        list.addAll(playlistFollow)
-        adapter.notifyDataSetChanged()
-    }
-    //endregion
-    //===========================================================
-    //region ANOTHER FUNCTION
 
     //  hàm hiện dialog
     private fun openDialogAddPlaylist(gravity: Int){
@@ -117,7 +124,10 @@ class LibraryPlaylistFragment: Fragment() {
         dialog.setCancelable(true)
 
         val window = dialog.window
-        window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val windowAttributes: WindowManager.LayoutParams = window!!.attributes
@@ -143,33 +153,6 @@ class LibraryPlaylistFragment: Fragment() {
             }
         }
         dialog.show()
-    }
-    //endregion
-    //===========================================================
-    //region CALL API
-
-    // load Playlist User created
-    private fun callApiLoadPlayListUser(list : ArrayList<PlayListUser>, adapter : MyPlaylistAdapter, idUser : String) {
-        ApiService.apiService.loadPlaylistUser(idUser).enqueue(object : Callback<DataPlayListUser?> {
-            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
-                val dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if (!dataPlayList.error) {
-                        val dataPlayListUser = dataPlayList.listPlayListUser
-
-                        list.addAll(dataPlayListUser)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showToast(requireContext(),dataPlayList.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error" )
-            }
-        })
     }
 
     //call Api Create playlist user
@@ -202,5 +185,4 @@ class LibraryPlaylistFragment: Fragment() {
         })
     }
 
-    //endregion
 }

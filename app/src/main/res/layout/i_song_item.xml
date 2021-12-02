@@ -27,15 +27,17 @@
         android:background="@drawable/cm_image_song"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgSelected"
+        app:layout_constraintHorizontal_bias=".25"
+        app:layout_constraintWidth_percent=".6"
         app:layout_constraintStart_toEndOf="@+id/imgSong"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".1">
+        >
 
         <TextView
             android:id="@+id/titleSong"

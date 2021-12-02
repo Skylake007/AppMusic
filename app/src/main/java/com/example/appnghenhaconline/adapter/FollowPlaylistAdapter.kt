@@ -2,7 +2,6 @@ package com.example.appnghenhaconline.adapter
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.fragment.ListSongFragment
+import com.example.appnghenhaconline.fragment.ListSongFromLibFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
@@ -31,22 +31,19 @@ class FollowPlaylistAdapter(var context: Context,
         holder.tvPlaylistTitle.text =playlist.playlistname
         Picasso.get().load(playlist.image)
                         .resize(480,500)
-                        .placeholder(R.drawable.img_loading)
+                        .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
                         .into(holder.imgPlaylist)
         //Thêm sự kiện onClick
         holder.layoutItem.setOnClickListener {v->
             val activity = v.context as AppCompatActivity
-            val listSongFragment = ListSongFragment()
+            val layoutFragment = ListSongFromLibFragment()
 
             val bundle = Bundle()
             bundle.putSerializable("object_song", playlist)
-            listSongFragment.arguments = bundle
+            layoutFragment.arguments = bundle
 
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.layoutFmLibOfPlaylist, listSongFragment)
-                .addToBackStack(null)
-                .commit()
+            MyLib.changeFragment(activity, layoutFragment)
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.appnghenhaconline.api
 
+import com.example.appnghenhaconline.models.album.DataAlbum
+import com.example.appnghenhaconline.models.playlist.DataCategories
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -18,12 +20,13 @@ interface ApiService {
     fun getListSong() : Call<DataSong>
 
     @GET("/listsong/playlist") // API GET ListSong With ID
-    fun getListSongByID(@Query ("id") id : String) : Call<DataSong>
+    fun getListSongByID(@Query ("playlistId") id : String) : Call<DataSong>
 
     companion object{
         private val baseUrl = "http://192.168.1.3:3000/"
         //private val baseUrl = "http://192.168.10.62:3000/"
 //      private val baseUrl = "http://192.168.0.31:3000/"
+//        private val baseUrl = "http://192.168.0.155:3000/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val apiService: ApiService = Retrofit.Builder()
             .baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson))
@@ -43,7 +46,7 @@ interface ApiService {
                    @Query("email") email : String
     ) : Call<DataUserSignUp>
 
-    @GET("getPlayList") // API GET getPlayList
+    @GET("PlayList") // API GET getPlayList
     fun getPlayList() : Call<DataPlayList>
 
     @PUT("UpdateUser") // API PUT UpdateUser
@@ -83,6 +86,12 @@ interface ApiService {
                                  @Query("status") status : Boolean
     ) : Call<DataUser>
 
+    @PUT("/updateuser/AddLoveOrRemoveAlbum")
+    fun followOrUnfollowALbum(@Query("userId") userId : String,
+                                 @Query("albumId") albumId : String,
+                                 @Query("status") status : Boolean
+    ) : Call<DataUser>
+
     @POST("updateuser/CreatePlaylistUser")
     fun createPlaylistUser(@Query("idUser") idUser : String,
                            @Query("playlistName") playlistName : String
@@ -113,4 +122,22 @@ interface ApiService {
     fun deleteSongFromPlaylistUser(@Query("idPlaylist") idPlaylist: String,
                                    @Query("idSong") idSong: String
     ) : Call<DataPlayListUser>
+
+    @GET("/category/getAllCategories")
+    fun getListCategories() : Call<DataCategories>
+
+    @GET("/PlayList/getPlaylistByCategoryId")
+    fun getPlaylistByCategoryID(@Query("CategoryId") categoryId : String) : Call<DataPlayList>
+
+    @GET("/album/getAllAlbum")
+    fun getAllAlbum() : Call<DataAlbum>
+
+    @GET("/listsong/album")
+    fun getListSongByAlbumId(@Query("albumId") albumId: String) : Call<DataSong>
+
+    @GET("/listsong/singer")
+    fun getListSongBySingerId(@Query("singerid") SingerId: String) : Call<DataSong>
+
+    @GET("/album/getSingerAlbum")
+    fun getListAlbumBySingerId(@Query("idSinger") SingerId: String) : Call<DataAlbum>
 }

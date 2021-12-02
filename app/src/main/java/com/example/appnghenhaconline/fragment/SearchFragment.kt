@@ -12,6 +12,8 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.models.playlist.Category
+import com.example.appnghenhaconline.models.playlist.DataCategories
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.Playlist
 import retrofit2.Call
@@ -22,7 +24,7 @@ class SearchFragment : Fragment() {
     internal lateinit var view: View
     private lateinit var tvSearch: TextView
     lateinit var rcvCategory: RecyclerView
-    lateinit var listCategory : ArrayList<Playlist>
+    lateinit var listCategory : ArrayList<Category>
     lateinit var categoryAdapter : CategoryAdapter
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -57,42 +59,46 @@ class SearchFragment : Fragment() {
         listCategory = ArrayList()
         categoryAdapter = CategoryAdapter(view.context,listCategory)
 
-        createCategory(rcvCategory, categoryAdapter)
+        rcvCategory.layoutManager = GridLayoutManager(view.context,2)
+        rcvCategory.setHasFixedSize(true)
+        rcvCategory.adapter = categoryAdapter
+
+        categoryAdapter.setOnItemClickListener(object : CategoryAdapter.IonItemClickListener{
+            override fun onItemClick(position: Int) {
+                val fragmentLayout = PlaylistByCategoryFragment()
+
+                val bundle = Bundle()
+                bundle.putSerializable("id_category", listCategory[position].id)
+                fragmentLayout.arguments = bundle
+
+                MyLib.changeFragment(requireActivity(), fragmentLayout)
+            }
+        })
+
         callApiCategory(listCategory,categoryAdapter)
     }
 
-    private fun createCategory(rcv: RecyclerView, adapter: CategoryAdapter){
-        rcv.layoutManager = GridLayoutManager(view.context,2)
-        rcv.setHasFixedSize(true)
-        rcv.adapter = adapter
+    //Get all category
+    private fun callApiCategory(list : ArrayList<Category>, adapter : CategoryAdapter) {
+        ApiService.apiService.getListCategories().enqueue(object : Callback<DataCategories?> {
+            override fun onResponse(call: Call<DataCategories?>, response: Response<DataCategories?>) {
+                var dataCategory = response.body()
+                if(dataCategory != null) {
+                    if(!dataCategory.error) {
 
-        adapter.setOnItemClickListener(object :CategoryAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
-//                TODO("Not yet implemented")
-            }
-
-        })
-    }
-
-    //Tạm thời khởi tạo danh sách playlist
-    private fun callApiCategory(list : ArrayList<Playlist>, adapter : CategoryAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                var dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
+                        list.addAll(dataCategory.listCategory)
                         adapter.notifyDataSetChanged()
                     }
                     else {
-                        MyLib.showLog("SearchFragment.kt: " + dataPlayList.message)
+                        MyLib.showLog("SearchFragment.kt: " + dataCategory.message)
                     }
                 }
             }
 
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+            override fun onFailure(call: Call<DataCategories?>, t: Throwable) {
                 MyLib.showToast(requireContext(),"Call Api Error")
             }
         })
     }
+
 }

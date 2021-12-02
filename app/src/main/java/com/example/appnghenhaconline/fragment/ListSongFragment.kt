@@ -13,48 +13,58 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
+import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isShuffle
 import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
 import com.example.appnghenhaconline.api.ApiService
+import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
+import com.example.appnghenhaconline.fragment.Library.Playlist.LibraryPlaylistFragment
+import com.example.appnghenhaconline.fragment.Library.Playlist.SearchToAddPlaylistFragment
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.reflect.Type
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ListSongFragment: Fragment() {
 
     internal lateinit var view: View
-    lateinit var rcvSong: RecyclerView
-    lateinit var tittleAlbum : TextView
-    lateinit var imgAlbum : ImageView
-    lateinit var listsong : ArrayList<Song>
-    lateinit var listPlaylistSelected : ArrayList<PlayListUser>
-    lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
-    lateinit var idPlayList : String
-    lateinit var mediaPlayer : MediaPlayer
-    lateinit var songAdapter: SongAdapter
-    private lateinit var btnFollow: ImageView
-    lateinit var sessionUser : SessionUser
-    var isFollow: Boolean = false
+    private lateinit var rcvSong: RecyclerView
+    private lateinit var tittleAlbum : TextView
+    private lateinit var imgAlbum : ImageView
+    private lateinit var listsong : ArrayList<Song>
+    private lateinit var listPlaylistSelected : ArrayList<PlayListUser>
+    private lateinit var playlistSelectedAdapter: PlaylistSelectedAdapter
+    private lateinit var idPlayList : String
+    private var mediaPlayer : MediaPlayer = MediaPlayer()
+    private lateinit var songAdapter: SongAdapter
+    private lateinit var sessionUser : SessionUser
+    private lateinit var lavFollow : LottieAnimationView
+    private lateinit var btnPlayPlaylist : Button
+    private lateinit var btnShufflePlaylist : Button
+    private lateinit var btnBack : ImageView
+    private var isFollow: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.fm_album_music_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_listsong_music_fragment, container, false)
         return view
     }
 
@@ -68,7 +78,10 @@ class ListSongFragment: Fragment() {
     private fun init(){
         tittleAlbum = view.findViewById(R.id.tittleAlbumMusic)
         imgAlbum = view.findViewById(R.id.imgAlbumMusic)
-        btnFollow = view.findViewById(R.id.btnFollow)
+        lavFollow = view.findViewById(R.id.lavFollow)
+        btnPlayPlaylist = view.findViewById(R.id.btnPlayPlaylist)
+        btnShufflePlaylist = view.findViewById(R.id.btnShufflePlaylist)
+        btnBack = view.findViewById(R.id.btnBack)
         initPlaylist()
         initSongList()
         event()
@@ -76,6 +89,10 @@ class ListSongFragment: Fragment() {
 
     private fun event() {
         clickFollow()
+        btnBack.setOnClickListener {
+            val fragmentLayout = PlayNowFragment()
+            MyLib.changeFragment(requireActivity(), fragmentLayout)
+        }
     }
 
     //===========================================================
@@ -105,8 +122,39 @@ class ListSongFragment: Fragment() {
             }
         })
 
+        btnPlayPlaylist.setOnClickListener {
+            isShuffle = false
+            if (mediaPlayer.isPlaying){
+                mediaPlayer.stop()
+                mediaPlayer.release()
+                clickStartService(listsong,position = 0)
+            }else{
+                clickStartService(listsong,position = 0)
+            }
+            MyDataLocalManager.setIsShuffle(isShuffle)
+        }
+
+        btnShufflePlaylist.setOnClickListener {
+            isShuffle = true
+            if (mediaPlayer.isPlaying){
+                mediaPlayer.stop()
+                mediaPlayer.release()
+                sendActionToService(MyService.ACTION_NEXT)
+            }else{
+                clickStartService(listsong,position = 0)
+                sendActionToService(MyService.ACTION_NEXT)
+            }
+//            clickStartService(listsong, randomPosition(listsong.size-1))
+//            sendActionToService(MyService.ACTION_NEXT)
+            MyDataLocalManager.setIsShuffle(isShuffle)
+        }
         callApiShowListSongByID(listsong,songAdapter,idPlayList)
-        mediaPlayer = MediaPlayer()
+    }
+
+    private fun sendActionToService(action: Int){
+        val intent = Intent(requireContext(), MyService::class.java)
+        intent.putExtra("action_music_service", action)
+        requireActivity().startService(intent)
     }
 
     private fun initPlaylist(){
@@ -196,7 +244,10 @@ class ListSongFragment: Fragment() {
         for (i in playlist) {
             if (i.id == idPlayList) {
                 isFollow = true
-                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+                lavFollow.setMinAndMaxProgress(1f, 1f)
+                lavFollow.speed = 1f
+                lavFollow.playAnimation()
+//                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
             }
         }
     }
@@ -204,18 +255,24 @@ class ListSongFragment: Fragment() {
     // sự kiện click để follow
     private fun clickFollow() {
         val getUser = sessionUser.getUserDetails()
-        btnFollow.setOnClickListener {
+        lavFollow.setOnClickListener {
 
-            if (!isFollow){
+            if (!isFollow){  // đang không follow
                 isFollow = true
-                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
+                lavFollow.setMinAndMaxProgress(0.4f, 1f)
+                lavFollow.speed = 1f
+                lavFollow.playAnimation()
+//                btnFollow.setImageResource(R.drawable.ic_favorite_selected)
                 callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
 
             }
 
-            else{
+            else{ // đang follow
                 isFollow = false
-                btnFollow.setImageResource(R.drawable.ic_favorite)
+                lavFollow.setMinAndMaxProgress(0f, 0.4f)
+                lavFollow.speed = -1f
+                lavFollow.playAnimation()
+//                btnFollow.setImageResource(R.drawable.ic_favorite)
                 callApiFollowOrUnfollow(getUser[sessionUser.KEY_ID]!!,idPlayList,isFollow)
             }
 

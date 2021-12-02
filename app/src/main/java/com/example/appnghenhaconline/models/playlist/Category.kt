@@ -10,11 +10,12 @@ class Category(
 //    var playlists: ArrayList<Playlist>
     @SerializedName("_id")
     var id : String,
-    var categoryname : String
+    var categoryname : String,
+    var imageCategory : String
 
 ) : Serializable {
 
     override fun toString(): String {
-        return "Category(id='$id', categoryname='$categoryname')"
+        return "Category(id='$id', categoryname='$categoryname', imageCategory='$imageCategory')"
     }
 }

@@ -15,12 +15,6 @@
         android:theme="@style/Theme.AppNgheNhacOnline"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.AddPlaylist.SearchToAddPlaylistActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.AddPlaylist.AddPlaylistActivity"
-            android:exported="true" />
-        <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
             android:exported="true" />
         <activity

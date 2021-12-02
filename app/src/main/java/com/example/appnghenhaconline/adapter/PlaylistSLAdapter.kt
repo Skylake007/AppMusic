@@ -47,7 +47,7 @@ class PlaylistSLAdapter(var context: Context,
             tvPlaylistTitle.text = itemPlaylist.playlistname
 
             Picasso.get().load(itemPlaylist.image).resize(480,500)
-                                            .placeholder(R.drawable.img_loading)
+                                            .placeholder(R.drawable.ic_loading_double)
                                             .error(R.drawable.img_error)
                                             .into(imgPlaylist)
 

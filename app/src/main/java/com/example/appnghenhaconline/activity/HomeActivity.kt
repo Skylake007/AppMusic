@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onStart() {
         super.onStart()
         session.checkLogin()
-        initSongInfo()
+        //initSongInfo()
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                                                 IntentFilter("send_action_to_activity"))
     }
@@ -257,10 +257,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private fun initSongInfo() {
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
-        if (songData ==null && isPlayingData==null) {
-            MyLib.showToast(this,"NULL")
-            playNav.visibility = View.GONE
-        }else{
+//        if (isFirstInstalled) {
+//            playNav.visibility = View.GONE
+//        }else{
             playNav.visibility = View.VISIBLE
             tvPlayNav.text = songData.title
 
@@ -287,8 +286,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             btnPrev.setOnClickListener {
                 sendActionToService(MyService.ACTION_PREVIOUS)
             }
-        }
-
+//        }
     }
 
     private var broadcastReceiver = object: BroadcastReceiver(){
@@ -316,7 +314,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                         session.createLoginSession(user.id,user.name,user.email,user.sex,user.password)
                         var gson = Gson()
                         var listPlaylist = gson.toJson(dataUser.user.followPlaylist)
+                        var listAlbum = gson.toJson(dataUser.user.followAlbum)
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
+                        sessionUser.editor.putString(sessionUser.KEY_ALBUM,listAlbum)
                         sessionUser.editor.commit()
                     }
                     else {
@@ -330,5 +330,6 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             }
         })
     }
+
 
 }
