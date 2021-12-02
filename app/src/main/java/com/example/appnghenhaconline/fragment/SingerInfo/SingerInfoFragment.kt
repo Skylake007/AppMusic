@@ -68,6 +68,7 @@ class SingerInfoFragment: Fragment() {
     private fun initTabFragment(){
         val tabOfSingerAdapter = TabOfSingerAdapter(requireActivity(), idSinger)
         viewPager.adapter = tabOfSingerAdapter
+
         TabLayoutMediator(tabLayout,viewPager){tittle, position ->
             when(position){
                 0 ->{
