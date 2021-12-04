@@ -152,6 +152,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun clickSave() {
         btnSaveInfo.setOnClickListener {
+            progressDialog.show()
             val user = session.getUserDetails()
             val name = edtName.text.toString()
             val sex: Boolean = edtSex.text.toString() == "Nam"
@@ -160,42 +161,48 @@ class UserInfoActivity : AppCompatActivity() {
             }
             else {
                 if (mUri != Uri.EMPTY) {
-                    callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
-                    callApiUpdateAvatarUser()
-
+                    if(user[session.KEY_NAME] == name && user[session.KEY_SEX].toBoolean() == sex) {
+                        callApiUpdateAvatarUser()
+//                        finish()
+                    }
+                    else {
+                        callApiUpdateUser(user[session.KEY_EMAIL]!!, name, sex, session)
+                        callApiUpdateAvatarUser()
+//                        finish()
+                    }
                 }
                 else {
                     callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
-                    finish()
+//                    finish()
                 }
             }
+            progressDialog.dismiss()
         }
     }
 
     private fun callApiUpdateAvatarUser() {
-        progressDialog.show()
+
 
         val user = session.getUserDetails()
-        var userId = user[session.KEY_ID]
+        val userId = user[session.KEY_ID]
 
-        var requestBodyUserId = RequestBody.create(MediaType.parse("multipart/form-data"),userId)
+        val requestBodyUserId = RequestBody.create(MediaType.parse("multipart/form-data"),userId)
 
-        var strRealPath = RealPathUtil.getRealPath(this, mUri);
+        val strRealPath = RealPathUtil.getRealPath(this, mUri);
         MyLib.showLog("Xem thử đường link thế nào: $strRealPath")
-        var file = File(strRealPath)
-        var requestBodyAvata = RequestBody.create(MediaType.parse("multipart/form-data"),file)
-        var multipartBodyAvatar = MultipartBody.Part.createFormData("image",file.name, requestBodyAvata)
+        val file = File(strRealPath)
+        val requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"),file)
+        val multipartBodyAvatar = MultipartBody.Part.createFormData("image",file.name, requestBodyAvatar)
 
         ApiService.apiService.updateAvatarUser(multipartBodyAvatar,requestBodyUserId).enqueue( object : Callback<DataUser> {
             override fun onResponse(call: Call<DataUser>, response: Response<DataUser>) {
-                progressDialog.dismiss()
+
                 val dataUser = response.body()
                 if (dataUser != null) {
                     if (!dataUser.error) {
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)
                         session.editor.putString(session.KEY_AVATAR,dataUser.user.avatar)
                         session.editor.commit()
-                        finish()
                     }
                     else {
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)

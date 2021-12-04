@@ -35,13 +35,7 @@ class AlbumOfSingerFragment(idSinger: String): Fragment() {
     }
 
     private fun init(){
-//        initIdSinger()
         initAlbum()
-    }
-
-    private fun initIdSinger() {
-        val bundleReceive : Bundle = requireArguments()
-        idSinger = bundleReceive.getString("id_singer").toString()
     }
 
     private fun initAlbum(){
@@ -56,31 +50,13 @@ class AlbumOfSingerFragment(idSinger: String): Fragment() {
         callApiShowListAlbumByIdSinger(listAlbum,albumAdapter,idSinger)
     }
 
-    private fun callApiAlbum(list : ArrayList<Album>, adapter : AlbumAdapter) {
-        ApiService.apiService.getAllAlbum().enqueue(object : Callback<DataAlbum?> {
-            override fun onResponse(call: Call<DataAlbum?>, response: Response<DataAlbum?>) {
-                var dataAlbum = response.body()
-                if(dataAlbum != null) {
-                    if (!dataAlbum.error) {
-                        list.addAll(dataAlbum.albums)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataAlbum.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataAlbum?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-
-        })
-    }
-
-    private fun callApiShowListAlbumByIdSinger(album : ArrayList<Album>,albumAdapter : AlbumAdapter, idSinger : String ) {
-        ApiService.apiService.getListAlbumBySingerId(idSinger).enqueue(object : Callback<DataAlbum?> {
-            override fun onResponse(call: Call<DataAlbum?>, response: Response<DataAlbum?>) {
+    private fun callApiShowListAlbumByIdSinger(album : ArrayList<Album>,
+                                               albumAdapter : AlbumAdapter,
+                                               idSinger : String ) {
+        ApiService.apiService.getListAlbumBySingerId(idSinger)
+                                .enqueue(object : Callback<DataAlbum?> {
+            override fun onResponse(call: Call<DataAlbum?>,
+                                    response: Response<DataAlbum?>) {
                 val dataAlbum = response.body()
                 MyLib.showLog(dataAlbum.toString())
                 if(dataAlbum!=null){
