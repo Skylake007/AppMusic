@@ -2,7 +2,6 @@ package com.example.appnghenhaconline.activity
 
 import android.Manifest
 import android.app.Activity
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +21,6 @@ import com.example.appnghenhaconline.models.user.UpdateUser
 import com.example.appnghenhaconline.models.user.User
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Request
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.fm_signup_tab_fragment.*
@@ -113,10 +111,10 @@ class UserInfoActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            var uri = data?.data
+            val uri = data?.data
             mUri = uri!!
             try{
-                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
                 image.setImageBitmap(bitmap)
             }
             catch(e : IOException) {
@@ -136,7 +134,8 @@ class UserInfoActivity : AppCompatActivity() {
     private fun clickPicture() {
         image.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED )  {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                    == PackageManager.PERMISSION_DENIED )  {
                     val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                     requestPermissions(permissions, PERMISSION_CODE);
                 }
@@ -160,13 +159,19 @@ class UserInfoActivity : AppCompatActivity() {
             }
             else {
                 if (mUri != Uri.EMPTY) {
-                    callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
-                    callApiUpdateAvatarUser()
-
+                    if (user[session.KEY_NAME] == name && user[session.KEY_SEX].toBoolean() == sex){
+//                        callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
+                        callApiUpdateAvatarUser()
+//                        finish()
+                    }else{
+                        callApiUpdateAvatarUser()
+                        callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
+//                        finish()
+                    }
                 }
                 else {
                     callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
-                    finish()
+//                    finish()
                 }
             }
         }
@@ -176,17 +181,21 @@ class UserInfoActivity : AppCompatActivity() {
         progressDialog.show()
 
         val user = session.getUserDetails()
-        var userId = user[session.KEY_ID]
+        val userId = user[session.KEY_ID]
 
-        var requestBodyUserId = RequestBody.create(MediaType.parse("multipart/form-data"),userId)
+        val requestBodyUserId = RequestBody
+                                .create(MediaType.parse("multipart/form-data"),userId)
 
-        var strRealPath = RealPathUtil.getRealPath(this, mUri);
+        val strRealPath = RealPathUtil.getRealPath(this, mUri);
         MyLib.showLog("Xem thử đường link thế nào: $strRealPath")
-        var file = File(strRealPath)
-        var requestBodyAvata = RequestBody.create(MediaType.parse("multipart/form-data"),file)
-        var multipartBodyAvatar = MultipartBody.Part.createFormData("image",file.name, requestBodyAvata)
+        val file = File(strRealPath)
+        val requestBodyAvata = RequestBody.create(MediaType
+                                .parse("multipart/form-data"),file)
+        val multipartBodyAvatar = MultipartBody.Part
+                                    .createFormData("image",file.name, requestBodyAvata)
 
-        ApiService.apiService.updateAvatarUser(multipartBodyAvatar,requestBodyUserId).enqueue( object : Callback<DataUser> {
+        ApiService.apiService.updateAvatarUser(multipartBodyAvatar,requestBodyUserId)
+                                                    .enqueue( object : Callback<DataUser> {
             override fun onResponse(call: Call<DataUser>, response: Response<DataUser>) {
                 progressDialog.dismiss()
                 val dataUser = response.body()
@@ -195,7 +204,6 @@ class UserInfoActivity : AppCompatActivity() {
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)
                         session.editor.putString(session.KEY_AVATAR,dataUser.user.avatar)
                         session.editor.commit()
-                        finish()
                     }
                     else {
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)

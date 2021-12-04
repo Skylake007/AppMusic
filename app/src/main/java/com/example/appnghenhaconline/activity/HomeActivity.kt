@@ -196,9 +196,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        sendActionToService(MyService.ACTION_CLEAR)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
-//        clickStopService()
+        super.onDestroy()
     }
     //set sự kiện khi nhận action từ service
     private fun handleLayoutMusic(action: Int) {
