@@ -14,8 +14,6 @@ import com.example.appnghenhaconline.adapter.CategoryAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.models.playlist.Category
 import com.example.appnghenhaconline.models.playlist.DataCategories
-import com.example.appnghenhaconline.models.playlist.DataPlayList
-import com.example.appnghenhaconline.models.playlist.Playlist
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
