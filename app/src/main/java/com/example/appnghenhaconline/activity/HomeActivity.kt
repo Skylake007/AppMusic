@@ -332,6 +332,4 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             }
         })
     }
-
-
 }

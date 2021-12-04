@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -46,6 +47,7 @@ class MyLib {
 //                    .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 //            }
         }
+
 
         // chuyển fragment
         fun changeFragment(activity: FragmentActivity, fragmentLayout: Fragment){

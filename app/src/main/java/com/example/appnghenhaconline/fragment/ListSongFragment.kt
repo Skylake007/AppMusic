@@ -252,6 +252,7 @@ class ListSongFragment: Fragment() {
         }
     }
 
+
     // sự kiện click để follow
     private fun clickFollow() {
         val getUser = sessionUser.getUserDetails()

@@ -5,11 +5,12 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
+    app:cardElevation="20dp"
     android:layout_marginBottom="10dp"
     android:layout_marginEnd="10dp"
     android:padding="15dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="260dp"
         android:layout_height="300dp">
 
@@ -18,15 +19,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_music_note_grey" />
+            android:src="@drawable/ic_music_note_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="0dp"
             android:layout_alignParentBottom="true"
-            android:background="#A6555555"
+            android:background="#96555555"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintHeight_percent=".2"
+            app:layout_constraintBottom_toBottomOf="@+id/imgPlaylistSL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tvPlaylistTittleSL"
@@ -37,5 +46,5 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

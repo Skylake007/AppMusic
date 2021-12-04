@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +21,14 @@ import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.adapter.SongRemoveAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.fragment.Library.Playlist.LibraryPlaylistFragment.Companion.btnAddPlaylist
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.google.android.material.textfield.TextInputEditText
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +45,7 @@ class AddPlaylistFragment: Fragment() {
     lateinit var rcvSong: RecyclerView
     lateinit var idPlayList : String
     lateinit var btnDeletePlayListUser : ImageView
+    lateinit var imgAddPlaylist: ImageView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
@@ -56,12 +60,16 @@ class AddPlaylistFragment: Fragment() {
         tvNamePlaylist = view.findViewById(R.id.tvNamePlaylist)
         addPlaylistNav = view.findViewById(R.id.addPlaylistNav)
         btnDeletePlayListUser = view.findViewById(R.id.btnDeletePlaylistUser)
+        imgAddPlaylist = view.findViewById(R.id.imgAddPlaylist)
         initPlaylistInfo()
-
         event()
     }
 
     private fun event() {
+        if(btnAddPlaylist.isVisible){
+            btnAddPlaylist.hide()
+        }
+
         btnBack.setOnClickListener {
             val fragmentLayout = LibraryPlaylistFragment()
             MyLib.changeFragment(requireActivity(), fragmentLayout)
@@ -195,6 +203,13 @@ class AddPlaylistFragment: Fragment() {
                         var listSong : ArrayList<Song> = playListUser.listSong
                         MyLib.showLog(playListUser.toString())
                         tvNamePlaylist.text = playListUser.playlistName
+                        if (listSong.size != 0){
+                            Picasso.get().load(listSong[0].image).into(imgAddPlaylist)
+                        }
+//                        else{
+//                            Picasso.get().load(R.drawable.ic_music_note_grey).into(imgAddPlaylist)
+//                        }
+
                         songs.addAll(listSong)
                         songAdapter.notifyDataSetChanged()
                     }
