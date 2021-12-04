@@ -21,9 +21,7 @@ import com.example.appnghenhaconline.adapter.SingerAdapter
 import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
-import com.example.appnghenhaconline.fragment.SingerInfo.AlbumOfSingerFragment
 import com.example.appnghenhaconline.fragment.SingerInfo.SingerInfoFragment
-import com.example.appnghenhaconline.fragment.SingerInfo.SongOfSingerFragment
 import com.example.appnghenhaconline.models.singer.Singer
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song

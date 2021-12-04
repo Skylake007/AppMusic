@@ -21,7 +21,6 @@ import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isShuf
 import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
-import com.example.appnghenhaconline.models.playlist.Playlist
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService

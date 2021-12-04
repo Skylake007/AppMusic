@@ -35,18 +35,22 @@ class MyPlaylistFragment : Fragment(){
                               savedInstanceState: Bundle?): View? {
 
         view = inflater.inflate(R.layout.tab_my_playlist, container, false)
-        init()
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        init()
     }
 
     private fun init(){
         session = SessionUser(this.requireContext())
         initMyPlaylist()
-        event()
+//        event()
     }
 
-    private fun event() {
-    }
+//    private fun event() {
+//    }
 
     private fun initMyPlaylist(){
         listMyPlaylist = ArrayList()
@@ -88,33 +92,33 @@ class MyPlaylistFragment : Fragment(){
     }
 
     //call Api Create playlist user
-    private fun callApiCreatePlaylistUser(userId : String, playlistName : String ) {
-        ApiService.apiService.createPlaylistUser(userId, playlistName).enqueue(object : Callback<DataPlayListUser?> {
-            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
-                val playList = response.body()
-                if (playList != null) {
-                    if (!playList.error) {
-                        val playlist : PlayListUser = playList.playlistUser
-
-                        val fragmentLayout = AddPlaylistFragment()
-
-                        val bundle = Bundle()
-                        bundle.putSerializable("id_playlist",playlist.id)
-                        fragmentLayout.arguments = bundle
-
-                        MyLib.changeFragment(requireActivity(), fragmentLayout)
-                    }
-                    else {
-                        MyLib.showToast(requireContext(),playList.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-
-        })
-    }
+//    private fun callApiCreatePlaylistUser(userId : String, playlistName : String ) {
+//        ApiService.apiService.createPlaylistUser(userId, playlistName).enqueue(object : Callback<DataPlayListUser?> {
+//            override fun onResponse(call: Call<DataPlayListUser?>, response: Response<DataPlayListUser?>) {
+//                val playList = response.body()
+//                if (playList != null) {
+//                    if (!playList.error) {
+//                        val playlist : PlayListUser = playList.playlistUser
+//
+//                        val fragmentLayout = AddPlaylistFragment()
+//
+//                        val bundle = Bundle()
+//                        bundle.putSerializable("id_playlist",playlist.id)
+//                        fragmentLayout.arguments = bundle
+//
+//                        MyLib.changeFragment(requireActivity(), fragmentLayout)
+//                    }
+//                    else {
+//                        MyLib.showToast(requireContext(),playList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayListUser?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//
+//        })
+//    }
 
 }

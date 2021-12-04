@@ -27,19 +27,16 @@ import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.fragment.Library.Playlist.LibraryPlaylistFragment
-import com.example.appnghenhaconline.fragment.Library.Playlist.SearchToAddPlaylistFragment
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.reflect.Type
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ListSongFromLibFragment: Fragment() {

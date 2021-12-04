@@ -69,6 +69,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         checkUser(user[session.KEY_EMAIL]!!, user[session.KEY_PASSWORD]!!,session)
         init()
         initMenu()
+        playNav.visibility = View.GONE
     }
 
     override fun onStart() {
@@ -197,6 +198,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+//        clickStopService()
     }
     //set sự kiện khi nhận action từ service
     private fun handleLayoutMusic(action: Int) {
@@ -289,6 +291,11 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 //        }
     }
 
+    private fun clickStopService(){
+        val intent = Intent(baseContext, MyService::class.java)
+        stopService(intent)
+    }
+
     private var broadcastReceiver = object: BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {
             val bundle: Bundle? = intent.extras
@@ -319,6 +326,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                         sessionUser.editor.putString(sessionUser.KEY_PLAYLIST,listPlaylist)
                         sessionUser.editor.putString(sessionUser.KEY_ALBUM,listAlbum)
                         sessionUser.editor.putString(sessionUser.KEY_SINGER,listSinger)
+                        sessionUser.editor.putString(sessionUser.KEY_AVATAR,dataUser.user.avatar)
                         sessionUser.editor.commit()
                     }
                     else {

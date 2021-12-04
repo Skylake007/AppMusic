@@ -17,12 +17,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 import com.airbnb.lottie.LottieAnimationView
-import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
-import com.example.appnghenhaconline.models.album.Album
-import com.example.appnghenhaconline.models.song.DataSong
-import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.models.user.DataUser
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

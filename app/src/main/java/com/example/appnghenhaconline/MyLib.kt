@@ -1,23 +1,13 @@
 package com.example.appnghenhaconline
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.example.appnghenhaconline.activity.HomeActivity
-import com.example.appnghenhaconline.fragment.Library.Playlist.AddPlaylistFragment
-import kotlinx.android.synthetic.main.activity_home.*
-import java.io.IOException
 import java.math.BigInteger
 import java.security.MessageDigest
 

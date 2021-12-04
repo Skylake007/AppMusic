@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.AlbumAdapter
-import com.example.appnghenhaconline.adapter.FollowAlbumAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.adapter.PlaylistSLAdapter
 import com.example.appnghenhaconline.adapter.PlaylistSMAdapter

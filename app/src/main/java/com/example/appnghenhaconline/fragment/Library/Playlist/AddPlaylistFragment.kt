@@ -16,14 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.adapter.SongAdapter
 import com.example.appnghenhaconline.adapter.SongRemoveAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
-import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
-import com.example.appnghenhaconline.models.playlist.PlayListUser
-import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.song.Song
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -51,15 +47,19 @@ class AddPlaylistFragment: Fragment() {
         return view
     }
 
+    override fun onStart() {
+        super.onStart()
+        initPlaylistInfo()
+        event()
+    }
+
     private fun init(){
         btnBack = view.findViewById(R.id.btnBack)
         tvNamePlaylist = view.findViewById(R.id.tvNamePlaylist)
         addPlaylistNav = view.findViewById(R.id.addPlaylistNav)
         btnDeletePlayListUser = view.findViewById(R.id.btnDeletePlaylistUser)
-        initPlaylistInfo()
-
-        event()
     }
+
 
     private fun event() {
         btnBack.setOnClickListener {
