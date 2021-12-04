@@ -47,7 +47,9 @@ class LibraryPlaylistFragment: Fragment() {
     private lateinit var tabLayout: TabLayout
     private lateinit var session: SessionUser
 
-    private lateinit var btnAddPlaylist: FloatingActionButton
+    companion object{
+        lateinit var btnAddPlaylist: FloatingActionButton
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {

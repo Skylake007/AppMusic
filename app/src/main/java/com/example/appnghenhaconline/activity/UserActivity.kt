@@ -46,7 +46,7 @@ class UserActivity : AppCompatActivity() {
         tvName = findViewById(R.id.tvName)
         image = findViewById(R.id.imgAvatar)
         tvName.text = user[session.KEY_NAME]
-        MyLib.showLog(user[session.KEY_AVATAR]!!)
+        MyLib.showLog("UserAvatar :"+ user[session.KEY_AVATAR]!!)
         Picasso.get().load(user[session.KEY_AVATAR]).error(R.drawable.img_error).into(image)
     }
     private fun event(session: SessionUser){

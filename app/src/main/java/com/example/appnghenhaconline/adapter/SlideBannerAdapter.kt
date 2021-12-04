@@ -1,23 +1,25 @@
 package com.example.appnghenhaconline.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Category
+import com.example.appnghenhaconline.models.playlist.PlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
 import com.squareup.picasso.Picasso
 
-class CategoryAdapter (var context: Context,
-                       private var categories: ArrayList<Category>)
-    : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
+class SlideBannerAdapter(var context: Context,
+                         private var playlist: ArrayList<Playlist>)
+        : RecyclerView.Adapter<SlideBannerAdapter.SlideBannerViewHolder>() {
 
     internal lateinit var view: View
+    private val limit: Int = 4
     lateinit var mListener: IonItemClickListener
 
     interface IonItemClickListener{
@@ -28,32 +30,34 @@ class CategoryAdapter (var context: Context,
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlideBannerViewHolder {
         view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.i_category_item, parent, false)
+            .inflate(R.layout.i_slide_banner_item, parent, false)
 
-        return CategoryViewHolder(view, mListener)
+        return SlideBannerViewHolder(view, mListener)
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category: Category = categories[position]
+    override fun onBindViewHolder(holder: SlideBannerViewHolder, position: Int) {
+        val playlist: Playlist = playlist[position]
 
-        holder.tvCategoryTitle.text = category.categoryname
-
-        Picasso.get().load(category.imageCategory)
-                        .resize(480,500)
+        Picasso.get().load(playlist.image)
                         .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
-                        .into(holder.imgCategory)
+                        .into(holder.imgBanner)
     }
 
     override fun getItemCount(): Int {
-        return categories.size
+        if (playlist.size > limit){
+            return limit
+        }else{
+            return playlist.size
+        }
     }
 
-    class CategoryViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
-        var tvCategoryTitle: TextView = itemView.findViewById(R.id.tvCategorySearch)
-        var imgCategory: ImageView = itemView.findViewById(R.id.imgCategorySearch)
+    class SlideBannerViewHolder(itemView: View, listener: IonItemClickListener)
+                                : RecyclerView.ViewHolder(itemView){
+
+        var imgBanner: ImageView = itemView.findViewById(R.id.imgBanner)
 
         init {
             itemView.setOnClickListener {

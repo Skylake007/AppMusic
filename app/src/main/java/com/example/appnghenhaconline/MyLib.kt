@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -36,6 +37,7 @@ class MyLib {
 //                    .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 //            }
         }
+
 
         // chuyển fragment
         fun changeFragment(activity: FragmentActivity, fragmentLayout: Fragment){

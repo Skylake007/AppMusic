@@ -40,7 +40,7 @@ class SearchToAddPlaylistFragment: Fragment() {
     private fun init(){
         btnBack = view.findViewById(R.id.btnBack)
         edtSearch = view.findViewById(R.id.edtSearch)
-
+        initObjectPlaylist()
         event()
     }
 

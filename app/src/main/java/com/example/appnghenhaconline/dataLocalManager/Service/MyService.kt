@@ -104,7 +104,7 @@ class MyService : Service() {
                 resumeMusic()
             }
             ACTION_CLEAR ->{
-                stopSelf()
+                stopMusic()
             }
             ACTION_NEXT ->{
                 nextMusic()
@@ -121,13 +121,20 @@ class MyService : Service() {
         }
     }
 
-    // phát nhạc
-    private fun startMusic(song: Song) {
+    private fun stopMusic() {
         mediaPlayer.stop()
         mediaPlayer.release()
+        stopSelf()
+    }
+
+    // phát nhạc
+    private fun startMusic(song: Song) {
+        if (isPlaying){
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
         playSong(song.link)
         isPlaying = true
-        sendActionToActivity(ACTION_START)
     }
 
     // khởi tạo media player

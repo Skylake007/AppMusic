@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -28,7 +29,6 @@ class SignupTabFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         view = inflater.inflate(R.layout.fm_signup_tab_fragment, container, false)
-
         val sex = resources.getStringArray(R.array.sex)
         val arrAdapter = ArrayAdapter(requireContext(), R.layout.i_dropdown_sex_item, sex)
         view.edtSex.setAdapter(arrAdapter)

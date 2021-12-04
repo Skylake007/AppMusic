@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playNowFragmentLayout"
     android:orientation="vertical">
     <ScrollView
@@ -13,6 +14,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPagerBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@drawable/img_gradient_color"
+                    android:paddingStart="50dp"
+                    android:paddingTop="20dp"
+                    android:paddingEnd="50dp"
+                    android:paddingBottom="25dp" />
+
+                <me.relex.circleindicator.CircleIndicator3
+                    android:id="@+id/ciBanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    app:ci_width="12dp"
+                    app:ci_height="2dp"
+                    app:ci_margin="5dp"
+                    app:ci_drawable="@drawable/cm_spot_pink_corner"
+                    app:ci_drawable_unselected="@drawable/cm_spot_grey_corner"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_b" />
 
             <TextView
                 android:layout_width="match_parent"
