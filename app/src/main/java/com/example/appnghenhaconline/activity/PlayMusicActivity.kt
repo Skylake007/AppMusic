@@ -58,6 +58,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         var isRepeat: Boolean = false
     }
 
+    //===============================================
     //region broadcastReceiver
     private var broadcastReceiver = object: BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -73,26 +74,34 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
     //endregion
-
+    //===============================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-            IntentFilter("send_action_to_activity"))
         init()
         initSongInfo()
-//        showInfoSong()
     }
 
     override fun onStart() {
         super.onStart()
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter("send_action_to_activity"))
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slilde_in_down, R.anim.slilde_out_down)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+    }
+
+    //===============================================
+    //region INIT
     private fun init(){
-        mList = ArrayList()
         MyLib.hideSystemUI(window, layoutPlayMusic)
-        swipeActivity()
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
         imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
@@ -106,13 +115,55 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         tvNameSinger = findViewById(R.id.tvAuthorPlayMusic)
         btnRepeat = findViewById(R.id.btnRepeat)
         btnShuffle = findViewById(R.id.btnShuffle)
+
+        mList = ArrayList()
+        swipeActivity()
+    }
+    //endregion
+    //===============================================
+    //region SERVICE
+    //set hành động sau khi nhận từ service
+    private fun handleLayoutMusic(action: Int) {
+        when(action){
+            MyService.ACTION_PAUSE->{
+                initSongInfo()
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_RESUME->{
+                initSongInfo()
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_START->{
+                initSongInfo()
+                setStatusButtonPlayOrPause()
+            }
+            MyService.ACTION_NEXT->{
+                initSongInfo()
+            }
+            MyService.ACTION_PREVIOUS->{
+                initSongInfo()
+            }
+        }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(R.anim.slilde_in_down, R.anim.slilde_out_down)
+    //set trạng thái button play
+    private fun setStatusButtonPlayOrPause(){
+        if (isPlaying){
+            btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
+        }else{
+            btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
+        }
     }
 
+    //gửi hành động tới service
+    private fun sendActionToService(action: Int){
+        val intent = Intent(this, MyService::class.java)
+        intent.putExtra("action_music_service", action)
+        startService(intent)
+    }
+    //endregion
+    //===============================================
+    //region SỰ KIỆN VUỐT MÀN HÌNH
     @SuppressLint("ClickableViewAccessibility")
     fun swipeActivity(){
         gestureDetector = GestureDetector(this, this)
@@ -122,120 +173,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
 
-    private fun handleLayoutMusic(action: Int) {
-        when(action){
-            MyService.ACTION_PAUSE->{
-//                showInfoSong()
-                initSongInfo()
-                setStatusButtonPlayOrPause()
-            }
-            MyService.ACTION_RESUME->{
-                initSongInfo()
-//                showInfoSong()
-                setStatusButtonPlayOrPause()
-            }
-            MyService.ACTION_START->{
-                initSongInfo()
-//                showInfoSong()
-                setStatusButtonPlayOrPause()
-            }
-            MyService.ACTION_NEXT->{
-                initSongInfo()
-//                showInfoSong()
-            }
-            MyService.ACTION_PREVIOUS->{
-                initSongInfo()
-//                showInfoSong()
-            }
-            MyService.ACTION_REPEAT->{
-                initSongInfo()
-            }
-            MyService.ACTION_SHUFFLE->{
-//                initSongInfo()
-            }
-        }
-    }
-
-    private fun setStatusButtonPlayOrPause(){
-        if (isPlaying){
-            btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
-        }else{
-            btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
-        }
-    }
-
-    private fun showInfoSong(){
-        seekBarMusic.max = MyService.mediaPlayer.duration
-
-        Picasso.get().load(mList[mPosition].image)
-//                        .resize(450,400)
-                        .into(imgPlay)
-        Picasso.get().load(mList[mPosition].image)
-                        .resize(480,480)
-                        .into(imgBgPlay)
-        tvSongPlay.text = mList[mPosition].title
-        tvNameSinger.text = mList[mPosition].singer[0].singername
-
-        val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
-        val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
-
-        if (isPlaying){
-            imgCardViewPlay.startAnimation(animZoomIn)
-        }else{
-            imgCardViewPlay.startAnimation(animZoomOut)
-        }
-
-        btnPlayOrPause.setOnClickListener {
-            if (isPlaying){
-                sendActionToService(MyService.ACTION_PAUSE)
-                imgCardViewPlay.startAnimation(animZoomOut)
-            }else{
-                sendActionToService(MyService.ACTION_RESUME)
-                imgCardViewPlay.startAnimation(animZoomIn)
-            }
-//            runnable.run()
-        }
-
-        btnNext.setOnClickListener {
-            sendActionToService(MyService.ACTION_NEXT)
-//            runnable.run()
-        }
-
-        btnPrev.setOnClickListener {
-            sendActionToService(MyService.ACTION_PREVIOUS)
-//            runnable.run()
-        }
-        btnRepeat.setOnClickListener {
-            repeatSong()
-//            runnable.run()
-        }
-        btnShuffle.setOnClickListener {
-            shuffleSong()
-//            runnable.run()
-        }
-
-        seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                //         TODO("Not yet implemented")
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//                TODO("Not yet implemented")
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                MyService.mediaPlayer.seekTo(seekBarMusic.progress)
-            }
-        })
-    }
-
-    private fun sendActionToService(action: Int){
-        val intent = Intent(this, MyService::class.java)
-        intent.putExtra("action_music_service", action)
-        startService(intent)
-    }
-    //===============================================
-    //region SỰ KIỆN VUỐT MÀN HÌNH
     override fun onDown(e: MotionEvent?): Boolean {
         return false
     }
@@ -267,6 +204,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
     //endregion
     //===============================================
+    //region ANOTHER FUNC
+    //set chế độ lặp lại
     private fun repeatSong(){
         if (!isRepeat){
             isRepeat = true
@@ -278,6 +217,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         MyDataLocalManager.setIsRepeat(isRepeat)
     }
 
+    //set chế độ random
     private fun shuffleSong(){
         if (!isShuffle){
             isShuffle = true
@@ -289,6 +229,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         MyDataLocalManager.setIsShuffle(isShuffle)
     }
 
+    //runtime set thanh process bar
     private var runnable = object: Runnable{
         @SuppressLint("SimpleDateFormat")
         override fun run() {
@@ -308,6 +249,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
 
+    //set thông tin bài hát
     private fun initSongInfo() {
         seekBarMusic.max = MyService.mediaPlayer.duration
         runnable.run()
@@ -321,11 +263,11 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         tvNameSinger.text = songData.singer[0].singername
 
         Picasso.get().load(songData.image)
-                    .resize(450,550)
-                    .into(imgPlay)
+            .resize(450,550)
+            .into(imgPlay)
         Picasso.get().load(songData.image)
-                    .resize(480,480)
-                    .into(imgBgPlay)
+            .resize(480,480)
+            .into(imgBgPlay)
 
         val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
         val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
@@ -384,7 +326,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
         seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-       //         TODO("Not yet implemented")
+                //         TODO("Not yet implemented")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -396,8 +338,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             }
         })
     }
-    override fun onDestroy() {
-        super.onDestroy()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
-    }
+    //endregion
+    //===============================================
 }

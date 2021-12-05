@@ -32,9 +32,6 @@
             android:name=".activity.UserActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.SettingActivity"
-            android:exported="true" />
-        <activity
             android:name=".activity.UserInfoActivity"
             android:exported="true" />
         <activity
