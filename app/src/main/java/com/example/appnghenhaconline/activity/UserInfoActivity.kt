@@ -41,9 +41,7 @@ class UserInfoActivity : AppCompatActivity() {
     lateinit var edtEmail : TextInputEditText
     lateinit var btnSaveInfo : ImageView
     lateinit var image : CircleImageView
-    private val IMAGE_PICK_CODE = 100
-    private val PERMISSION_CODE = 1001
-    private lateinit var mUri : Uri
+
     private lateinit var progressDialog: ProgressDialog
     private lateinit var session : SessionUser
 
@@ -64,7 +62,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun init(session : SessionUser){
         val user = session.getUserDetails()
-        mUri = Uri.EMPTY
+
         btnBack = findViewById(R.id.btnBackUserInfo)
         edtSex = findViewById(R.id.etSex)
         edtName = findViewById(R.id.edtName)
@@ -88,70 +86,16 @@ class UserInfoActivity : AppCompatActivity() {
         edtSex.setAdapter(arrAdapter)
     }
 
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_PICK_CODE)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode) {
-            PERMISSION_CODE -> {
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openGallery()
-                }
-                else {
-                    MyLib.showToast(this,"Permission denied")
-                }
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            val uri = data?.data
-            mUri = uri!!
-            try{
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
-                image.setImageBitmap(bitmap)
-            }
-            catch(e : IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     private fun event(){
         btnBack.setOnClickListener {
             finish()
         }
-        clickPicture()
         clickSave()
-    }
-
-    private fun clickPicture() {
-        image.setOnClickListener {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                                    == PackageManager.PERMISSION_DENIED )  {
-                    val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    requestPermissions(permissions, PERMISSION_CODE);
-                }
-                else {
-                    openGallery()
-                }
-            }
-            else {
-                openGallery()
-            }
-        }
     }
 
     private fun clickSave() {
         btnSaveInfo.setOnClickListener {
-            progressDialog.show()
+
             val user = session.getUserDetails()
             val name = edtName.text.toString()
             val sex: Boolean = edtSex.text.toString() == "Nam"
@@ -159,65 +103,17 @@ class UserInfoActivity : AppCompatActivity() {
                 MyLib.showToast(this,"Vui lòng nhập tên người dùng")
             }
             else {
-                if (mUri != Uri.EMPTY) {
-                    if(user[session.KEY_NAME] == name && user[session.KEY_SEX].toBoolean() == sex) {
-                    }
-                    else {
-                        callApiUpdateUser(user[session.KEY_EMAIL]!!, name, sex, session)
-                        callApiUpdateAvatarUser()
-//                        finish()
-                    }
-                }
-                else {
-                    callApiUpdateUser(user[session.KEY_EMAIL]!!,name,sex, session)
-//                    finish()
-                }
+                callApiUpdateUser(user[session.KEY_EMAIL]!!, name, sex, session)
             }
-            progressDialog.dismiss()
+            finish()
         }
     }
 
-    private fun callApiUpdateAvatarUser() {
-
-
-        val user = session.getUserDetails()
-        val userId = user[session.KEY_ID]
-
-        val requestBodyUserId = RequestBody.create(MediaType.parse("multipart/form-data"),userId)
-
-        val strRealPath = RealPathUtil.getRealPath(this, mUri);
-        MyLib.showLog("Xem thử đường link thế nào: $strRealPath")
-        val file = File(strRealPath)
-        val requestBodyAvatar = RequestBody.create(MediaType.parse("multipart/form-data"),file)
-        val multipartBodyAvatar = MultipartBody.Part.createFormData("image",file.name, requestBodyAvatar)
-
-        ApiService.apiService.updateAvatarUser(multipartBodyAvatar,requestBodyUserId)
-                                                    .enqueue( object : Callback<DataUser> {
-            override fun onResponse(call: Call<DataUser>, response: Response<DataUser>) {
-
-                val dataUser = response.body()
-                if (dataUser != null) {
-                    if (!dataUser.error) {
-                        MyLib.showToast(this@UserInfoActivity,dataUser.message)
-                        session.editor.putString(session.KEY_AVATAR,dataUser.user.avatar)
-                        session.editor.commit()
-                    }
-                    else {
-                        MyLib.showToast(this@UserInfoActivity,dataUser.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataUser>, t: Throwable) {
-                progressDialog.dismiss()
-                MyLib.showToast(this@UserInfoActivity,"Call Api Error")
-            }
-        })
-    }
-
     private fun callApiUpdateUser( email : String, name : String, sex : Boolean, session: SessionUser)  { // call API UpdateUser
+        progressDialog.show()
         ApiService.apiService.putUpdateUser(email,name,sex).enqueue(object : Callback<UpdateUser> {
             override fun onResponse(call: Call<UpdateUser>, response: Response<UpdateUser>) {
+                progressDialog.dismiss()
                 val dataUser  = response.body()
                 if(dataUser != null) {
                     if (!dataUser.error){
@@ -238,6 +134,6 @@ class UserInfoActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }
+
+
