@@ -9,15 +9,12 @@
     <application
         android:name=".dataLocalManager.MyApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppNgheNhacOnline"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
             android:exported="true" />

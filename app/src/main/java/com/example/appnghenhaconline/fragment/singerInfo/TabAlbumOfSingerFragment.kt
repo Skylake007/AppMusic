@@ -51,7 +51,7 @@ class TabAlbumOfSingerFragment(idSinger: String): Fragment() {
     }
 
     private fun callApiShowListAlbumByIdSinger(album : ArrayList<Album>,
-                                               albumAdapter : AlbumAdapter,
+                                               albumAdapter : AlbumOfSingerAdapter,
                                                idSinger : String ) {
         ApiService.apiService.getListAlbumBySingerId(idSinger)
                                 .enqueue(object : Callback<DataAlbum?> {
