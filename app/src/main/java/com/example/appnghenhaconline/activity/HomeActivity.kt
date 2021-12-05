@@ -30,6 +30,8 @@ import com.example.appnghenhaconline.models.user.User
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fm_play_now_fragment.*
+import kotlinx.android.synthetic.main.tab_album_of_singer.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -227,6 +229,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?,
                           distanceX: Float, distanceY: Float): Boolean {
 //        TODO("Not yet implemented")
+
         return false
     }
 

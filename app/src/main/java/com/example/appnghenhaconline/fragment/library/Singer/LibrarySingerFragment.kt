@@ -10,12 +10,24 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.adapter.albumAdapter.FollowAlbumAdapter
+import com.example.appnghenhaconline.adapter.FollowAlbumAdapter
+import com.example.appnghenhaconline.adapter.FollowPlaylistAdapter
+import com.example.appnghenhaconline.adapter.MyPlaylistAdapter
+import com.example.appnghenhaconline.adapter.PlaylistSelectedAdapter
+import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.fragment.library.LibraryFragment
 import com.example.appnghenhaconline.models.album.Album
+import com.example.appnghenhaconline.models.playlist.DataPlayListUser
+import com.example.appnghenhaconline.models.playlist.PlayListUser
+import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.models.singer.DataSinger
+import com.example.appnghenhaconline.models.singer.Singer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.reflect.Type
 
 class LibrarySingerFragment: Fragment() {
@@ -62,15 +74,33 @@ class LibrarySingerFragment: Fragment() {
         rcvFollowPlaylist.layoutManager = GridLayoutManager(view.context, 2)
         rcvFollowPlaylist.adapter = followAlbumAdapter
 
-        showFollowAlbum(listFollowAlbum, followAlbumAdapter)
+        var user = session.getUserDetails()
+//        user[session.KEY_SINGER]
+        //Nghĩa lấy cái hàm user[session.KEY_SINGER] truyền vào cuối cái call Api nha
+//        callApiLoadPlayListUser()
     }
 
-    private fun showFollowAlbum(list : ArrayList<Album>, adapter : FollowAlbumAdapter) {
-        val getPlaylist = session.getUserDetails()
-        val gson = Gson()
-        val type: Type = object : TypeToken<ArrayList<Album?>?>() {}.type
-        val albumFollow : ArrayList<Album> = gson.fromJson(getPlaylist[session.KEY_ALBUM],type)
-        list.addAll(albumFollow)
-        adapter.notifyDataSetChanged()
+    // Api lấy list Singer yêu thich
+    private fun callApiListLoveSinger(list : ArrayList<Singer>, adapter : PlaylistSelectedAdapter, listIdUser : ArrayList<String>) {
+        ApiService.apiService.getListLoveSinger(listIdUser).enqueue(object : Callback<DataSinger?> {
+            override fun onResponse(call: Call<DataSinger?>, response: Response<DataSinger?>) {
+                val dataSinger = response.body()
+                if(dataSinger != null) {
+                    if (!dataSinger.error) {
+                        val dataListSiger = dataSinger.singers
+
+                        list.addAll(dataListSiger)
+                        adapter.notifyDataSetChanged()
+                    }
+                    else {
+                        MyLib.showToast(requireContext(),dataSinger.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DataSinger?>, t: Throwable) {
+                MyLib.showToast(requireContext(),"Call Api Error" )
+            }
+        })
     }
 }

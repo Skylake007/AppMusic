@@ -63,6 +63,7 @@ class UserPasswordActivity : AppCompatActivity() {
     }
 
     private fun callApiUpdateUserPassword( email : String, oldPassword : String, newPassowrd : String, session: SessionUser) { // call API UpdateUser
+
         ApiService.apiService.putUpdateUserPassword(email,oldPassword,newPassowrd).enqueue(object : Callback<UpdateUser> {
             override fun onResponse(call: Call<UpdateUser>, response: Response<UpdateUser>) {
                 val dataUser  = response.body()
@@ -72,8 +73,9 @@ class UserPasswordActivity : AppCompatActivity() {
                         session.editor.putString(session.KEY_PASSWORD,user.password)
                         session.editor.commit()
                         MyLib.showToast(this@UserPasswordActivity,dataUser.message)
-                        intent = Intent(this@UserPasswordActivity, UserActivity::class.java)
-                        startActivity(intent)
+//                        intent = Intent(this@UserPasswordActivity, UserActivity::class.java)
+//                        startActivity(intent)
+                        finish()
                     }
                     else {
                         MyLib.showToast(this@UserPasswordActivity,dataUser.message)
@@ -89,8 +91,9 @@ class UserPasswordActivity : AppCompatActivity() {
 
     private fun event() {
         btnBack.setOnClickListener {
-            intent = Intent(this, UserActivity::class.java)
-            startActivity(intent)
+//            intent = Intent(this, UserActivity::class.java)
+//            startActivity(intent)
+            finish()
         }
     }
 }

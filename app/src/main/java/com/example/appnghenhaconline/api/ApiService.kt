@@ -5,6 +5,7 @@ import com.example.appnghenhaconline.models.playlist.DataCategories
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.models.singer.DataSinger
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.user.*
 import com.google.gson.Gson
@@ -25,9 +26,9 @@ interface ApiService {
     fun getListSongByID(@Query ("playlistId") id : String) : Call<DataSong>
 
     companion object{
-        private val baseUrl = "http://192.168.1.3:3000/"
+//        private val baseUrl = "http://192.168.1.3:3000/"
         //private val baseUrl = "http://192.168.10.62:3000/"
-//      private val baseUrl = "http://192.168.0.31:3000/"
+      private val baseUrl = "http://192.168.0.31:3000/"
 //        private val baseUrl = "http://192.168.0.155:3000/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val apiService: ApiService = Retrofit.Builder()
@@ -151,7 +152,7 @@ interface ApiService {
 
     @PUT("/updateuser/removeFavoriteSinger")
     fun unFollowSinger(@Query("singerid") SingerId: String,
-                     @Query("userid") UserId : String
+                       @Query("userid") UserId : String
 
     )  : Call<DataUser>
 
@@ -161,4 +162,6 @@ interface ApiService {
                           @Part("idUser") idUser : RequestBody
     ) : Call<DataUser>
 
+    @GET("/singer/getListSinger")
+    fun getListLoveSinger(@Part ("singerIds") listSingerIds : ArrayList<String>) : Call<DataSinger>
 }
