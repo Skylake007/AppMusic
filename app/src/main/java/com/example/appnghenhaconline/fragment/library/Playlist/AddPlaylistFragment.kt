@@ -125,10 +125,11 @@ class AddPlaylistFragment: Fragment() {
 
         //Sự kiện onItemClick
         songRemoveAdapter.setOnItemClickListener(object : SongRemoveAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 clickStartService(listsong, position)
             }
-            override fun onItemSelected(position: Int) {
+
+            override fun onRemoveItem(position: Int) {
                 callApiDeleteSongFromPlaylistUser(idPlayList,listsong[position].id)
             }
         })

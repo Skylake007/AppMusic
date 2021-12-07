@@ -80,7 +80,6 @@ class SingerInfoFragment: Fragment() {
         Picasso.get().load(singer.image)
             .resize(800,800)
             .into(imgSinger)
-        MyLib.showLog("Cái nồi này ra đc ko cu: $idSinger")
     }
 
     private fun initTabFragment(){

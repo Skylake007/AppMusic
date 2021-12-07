@@ -12,6 +12,7 @@ import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.adapter.albumAdapter.FollowAlbumAdapter
 import com.example.appnghenhaconline.adapter.playlistAdapter.PlaylistSelectedAdapter
+import com.example.appnghenhaconline.adapter.singerAdapter.FollowSingerAdapter
 import com.example.appnghenhaconline.api.ApiService
 import com.example.appnghenhaconline.dataLocalManager.SharedPreferences.SessionUser
 import com.example.appnghenhaconline.fragment.library.LibraryFragment
@@ -28,15 +29,15 @@ import java.lang.reflect.Type
 class LibrarySingerFragment: Fragment() {
     internal lateinit var view: View
     private lateinit var btnBack: ImageView
-    private lateinit var listFollowAlbum: ArrayList<Album>
-    private lateinit var rcvFollowPlaylist: RecyclerView
-    private lateinit var followAlbumAdapter: FollowAlbumAdapter
+    private lateinit var listFollowSinger: ArrayList<Singer>
+    private lateinit var rcvFollowSinger: RecyclerView
+    private lateinit var followSingerAdapter: FollowSingerAdapter
     private lateinit var session: SessionUser
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                 savedInstanceState: Bundle?): View? {
-        view = inflater.inflate(R.layout.fm_library_album_fragment, container, false)
+        view = inflater.inflate(R.layout.fm_library_singer_fragment, container, false)
 
         return view
     }
@@ -61,22 +62,28 @@ class LibrarySingerFragment: Fragment() {
     }
 
     private fun initFollowPlaylist(){
-        listFollowAlbum = ArrayList()
-        followAlbumAdapter = FollowAlbumAdapter(view.context, listFollowAlbum)
+        listFollowSinger = ArrayList()
+        followSingerAdapter = FollowSingerAdapter(view.context, listFollowSinger)
 
-        rcvFollowPlaylist =view.findViewById(R.id.rcvFollowAlbum)
-        rcvFollowPlaylist.setHasFixedSize(true)
-        rcvFollowPlaylist.layoutManager = GridLayoutManager(view.context, 2)
-        rcvFollowPlaylist.adapter = followAlbumAdapter
+        rcvFollowSinger = view.findViewById(R.id.rcvFollowAlbum)
+        rcvFollowSinger.setHasFixedSize(true)
+        rcvFollowSinger.layoutManager = GridLayoutManager(view.context, 2)
+        rcvFollowSinger.adapter = followSingerAdapter
 
-        var user = session.getUserDetails()
+        followSingerAdapter.setOnItemClickListener(object :FollowSingerAdapter.IonItemClickListener{
+            override fun onRemoveItem(position: Int) {
+//                TODO("Not yet implemented")
+            }
+        })
+
+        val user = session.getUserDetails()
 //        user[session.KEY_SINGER]
         //Nghĩa lấy cái hàm user[session.KEY_SINGER] truyền vào cuối cái call Api nha
-//        callApiLoadPlayListUser()
+        callApiListFollowSinger(listFollowSinger, followSingerAdapter, user[session.KEY_SINGER])
     }
 
     // Api lấy list Singer yêu thich
-    private fun callApiListLoveSinger(list : ArrayList<Singer>, adapter : PlaylistSelectedAdapter, listIdUser : ArrayList<String>) {
+    private fun callApiListFollowSinger(list : ArrayList<Singer>, adapter : FollowSingerAdapter, listIdUser : ArrayList<String>) {
         ApiService.apiService.getListLoveSinger(listIdUser).enqueue(object : Callback<DataSinger?> {
             override fun onResponse(call: Call<DataSinger?>, response: Response<DataSinger?>) {
                 val dataSinger = response.body()

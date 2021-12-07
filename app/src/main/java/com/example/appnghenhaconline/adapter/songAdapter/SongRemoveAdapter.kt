@@ -19,8 +19,8 @@ class SongRemoveAdapter(var context: Context,
     private lateinit var mListener: IonItemClickListener
 
     interface IonItemClickListener{
-        fun onItemClick(position: Int)
-        fun onItemSelected(position: Int)
+        fun onClickItem(position: Int)
+        fun onRemoveItem(position: Int)
     }
 
     fun setOnItemClickListener(listener: IonItemClickListener){
@@ -49,10 +49,10 @@ class SongRemoveAdapter(var context: Context,
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.onClickItem(adapterPosition)
             }
             imgSelected.setOnClickListener {
-                listener.onItemSelected(adapterPosition)
+                listener.onRemoveItem(adapterPosition)
             }
         }
 
