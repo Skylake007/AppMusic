@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.fragment.playNow.PlaylistFragment
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -27,33 +28,9 @@ class PlaylistSMAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: PlaylistSMViewHolder, position: Int) {
-        val playlist: Playlist = playlists[position]
-
-        holder.tvPlaylistTitle.text =playlist.playlistname
-        Picasso.get().load(playlist.image)
-                        .resize(480,500)
-                        .placeholder(R.drawable.ic_loading_double)
-                        .error(R.drawable.img_error)
-                        .into(holder.imgPlaylist)
-        //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {v->
-            val activity = v.context as AppCompatActivity
-            val listSongFragment = PlaylistFragment()
-
-            val bundle = Bundle()
-            bundle.putSerializable("object_song", playlist)
-            listSongFragment.arguments = bundle
-
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.playNowFragmentLayout, listSongFragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        holder.bindPlaylist(playlists[position])
     }
 
-    private fun onClickShowInfo(playlist: Playlist) {
-        Log.e("Task", playlist.playlistname)
-    }
     override fun getItemCount(): Int {
         return playlists.size
     }
@@ -62,5 +39,25 @@ class PlaylistSMAdapter(var context: Context,
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
+
+        fun bindPlaylist(itemPlaylist: Playlist){
+            tvPlaylistTitle.text = itemPlaylist.playlistname
+            Picasso.get().load(itemPlaylist.image)
+                .resize(480,500)
+                .placeholder(R.drawable.ic_loading_double)
+                .error(R.drawable.img_error)
+                .into(imgPlaylist)
+            //Thêm sự kiện onClick
+            layoutItem.setOnClickListener {v->
+                val activity = v.context as AppCompatActivity
+                val layoutFragment = PlaylistFragment()
+
+                val bundle = Bundle()
+                bundle.putSerializable("object_song", itemPlaylist)
+                layoutFragment.arguments = bundle
+
+                MyLib.changeFragment(activity, layoutFragment)
+            }
+        }
     }
 }

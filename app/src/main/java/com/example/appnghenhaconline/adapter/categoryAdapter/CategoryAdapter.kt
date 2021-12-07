@@ -19,7 +19,7 @@ class CategoryAdapter (var context: Context,
     lateinit var mListener: IonItemClickListener
 
     interface IonItemClickListener{
-        fun onItemClick(position: Int)
+        fun onClickItem(position: Int)
     }
 
     fun setOnItemClickListener(listener: IonItemClickListener){
@@ -34,15 +34,7 @@ class CategoryAdapter (var context: Context,
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category: Category = categories[position]
-
-        holder.tvCategoryTitle.text = category.categoryname
-
-        Picasso.get().load(category.imageCategory)
-                        .resize(480,500)
-                        .placeholder(R.drawable.ic_loading_double)
-                        .error(R.drawable.img_error)
-                        .into(holder.imgCategory)
+        holder.bindCategory(categories[position])
     }
 
     override fun getItemCount(): Int {
@@ -55,8 +47,18 @@ class CategoryAdapter (var context: Context,
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.onClickItem(adapterPosition)
             }
+        }
+
+        fun bindCategory(itemCategory: Category){
+            tvCategoryTitle.text = itemCategory.categoryname
+
+            Picasso.get().load(itemCategory.imageCategory)
+                .resize(480,500)
+                .placeholder(R.drawable.ic_loading_double)
+                .error(R.drawable.img_error)
+                .into(imgCategory)
         }
     }
 }

@@ -45,13 +45,13 @@ class SongRemoveAdapter(var context: Context,
         var tvTittle: TextView = itemView.findViewById(R.id.titleSong)
         var imgSong: ImageView = itemView.findViewById(R.id.imgSong)
         var tvSinger : TextView = itemView.findViewById(R.id.titleSinger)
-        var imgSelected : ImageView = itemView.findViewById(R.id.imgSelected)
+        var imgRemove : ImageView = itemView.findViewById(R.id.imgSelected)
 
         init {
             itemView.setOnClickListener {
                 listener.onClickItem(adapterPosition)
             }
-            imgSelected.setOnClickListener {
+            imgRemove.setOnClickListener {
                 listener.onRemoveItem(adapterPosition)
             }
         }

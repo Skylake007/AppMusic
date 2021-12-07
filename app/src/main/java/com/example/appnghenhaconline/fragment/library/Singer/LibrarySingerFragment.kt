@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
@@ -67,7 +68,8 @@ class LibrarySingerFragment: Fragment() {
 
         rcvFollowSinger = view.findViewById(R.id.rcvFollowSinger)
         rcvFollowSinger.setHasFixedSize(true)
-        rcvFollowSinger.layoutManager = GridLayoutManager(view.context, 2)
+        rcvFollowSinger.layoutManager = LinearLayoutManager(view.context,
+            LinearLayoutManager.VERTICAL, false)
         rcvFollowSinger.adapter = followSingerAdapter
 
         followSingerAdapter.setOnItemClickListener(object :FollowSingerAdapter.IonItemClickListener{

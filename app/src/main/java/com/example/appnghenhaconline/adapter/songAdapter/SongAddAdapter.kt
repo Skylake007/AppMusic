@@ -19,7 +19,7 @@ class SongAddAdapter(var context: Context,
     private lateinit var mListener: IonItemClickListener
 
     interface IonItemClickListener{
-        fun onItemClick(position: Int)
+        fun onClickItem(position: Int)
 //        fun onItemSelected(isSelected: Boolean)
     }
 
@@ -45,11 +45,11 @@ class SongAddAdapter(var context: Context,
         var tvTittle: TextView = itemView.findViewById(R.id.titleSong)
         var imgSong: ImageView = itemView.findViewById(R.id.imgSong)
         var tvSinger : TextView = itemView.findViewById(R.id.titleSinger)
-        var imgSelected : ImageView = itemView.findViewById(R.id.imgSelected)
+        var imgAdd : ImageView = itemView.findViewById(R.id.imgSelected)
 
         init {
-            imgSelected.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+            imgAdd.setOnClickListener {
+                listener.onClickItem(adapterPosition)
             }
         }
 

@@ -12,11 +12,11 @@ import com.example.appnghenhaconline.models.singer.Singer
 import com.squareup.picasso.Picasso
 
 class SingerAdapter(var context: Context,
-                    private var listSong: ArrayList<Singer>) : RecyclerView.Adapter<SingerAdapter.SingerViewHolder>(){
+                    private var listSinger: ArrayList<Singer>) : RecyclerView.Adapter<SingerAdapter.SingerViewHolder>(){
 
     private lateinit var mListener: IonItemClickListener
     interface IonItemClickListener{
-        fun onItemClick(position: Int)
+        fun onClickItem(position: Int)
     }
     fun setOnItemClickListener(listener: IonItemClickListener){
         mListener = listener
@@ -29,16 +29,11 @@ class SingerAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: SingerViewHolder, position: Int) {
-        val singer: Singer = listSong[position]
-
-        holder.singerName.text = singer.singername
-        Picasso.get().load(singer.image)
-            .resize(80,80)
-            .into(holder.imgSinger)
+        holder.bindSinger(listSinger[position])
     }
 
     override fun getItemCount(): Int {
-       return listSong.size
+       return listSinger.size
     }
 
     inner class SingerViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
@@ -47,8 +42,15 @@ class SingerAdapter(var context: Context,
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.onClickItem(adapterPosition)
             }
+        }
+
+        fun bindSinger(itemSinger: Singer){
+            singerName.text = itemSinger.singername
+            Picasso.get().load(itemSinger.image)
+                .resize(80,80)
+                .into(imgSinger)
         }
     }
 }

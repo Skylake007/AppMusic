@@ -19,15 +19,15 @@ import com.squareup.picasso.Picasso
 
 class AlbumOfSingerAdapter(var context: Context,
                            private var albums: ArrayList<Album>)
-    : RecyclerView.Adapter<AlbumOfSingerAdapter.AlbumViewHolder>() {
+    : RecyclerView.Adapter<AlbumOfSingerAdapter.AlbumOfSingerViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumOfSingerViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.i_playlist_sm_item, parent, false)
-        return AlbumViewHolder(view)
+        return AlbumOfSingerViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AlbumOfSingerViewHolder, position: Int) {
         holder.bindAlbum(albums[position])
     }
 
@@ -35,22 +35,22 @@ class AlbumOfSingerAdapter(var context: Context,
         return albums.size
     }
 
-    class AlbumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
-        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
+    class AlbumOfSingerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        var tvAlbumTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
+        var imgAlbum: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
 
         fun bindAlbum(itemAlbum : Album){
-            tvPlaylistTitle.text = itemAlbum.albumname
+            tvAlbumTitle.text = itemAlbum.albumname
             Picasso.get().load(itemAlbum.imageAlbum)
                 .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
                 .error(R.drawable.img_error)
-                .into(imgPlaylist)
+                .into(imgAlbum)
             //Thêm sự kiện onClick
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
-                val layoutFragment = AlbumFragment()
+                val layoutFragment = AlbumFromSingerFragment()
 
                 val bundle = Bundle()
                 bundle.putSerializable("object_album", itemAlbum)

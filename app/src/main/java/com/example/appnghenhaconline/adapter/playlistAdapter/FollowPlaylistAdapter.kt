@@ -27,25 +27,7 @@ class FollowPlaylistAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: FollowPlaylistViewHolder, position: Int) {
-        val playlist: Playlist = playlists[position]
-
-        holder.tvPlaylistTitle.text =playlist.playlistname
-        Picasso.get().load(playlist.image)
-                        .resize(480,500)
-                        .placeholder(R.drawable.ic_loading_double)
-                        .error(R.drawable.img_error)
-                        .into(holder.imgPlaylist)
-        //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {v->
-            val activity = v.context as AppCompatActivity
-            val layoutFragment = PlaylistFromLibFragment()
-
-            val bundle = Bundle()
-            bundle.putSerializable("object_song", playlist)
-            layoutFragment.arguments = bundle
-
-            MyLib.changeFragment(activity, layoutFragment)
-        }
+        holder.bindPlaylist(playlists[position])
     }
 
     override fun getItemCount(): Int {
@@ -56,5 +38,25 @@ class FollowPlaylistAdapter(var context: Context,
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
+
+        fun bindPlaylist(itemPlaylist: Playlist){
+            tvPlaylistTitle.text = itemPlaylist.playlistname
+            Picasso.get().load(itemPlaylist.image)
+                .resize(480,500)
+                .placeholder(R.drawable.ic_loading_double)
+                .error(R.drawable.img_error)
+                .into(imgPlaylist)
+            //Thêm sự kiện onClick
+            layoutItem.setOnClickListener {v->
+                val activity = v.context as AppCompatActivity
+                val layoutFragment = PlaylistFromLibFragment()
+
+                val bundle = Bundle()
+                bundle.putSerializable("object_song", itemPlaylist)
+                layoutFragment.arguments = bundle
+
+                MyLib.changeFragment(activity, layoutFragment)
+            }
+        }
     }
 }

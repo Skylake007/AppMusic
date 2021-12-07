@@ -107,10 +107,10 @@ class AlbumFragment: Fragment() {
         rcvSong.adapter = songAdapter
         //Sự kiện onItemClick
         songAdapter.setOnItemClickListener(object : SongAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 clickStartService(listsong, position)
             }
-            override fun onItemSelected(position: Int) {
+            override fun onAddItem(position: Int) {
                 openDialogAddPlaylist(Gravity.CENTER, listsong[position].id)
             }
         })

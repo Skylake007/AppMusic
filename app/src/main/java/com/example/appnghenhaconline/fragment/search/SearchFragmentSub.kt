@@ -70,7 +70,7 @@ class SearchFragmentSub: Fragment() {
         rcvSong.adapter = songAdapter
 
         songAdapter.setOnItemClickListener(object : SongAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
                     clickStartService(listSong, position)
@@ -80,7 +80,7 @@ class SearchFragmentSub: Fragment() {
                 MyLib.showLog("AlbumFragment: "+ listSong[position].link)
             }
 
-            override fun onItemSelected(position: Int) {
+            override fun onAddItem(position: Int) {
 //                TODO("Not yet implemented")
             }
         })
@@ -97,7 +97,7 @@ class SearchFragmentSub: Fragment() {
         rcvSinger.adapter = singerAdapter
 
         singerAdapter.setOnItemClickListener(object : SingerAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 idSinger = listSinger[position].id
                 val fragmentLayout = SingerInfoFragment()
 

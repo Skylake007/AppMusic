@@ -62,7 +62,7 @@ class SearchFragment : Fragment() {
         rcvCategory.adapter = categoryAdapter
 
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 val fragmentLayout = PlaylistByCategoryIdFragment()
 
                 val bundle = Bundle()

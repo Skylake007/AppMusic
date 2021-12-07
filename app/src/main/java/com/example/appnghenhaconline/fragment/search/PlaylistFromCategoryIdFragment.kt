@@ -118,7 +118,7 @@ class PlaylistFromCategoryIdFragment: Fragment() {
         rcvSong.adapter = songAdapter
         //Sự kiện onItemClick
         songAdapter.setOnItemClickListener(object : SongAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
                     clickStartService(listsong, position)
@@ -126,7 +126,7 @@ class PlaylistFromCategoryIdFragment: Fragment() {
                     clickStartService(listsong, position)
                 }
             }
-            override fun onItemSelected(position: Int) {
+            override fun onAddItem(position: Int) {
                 openDialogAddPlaylist(Gravity.CENTER, listsong[position].id)
             }
         })

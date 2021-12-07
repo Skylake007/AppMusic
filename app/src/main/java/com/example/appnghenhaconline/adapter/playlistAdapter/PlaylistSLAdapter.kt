@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.playNow.PlaylistFragment
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -52,16 +53,13 @@ class PlaylistSLAdapter(var context: Context,
 
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
-                val listSongFragment = PlaylistFragment()
+                val layoutFragment = PlaylistFragment()
 
                 val bundle = Bundle()
                 bundle.putSerializable("object_song", itemPlaylist)
-                listSongFragment.arguments = bundle
+                layoutFragment.arguments = bundle
 
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.playNowFragmentLayout, listSongFragment)
-                    .addToBackStack(null)
-                    .commit()
+                MyLib.changeFragment(activity, layoutFragment)
             }
         }
     }

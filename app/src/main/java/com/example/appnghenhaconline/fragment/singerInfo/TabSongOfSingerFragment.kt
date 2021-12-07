@@ -66,7 +66,7 @@ class TabSongOfSingerFragment(idSinger: String): Fragment() {
         callApiShowListSongByIdSinger(listSong,songAdapter,idSinger)
 
         songAdapter.setOnItemClickListener(object: SongAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
                 if (mediaPlayer.isPlaying){
                     mediaPlayer.stop()
                     clickStartService(listSong, position)
@@ -75,7 +75,7 @@ class TabSongOfSingerFragment(idSinger: String): Fragment() {
                 }
             }
 
-            override fun onItemSelected(position: Int) {
+            override fun onAddItem(position: Int) {
 //                openDialogAddPlaylist(Gravity.CENTER, listSong[position].id)
             }
         })
