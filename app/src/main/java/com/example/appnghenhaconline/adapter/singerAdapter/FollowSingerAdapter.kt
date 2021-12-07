@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.fragment.library.Album.AlbumFromLibFragment
+import com.example.appnghenhaconline.fragment.library.Singer.SingerFromLibFragment
 import com.example.appnghenhaconline.fragment.singerInfo.SingerInfoFragment
 import com.example.appnghenhaconline.models.album.Album
 import com.example.appnghenhaconline.models.singer.Singer
@@ -71,7 +72,7 @@ class FollowSingerAdapter(var context: Context,
             //Thêm sự kiện onClick
             layoutItem.setOnClickListener {v->
                 val activity = v.context as AppCompatActivity
-                val layoutFragment = SingerInfoFragment()
+                val layoutFragment = SingerFromLibFragment()
 
                 val bundle = Bundle()
                 bundle.putSerializable("object_singer_info", itemSinger)
