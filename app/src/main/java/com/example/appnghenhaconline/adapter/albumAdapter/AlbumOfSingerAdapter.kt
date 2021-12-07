@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.fragment.playNow.AlbumFragment
 import com.example.appnghenhaconline.fragment.singerInfo.AlbumFromSingerFragment
 import com.example.appnghenhaconline.models.album.Album
 import com.squareup.picasso.Picasso
@@ -27,25 +28,7 @@ class AlbumOfSingerAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        val album: Album = albums[position]
-
-        holder.tvPlaylistTitle.text =album.albumname
-        Picasso.get().load(album.imageAlbum)
-                        .resize(480,500)
-                        .placeholder(R.drawable.ic_loading_double)
-                        .error(R.drawable.img_error)
-                        .into(holder.imgPlaylist)
-        //Thêm sự kiện onClick
-        holder.layoutItem.setOnClickListener {v->
-            val activity = v.context as AppCompatActivity
-            val layoutFragment = AlbumFromSingerFragment()
-
-            val bundle = Bundle()
-            bundle.putSerializable("object_album", album)
-            layoutFragment.arguments = bundle
-
-            MyLib.changeFragment(activity, layoutFragment)
-        }
+        holder.bindAlbum(albums[position])
     }
 
     override fun getItemCount(): Int {
@@ -56,5 +39,25 @@ class AlbumOfSingerAdapter(var context: Context,
         var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
         var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
+
+        fun bindAlbum(itemAlbum : Album){
+            tvPlaylistTitle.text = itemAlbum.albumname
+            Picasso.get().load(itemAlbum.imageAlbum)
+                .resize(480,500)
+                .placeholder(R.drawable.ic_loading_double)
+                .error(R.drawable.img_error)
+                .into(imgPlaylist)
+            //Thêm sự kiện onClick
+            layoutItem.setOnClickListener {v->
+                val activity = v.context as AppCompatActivity
+                val layoutFragment = AlbumFragment()
+
+                val bundle = Bundle()
+                bundle.putSerializable("object_album", itemAlbum)
+                layoutFragment.arguments = bundle
+
+                MyLib.changeFragment(activity, layoutFragment)
+            }
+        }
     }
 }

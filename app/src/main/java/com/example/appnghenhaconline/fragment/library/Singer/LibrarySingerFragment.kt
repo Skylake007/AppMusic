@@ -65,7 +65,7 @@ class LibrarySingerFragment: Fragment() {
         listFollowSinger = ArrayList()
         followSingerAdapter = FollowSingerAdapter(view.context, listFollowSinger)
 
-        rcvFollowSinger = view.findViewById(R.id.rcvFollowAlbum)
+        rcvFollowSinger = view.findViewById(R.id.rcvFollowSinger)
         rcvFollowSinger.setHasFixedSize(true)
         rcvFollowSinger.layoutManager = GridLayoutManager(view.context, 2)
         rcvFollowSinger.adapter = followSingerAdapter
@@ -81,7 +81,7 @@ class LibrarySingerFragment: Fragment() {
         val type: Type = object : TypeToken<ArrayList<String?>?>() {}.type
         val singerFollow : ArrayList<String> = gson.fromJson(user[session.KEY_SINGER],type)
         //Nghĩa lấy cái singerFollow truyền vào cuối cái call Api nha
-        callApiListFollowSinger(listFollowSinger, followSingerAdapter, user[session.KEY_SINGER])
+        callApiListFollowSinger(listFollowSinger, followSingerAdapter, singerFollow)
     }
 
     // Api lấy list Singer yêu thich
