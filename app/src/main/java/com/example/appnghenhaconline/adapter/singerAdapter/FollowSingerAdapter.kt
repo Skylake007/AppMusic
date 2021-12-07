@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
@@ -50,7 +51,7 @@ class FollowSingerAdapter(var context: Context,
     class FollowSingerViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
         var titleSinger: TextView = itemView.findViewById(R.id.titleSinger)
         var imgSinger: ImageView = itemView.findViewById(R.id.imgSinger)
-        var layoutItem: CardView = itemView.findViewById(R.id.layoutSinger)
+        var layoutItem: ConstraintLayout = itemView.findViewById(R.id.layoutSinger)
         var imgRemove: ImageView = itemView.findViewById(R.id.imgRemove)
 
         init {

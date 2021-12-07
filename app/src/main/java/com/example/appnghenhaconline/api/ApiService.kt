@@ -26,9 +26,9 @@ interface ApiService {
     fun getListSongByID(@Query ("playlistId") id : String) : Call<DataSong>
 
     companion object{
-        private val baseUrl = "http://192.168.1.3:3000/"
+//        private val baseUrl = "http://192.168.1.3:3000/"
         //private val baseUrl = "http://192.168.10.62:3000/"
-//      private val baseUrl = "http://192.168.0.31:3000/"
+      private val baseUrl = "http://192.168.0.31:3000/"
 //        private val baseUrl = "http://192.168.0.155:3000/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val apiService: ApiService = Retrofit.Builder()
@@ -163,7 +163,7 @@ interface ApiService {
     ) : Call<DataUser>
 
     @FormUrlEncoded
-    @POST("/singer/getListSinger")
-    fun getListLoveSinger(@Field ("singerIds") listSingerIds : ArrayList<String>)
+    @POST("/singer/getListSinger?_method=GET")
+    fun getListLoveSinger(@Field ("singerIds[]") listSingerIds : ArrayList<String>)
     : Call<DataSinger>
 }

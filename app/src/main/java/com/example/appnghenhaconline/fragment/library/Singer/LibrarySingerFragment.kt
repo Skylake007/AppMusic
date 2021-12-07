@@ -1,5 +1,6 @@
 package com.example.appnghenhaconline.fragment.library.Singer
 
+import android.app.DownloadManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ import com.example.appnghenhaconline.models.singer.DataSinger
 import com.example.appnghenhaconline.models.singer.Singer
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,20 +83,24 @@ class LibrarySingerFragment: Fragment() {
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<String?>?>() {}.type
         val singerFollow : ArrayList<String> = gson.fromJson(user[session.KEY_SINGER],type)
+        MyLib.showLog(singerFollow.toString())
         //Nghĩa lấy cái singerFollow truyền vào cuối cái call Api nha
+
         callApiListFollowSinger(listFollowSinger, followSingerAdapter, singerFollow)
     }
 
     // Api lấy list Singer yêu thich
-    private fun callApiListFollowSinger(list : ArrayList<Singer>, adapter : FollowSingerAdapter, listIdUser : ArrayList<String>) {
-        ApiService.apiService.getListLoveSinger(listIdUser).enqueue(object : Callback<DataSinger?> {
+    private fun callApiListFollowSinger(list : ArrayList<Singer>, adapter : FollowSingerAdapter, listIdSinger : ArrayList<String>) {
+        ApiService.apiService.getListLoveSinger(listIdSinger).enqueue(object : Callback<DataSinger?> {
             override fun onResponse(call: Call<DataSinger?>, response: Response<DataSinger?>) {
                 val dataSinger = response.body()
                 if(dataSinger != null) {
                     if (!dataSinger.error) {
-                        val dataListSiger = dataSinger.singers
+                        MyLib.showLog(dataSinger.singers.toString())
 
-                        list.addAll(dataListSiger)
+                        val dataListSinger = dataSinger.singers
+
+                        list.addAll(dataListSinger)
                         adapter.notifyDataSetChanged()
                     }
                     else {
