@@ -77,8 +77,10 @@ class LibrarySingerFragment: Fragment() {
         })
 
         val user = session.getUserDetails()
-//        user[session.KEY_SINGER]
-        //Nghĩa lấy cái hàm user[session.KEY_SINGER] truyền vào cuối cái call Api nha
+        val gson = Gson()
+        val type: Type = object : TypeToken<ArrayList<String?>?>() {}.type
+        val singerFollow : ArrayList<String> = gson.fromJson(user[session.KEY_SINGER],type)
+        //Nghĩa lấy cái singerFollow truyền vào cuối cái call Api nha
         callApiListFollowSinger(listFollowSinger, followSingerAdapter, user[session.KEY_SINGER])
     }
 
