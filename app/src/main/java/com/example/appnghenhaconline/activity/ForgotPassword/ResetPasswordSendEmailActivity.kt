@@ -59,8 +59,7 @@ class ResetPasswordSendEmailActivity : AppCompatActivity() {
 
     private fun backIntent(){
         btnBack.setOnClickListener {
-            val  intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
