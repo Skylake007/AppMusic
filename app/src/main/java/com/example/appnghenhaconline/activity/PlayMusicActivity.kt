@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -17,15 +18,31 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
+import com.example.appnghenhaconline.activity.HomeActivity.Companion.songObj
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.Service.MyService
+import com.example.appnghenhaconline.models.singer.Singer
 import com.squareup.picasso.Picasso
+import io.alterac.blurkit.BlurLayout
 import kotlinx.android.synthetic.main.activity_play_music.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import kotlin.math.abs
+import eightbitlab.com.blurview.RenderScriptBlur
+
+import android.graphics.drawable.Drawable
+
+import android.view.ViewGroup
+import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import eightbitlab.com.blurview.BlurView
 
 
 class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
@@ -33,20 +50,21 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private lateinit var gestureDetector : GestureDetector
     private lateinit var btnNext : ImageView
     private lateinit var btnPrev : ImageView
-    lateinit var imgCardViewPlay : CardView
-    lateinit var btnPlayOrPause : ImageView
-    lateinit var tvNameSinger: TextView
-    lateinit var imgBgPlay : ImageView
-    lateinit var mList: ArrayList<Song>
+    private lateinit var imgCardViewPlay : CardView
+    private lateinit var btnPlayOrPause : ImageView
+    private lateinit var tvNameSinger: TextView
+//    private lateinit var imgBgPlay: ImageView
+    private lateinit var mainLayout: RelativeLayout
+    private lateinit var blurLayout: BlurView
+    private var mList: ArrayList<Song> = ArrayList()
     private lateinit var tvSongPlay : TextView
-    lateinit var startSeekBar :TextView
-    lateinit var seekBarMusic: SeekBar
-    lateinit var imgPlay : ImageView
-    lateinit var endSeekBar :TextView
+    private lateinit var startSeekBar :TextView
+    private lateinit var seekBarMusic: SeekBar
+    private lateinit var imgPlay : ImageView
+    private lateinit var endSeekBar :TextView
     lateinit var btnRepeat : ImageView
     lateinit var btnShuffle : ImageView
     var isPlaying: Boolean = false
-
 
     val mHandler = Handler()
     var mPosition: Int = 0
@@ -67,7 +85,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             mPosition = bundle?.get("position_song") as Int
             mList = bundle.get("list_song") as ArrayList<Song>
             isPlaying = bundle.getBoolean("status_player")
-
             val actionMusic: Int = bundle.getInt("action_music")
 
             handleLayoutMusic(actionMusic)
@@ -79,13 +96,15 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_music)
         init()
-        initSongInfo()
     }
 
     override fun onStart() {
         super.onStart()
+        initSongInfo()
+        customBlurView()
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, IntentFilter("send_action_to_activity"))
+
     }
 
     override fun onBackPressed() {
@@ -94,8 +113,9 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+        mHandler.removeCallbacks(runnable)
+        super.onDestroy()
     }
 
     //===============================================
@@ -104,9 +124,11 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         MyLib.hideSystemUI(window, layoutPlayMusic)
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
-        imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
+//        imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
+        mainLayout = findViewById(R.id.backgroundPlayMusic)
         tvSongPlay = findViewById(R.id.tvSongNamePlayMusic)
         imgCardViewPlay = findViewById(R.id.imgPlayMusic)
+        blurLayout = findViewById(R.id.blurLayout)
         btnNext = findViewById(R.id.btnNextPlay)
         btnPrev = findViewById(R.id.btnPrevPlay)
         startSeekBar = findViewById(R.id.tvStartSeekbar)
@@ -115,8 +137,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         tvNameSinger = findViewById(R.id.tvAuthorPlayMusic)
         btnRepeat = findViewById(R.id.btnRepeat)
         btnShuffle = findViewById(R.id.btnShuffle)
-
-        mList = ArrayList()
         swipeActivity()
     }
     //endregion
@@ -205,6 +225,25 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     //endregion
     //===============================================
     //region ANOTHER FUNC
+    private fun customBlurView(){
+        val radius = 20f
+
+        val decorView = window.decorView
+        val rootView = decorView.findViewById<View>(android.R.id.content) as ViewGroup
+        val windowBackground = decorView.background
+
+        blurLayout.setupWith(rootView)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(this))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+            .setHasFixedTransformationMatrix(false) // Or false if it's in a scrolling container or might be animated
+
+        val animationDrawable: AnimationDrawable = mainLayout.background as AnimationDrawable
+        animationDrawable.setEnterFadeDuration(2500)
+        animationDrawable.setExitFadeDuration(5000)
+        animationDrawable.start()
+    }
     //set chế độ lặp lại
     private fun repeatSong(){
         if (!isRepeat){
@@ -254,20 +293,32 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         seekBarMusic.max = MyService.mediaPlayer.duration
         runnable.run()
 
+        MyLib.showLog("PlayMusic $songObj")
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
         val isRepeatData: Boolean = MyDataLocalManager.getIsRepeat()
         val isShuffleData: Boolean = MyDataLocalManager.getIsShuffle()
 
-        tvSongPlay.text = songData.title
-        tvNameSinger.text = songData.singer[0].singername
+        tvSongPlay.text = songObj.title
+        tvNameSinger.text = songObj.singer[0].singername
 
-        Picasso.get().load(songData.image)
+        Picasso.get().load(songObj.image)
             .resize(450,550)
             .into(imgPlay)
-        Picasso.get().load(songData.image)
-            .resize(480,480)
-            .into(imgBgPlay)
+
+//        Picasso.get().load(songObj.image)
+//            .resize(450,550)
+//            .into(imgBgPlay)
+
+//        tvSongPlay.text = songObj.title
+//        tvNameSinger.text = songObj.singer[0].singername
+//
+//        Picasso.get().load(songObj.image)
+//            .resize(450,550)
+//            .into(imgPlay)
+//        Picasso.get().load(songObj.image)
+//            .resize(480,480)
+//            .into(imgBgPlay)
 
         val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
         val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)

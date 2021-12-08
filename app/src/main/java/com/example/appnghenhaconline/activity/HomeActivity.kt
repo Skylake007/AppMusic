@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private lateinit var btnPlayOrPause : ImageView
     private lateinit var tvPlayNav : TextView
     private lateinit var menuUser: ImageView
-    lateinit var mList: ArrayList<Song>
+    private var mList: ArrayList<Song> = ArrayList()
     lateinit var imgPlayNav : ImageView
     lateinit var session : SessionUser
     lateinit var btnNext : ImageView
@@ -59,6 +59,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     companion object{
         const val MIN_DISTANCE = 100
         const val MIN_VELOCITY = 100
+        lateinit var songObj: Song
     }
     //===============================================
     //region broadcastReceiver
@@ -69,6 +70,9 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             mPosition = bundle?.get("position_song") as Int
             mList = bundle.get("list_song") as ArrayList<Song>
             isPlaying = bundle.getBoolean("status_player")
+
+            songObj = mList[mPosition]
+            MyLib.showLog("HomeActivity : $songObj")
             val actionMusic: Int = bundle.getInt("action_music")
 
             handleLayoutMusic(actionMusic)
@@ -79,6 +83,8 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter("send_action_to_activity"))
 
         session = SessionUser(applicationContext)
         val user = session.getUserDetails()
@@ -92,8 +98,7 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         super.onStart()
         session.checkLogin()
         //initSongInfo()
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                                                IntentFilter("send_action_to_activity"))
+
     }
 
     override fun onBackPressed() {
@@ -285,20 +290,26 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
         playNav.visibility = View.VISIBLE
-        tvPlayNav.text = songData.title
+//        tvPlayNav.text = songData.title
+//
+//        Picasso.get().load(songData.image)
+////                  .resize(450,400)
+//            .into(imgPlayNav)
 
-        Picasso.get().load(songData.image)
+        tvPlayNav.text = songObj.title
+
+        Picasso.get().load(songObj.image)
 //                  .resize(450,400)
             .into(imgPlayNav)
 
-        if (isPlayingData){
+        if (isPlaying){
             btnPlayOrPause.setImageResource(R.drawable.ic_baseline_pause_24)
         }else{
             btnPlayOrPause.setImageResource(R.drawable.ic_baseline_play_arrow_24)
         }
 
         btnPlayOrPause.setOnClickListener {
-            if (isPlayingData){
+            if (isPlaying){
                 sendActionToService(MyService.ACTION_PAUSE)
             }else{
                 sendActionToService(MyService.ACTION_RESUME)

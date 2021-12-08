@@ -1,6 +1,9 @@
 package com.example.appnghenhaconline
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -9,9 +12,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import java.math.BigInteger
 import java.security.MessageDigest
-
+import java.util.*
 
 
 class MyLib {
@@ -45,6 +51,15 @@ class MyLib {
                 .replace(R.id.fragmentContainer, fragmentLayout)
                 .addToBackStack(null)
                 .commit()
+        }
+
+         suspend fun getBitmap(context: Context, data: String): Bitmap{
+            val loading = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(data)
+                .build()
+            val result = (loading.execute(request) as SuccessResult).drawable
+            return (result as BitmapDrawable).bitmap
         }
     }
 }

@@ -9,17 +9,16 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-
+import android.media.session.MediaSession
+import android.media.session.MediaSession.Token
 import android.os.Bundle
 import android.os.IBinder
-import android.view.View
+import android.support.v4.media.session.MediaSessionCompat
 import android.widget.RemoteViews
-import android.widget.SeekBar
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
-import com.example.appnghenhaconline.activity.HomeActivity
 import com.example.appnghenhaconline.activity.PlayMusicActivity
 import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isRepeat
 import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isShuffle
@@ -28,8 +27,11 @@ import com.example.appnghenhaconline.dataLocalManager.MyApplication.Companion.CH
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.example.appnghenhaconline.dataLocalManager.Receiver.MyReceiver
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,6 +65,7 @@ class MyService : Service() {
 
     //run service
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+
         val bundle = intent.extras
         if (bundle != null){
             //Nhận dữ liệu bài hát
@@ -239,50 +242,50 @@ class MyService : Service() {
     //====================================================
     //region GỬI Notification
     @SuppressLint("UnspecifiedImmutableFlag")
-    private fun sendNotification(song: Song) {
-        val intent = Intent(this, HomeActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this,
-                                        0,
-                                        intent,
-                                        FLAG_UPDATE_CURRENT)
+    private fun sendNotification(song: Song){
+        val scope = CoroutineScope(Job()+ Dispatchers.Main)
+        scope.launch {
+            val intent = Intent(this@MyService, PlayMusicActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(this@MyService,
+                                                            0,
+                                                            intent,
+                                                            FLAG_UPDATE_CURRENT)
+            val imageSinger = MyLib.getBitmap(this@MyService, song.image)
 
-        val remoteView = RemoteViews(packageName, R.layout.i_layout_notification)
+            val mMediaSession  = MediaSessionCompat(this@MyService, "tag")
+            mMediaSession.isActive = true
+            val style = androidx.media.app.NotificationCompat.MediaStyle()
+            style.setShowActionsInCompactView(0, 1, 2)
+                .setMediaSession(mMediaSession.sessionToken)
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                                            .setSmallIcon(R.drawable.ic_dashboard)
-                                            .setContentIntent(pendingIntent)
-                                            .setCustomContentView(remoteView)
-                                            .setSound(null)
-                                            .build()
+            val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(this@MyService, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_music_note_black)
+                .setLargeIcon(imageSinger)
+                .setContentIntent(pendingIntent)
+                .setContentTitle(song.title)
+                .setShowWhen(false)
+                .setContentText(song.singer[0].singername)
+                .setStyle(style)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        remoteView.setTextViewText(R.id.tvNameNotification, song.title)
-        Picasso.get().load(song.image).into(remoteView,
-                                        R.id.imgNotification,
-                                        1,
-                                        notification)
-        remoteView.setImageViewResource(R.id.btnPlayNotification,
-                                        R.drawable.ic_baseline_pause_24)
-        remoteView.setImageViewResource(R.id.btnNextNotification,
-                                        R.drawable.ic_next)
-        remoteView.setImageViewResource(R.id.btnPrevNotification,
-                                        R.drawable.ic_previous)
-        if (isPlaying){
-            remoteView.setOnClickPendingIntent(R.id.btnPlayNotification,
-                                            getPendingIntent(this, ACTION_PAUSE))
-            remoteView.setImageViewResource(R.id.btnPlayNotification,
-                                            R.drawable.ic_baseline_pause_24)
-        }else{
-            remoteView.setOnClickPendingIntent(R.id.btnPlayNotification,
-                                            getPendingIntent(this, ACTION_RESUME))
-            remoteView.setImageViewResource(R.id.btnPlayNotification,
-                                            R.drawable.ic_baseline_play_arrow_24)
+            if (isPlaying){
+                notificationBuilder
+                    .addAction(R.drawable.ic_previous,"Previous", getPendingIntent(this@MyService, ACTION_PREVIOUS))
+                    .addAction(R.drawable.ic_baseline_pause_24,"PlayOrPause", getPendingIntent(this@MyService, ACTION_PAUSE))
+                    .addAction(R.drawable.ic_next,"Next", getPendingIntent(this@MyService, ACTION_NEXT))
+            }else{
+                notificationBuilder
+                    .addAction(R.drawable.ic_previous,"Previous", getPendingIntent(this@MyService, ACTION_PREVIOUS))
+                    .addAction(R.drawable.ic_baseline_play_arrow_24,"PlayOrPause", getPendingIntent(this@MyService, ACTION_RESUME))
+                    .addAction(R.drawable.ic_next,"Next", getPendingIntent(this@MyService, ACTION_NEXT))
+            }
+
+            val notification = notificationBuilder.build()
+
+            startForeground(1, notification)
         }
-        remoteView.setOnClickPendingIntent(R.id.btnNextNotification,
-                                            getPendingIntent(this, ACTION_NEXT))
-        remoteView.setOnClickPendingIntent(R.id.btnPrevNotification,
-                                            getPendingIntent(this, ACTION_PREVIOUS))
-        startForeground(1, notification)
     }
+
     //endregion
     //====================================================
     //region GỬI DỮ LIỆU ĐẾN ACTIVITY

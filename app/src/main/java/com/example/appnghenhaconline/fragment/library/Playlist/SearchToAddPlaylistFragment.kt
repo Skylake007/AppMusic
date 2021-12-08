@@ -87,7 +87,7 @@ class SearchToAddPlaylistFragment: Fragment() {
         rcvSong.adapter = songAdapter
 
         songAdapter.setOnItemClickListener(object : SongAddAdapter.IonItemClickListener{
-            override fun onItemClick(position: Int) {
+            override fun onClickItem(position: Int) {
 //                openDialogAddPlaylist(Gravity.CENTER)
                 callApiAddPlaylistUser(idPlaylist,listSong[position].id)
             }

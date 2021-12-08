@@ -76,7 +76,7 @@ class UserActivity : AppCompatActivity() {
         tvName.text = user[session.KEY_NAME]
         MyLib.showLog("UserAvatar :"+ user[session.KEY_AVATAR]!!)
 //        Picasso.get().load(user[session.KEY_AVATAR]).error(R.drawable.img_error).into(image)
-        Glide.with(this@UserActivity).load(user[session.KEY_AVATAR]).error(R.drawable.img_error).into(image)
+        Glide.with(this@UserActivity).load(user[session.KEY_AVATAR]).error(R.drawable.ic_account).into(image)
     }
     private fun event(session: SessionUser){
         btnBack = findViewById(R.id.btnBack)

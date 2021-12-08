@@ -35,7 +35,8 @@
             android:exported="true" />
         <activity
             android:name=".activity.PlayMusicActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activity.HomeActivity"
             android:exported="true">
