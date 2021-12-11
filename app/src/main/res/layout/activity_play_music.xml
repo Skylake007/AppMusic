@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.PlayMusicActivity"
-    android:id="@+id/layoutPlayMusic"
-    android:background="@drawable/gradient_list">
+    android:id="@+id/layoutPlayMusic">
 
 
     <ImageView
@@ -14,13 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_avatar_2"/>
+        android:scaleY="3"
+        android:scaleX="3"
+        />
+
+<!--    <ImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+
+<!--        android:background="#52626262" />-->
 
     <RelativeLayout
-        android:id="@+id/backgroundPlayMusic"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:scaleX="3"
+        android:scaleY="3"
         android:background="@drawable/gradient_list"/>
 
     <eightbitlab.com.blurview.BlurView

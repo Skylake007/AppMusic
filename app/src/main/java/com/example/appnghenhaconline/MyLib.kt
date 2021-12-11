@@ -54,7 +54,7 @@ class MyLib {
         }
 
          suspend fun getBitmap(context: Context, data: String): Bitmap{
-            val loading = ImageLoader(context)
+             val loading = ImageLoader(context)
             val request = ImageRequest.Builder(context)
                 .data(data)
                 .build()

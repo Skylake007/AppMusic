@@ -5,7 +5,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -40,9 +43,17 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import android.graphics.drawable.Drawable
 
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.palette.graphics.Palette
+import com.squareup.picasso.Callback
 import eightbitlab.com.blurview.BlurView
+import java.lang.Exception
+import com.google.android.material.snackbar.Snackbar
+
+
+
 
 
 class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
@@ -53,7 +64,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private lateinit var imgCardViewPlay : CardView
     private lateinit var btnPlayOrPause : ImageView
     private lateinit var tvNameSinger: TextView
-//    private lateinit var imgBgPlay: ImageView
+    private lateinit var imgBgPlay: ImageView
     private lateinit var mainLayout: RelativeLayout
     private lateinit var blurLayout: BlurView
     private var mList: ArrayList<Song> = ArrayList()
@@ -64,6 +75,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private lateinit var endSeekBar :TextView
     lateinit var btnRepeat : ImageView
     lateinit var btnShuffle : ImageView
+
     var isPlaying: Boolean = false
 
     val mHandler = Handler()
@@ -124,8 +136,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         MyLib.hideSystemUI(window, layoutPlayMusic)
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
-//        imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
-        mainLayout = findViewById(R.id.backgroundPlayMusic)
+        imgBgPlay = findViewById(R.id.imgBackgroundPlayMusic)
+        mainLayout = findViewById(R.id.background)
         tvSongPlay = findViewById(R.id.tvSongNamePlayMusic)
         imgCardViewPlay = findViewById(R.id.imgPlayMusic)
         blurLayout = findViewById(R.id.blurLayout)
@@ -288,12 +300,21 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
 
+    private var runnableAnim = object: Runnable{
+        override fun run() {
+            mainLayout.animate().rotationBy(360f).withEndAction(this)
+                .setDuration(50000)
+                .setInterpolator(LinearInterpolator())
+                .start()
+        mHandler.postDelayed(this, 50000)
+        }
+    }
+
     //set thông tin bài hát
     private fun initSongInfo() {
         seekBarMusic.max = MyService.mediaPlayer.duration
         runnable.run()
 
-        MyLib.showLog("PlayMusic $songObj")
         val songData: Song = MyDataLocalManager.getSong()
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
         val isRepeatData: Boolean = MyDataLocalManager.getIsRepeat()
@@ -302,23 +323,33 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         tvSongPlay.text = songObj.title
         tvNameSinger.text = songObj.singer[0].singername
 
-        Picasso.get().load(songObj.image)
-            .resize(450,550)
-            .into(imgPlay)
+        val scope = CoroutineScope(Job()+ Dispatchers.Main)
+        scope.launch {
+            Picasso.get().load(songObj.image)
+                .into(imgPlay, object : Callback{
+                    override fun onSuccess() {
+                        val bitmap: Bitmap = (imgPlay.drawable as BitmapDrawable).bitmap
+                        Palette.from(bitmap).generate {palette->
+                            val mutedDarkColor: Palette.Swatch? = palette?.darkMutedSwatch
+                            val mutedColor: Palette.Swatch? = palette?.mutedSwatch
 
-//        Picasso.get().load(songObj.image)
-//            .resize(450,550)
-//            .into(imgBgPlay)
+                            if (mutedDarkColor != null) {
+                                imgBgPlay.setBackgroundColor(mutedDarkColor.rgb)
+                            }else if (mutedColor != null){
+                                imgBgPlay.setBackgroundColor(mutedColor.rgb)
+                            }
+                        }
+                    }
 
-//        tvSongPlay.text = songObj.title
-//        tvNameSinger.text = songObj.singer[0].singername
-//
-//        Picasso.get().load(songObj.image)
-//            .resize(450,550)
-//            .into(imgPlay)
-//        Picasso.get().load(songObj.image)
-//            .resize(480,480)
-//            .into(imgBgPlay)
+                    override fun onError(e: Exception?) {
+                        val snackbar = Snackbar
+                            .make(layoutPlayMusic, "Error on image load.", Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                })
+        }
+
+        runnableAnim.run()
 
         val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
         val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)

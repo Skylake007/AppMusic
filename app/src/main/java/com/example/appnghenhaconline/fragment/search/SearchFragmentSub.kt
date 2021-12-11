@@ -141,16 +141,23 @@ class SearchFragmentSub: Fragment() {
         ApiService.apiService.searchSongAndSinger(q).enqueue(object : Callback<DataSong?> {
             override fun onResponse(call: Call<DataSong?>, response: Response<DataSong?>) {
                 val dataSong = response.body()
-                MyLib.showLog(dataSong.toString())
+                MyLib.showLog("Search :" +dataSong.toString())
                 if(dataSong!=null){
                     if(!dataSong.error){
-                        val dtListSinger = dataSong.singer
-                        listSinger.addAll(dtListSinger)
-                        singerAdapter.notifyDataSetChanged()
+                        if (dataSong.singer == null) {
+                            val dtListSong = dataSong.listSong
+                            listSong.addAll(dtListSong)
+                            songAdapter.notifyDataSetChanged()
+                        }
+                        else {
+                            val dtListSinger = dataSong.singer
+                            listSinger.addAll(dtListSinger)
+                            singerAdapter.notifyDataSetChanged()
 
-                        val dtListSong = dataSong.listSong
-                        listSong.addAll(dtListSong)
-                        songAdapter.notifyDataSetChanged()
+                            val dtListSong = dataSong.listSong
+                            listSong.addAll(dtListSong)
+                            songAdapter.notifyDataSetChanged()
+                        }
                     }else MyLib.showLog(dataSong.message)
                 }
             }
