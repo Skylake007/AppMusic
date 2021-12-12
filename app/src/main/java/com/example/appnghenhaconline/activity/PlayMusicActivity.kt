@@ -127,6 +127,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
         mHandler.removeCallbacks(runnable)
+        mHandler.removeCallbacks(runnableAnim)
         super.onDestroy()
     }
 
@@ -229,7 +230,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?,
                          velocityX: Float, velocityY: Float): Boolean {
         if ( e1!!.y - e2!!.y < MIN_DISTANCE && abs(velocityY) > MIN_VELOCITY){
-            MyLib.showToast(this,"Bottom")
             onBackPressed()
         }
         return false
@@ -255,6 +255,10 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         animationDrawable.setEnterFadeDuration(2500)
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
+
+
+
+        tvSongPlay.isSelected = true
     }
     //set chế độ lặp lại
     private fun repeatSong(){
@@ -296,6 +300,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                     sendActionToService(MyService.ACTION_NEXT)
                 }
             }
+
             mHandler.postDelayed(this, 1000)
         }
     }
@@ -312,17 +317,16 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
     //set thông tin bài hát
     private fun initSongInfo() {
-        seekBarMusic.max = MyService.mediaPlayer.duration
-        runnable.run()
+        tvSongPlay.text = songObj.title
+        tvNameSinger.text = songObj.singer[0].singername
 
-        val songData: Song = MyDataLocalManager.getSong()
+        seekBarMusic.max = MyService.mediaPlayer.duration
+
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
         val isRepeatData: Boolean = MyDataLocalManager.getIsRepeat()
         val isShuffleData: Boolean = MyDataLocalManager.getIsShuffle()
 
-        tvSongPlay.text = songObj.title
-        tvNameSinger.text = songObj.singer[0].singername
-
+        runnable.run()
         val scope = CoroutineScope(Job()+ Dispatchers.Main)
         scope.launch {
             Picasso.get().load(songObj.image)
@@ -382,37 +386,31 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 sendActionToService(MyService.ACTION_RESUME)
                 imgCardViewPlay.startAnimation(animZoomIn)
             }
-//            runnable.run()
         }
 
         btnNext.setOnClickListener {
             sendActionToService(MyService.ACTION_NEXT)
-//            runnable.run()
         }
 
         btnPrev.setOnClickListener {
             sendActionToService(MyService.ACTION_PREVIOUS)
-//            runnable.run()
         }
 
         btnRepeat.setOnClickListener {
             repeatSong()
-//            runnable.run()
         }
 
         btnShuffle.setOnClickListener {
             shuffleSong()
-//            sendActionToService(MyService.ACTION_SHUFFLE)
-//            runnable.run()
         }
 
         seekBarMusic.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                //         TODO("Not yet implemented")
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//                TODO("Not yet implemented")
+                MyService.mediaPlayer.seekTo(seekBarMusic.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {

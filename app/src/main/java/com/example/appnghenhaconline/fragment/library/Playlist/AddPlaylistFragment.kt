@@ -96,7 +96,7 @@ class AddPlaylistFragment: Fragment() {
         }
 
         btnDeletePlayListUser.setOnClickListener{
-            callApiDeletePlaylistUser(idPlayList)
+            openDialogRemovePlaylist(Gravity.CENTER)
         }
     }
 
@@ -130,7 +130,7 @@ class AddPlaylistFragment: Fragment() {
             }
 
             override fun onRemoveItem(position: Int) {
-                callApiDeleteSongFromPlaylistUser(idPlayList,listsong[position].id)
+                openDialogRemoveSong(Gravity.CENTER, position)
             }
         })
     }
@@ -167,7 +167,7 @@ class AddPlaylistFragment: Fragment() {
     //===========================================================
     //region ANOTHER FUNCTION
 
-    //    hàm hiện dialog
+    //hàm hiện dialog sửa tên playlist
     private fun openDialogEditNamePlaylist(gravity: Int){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -207,6 +207,71 @@ class AddPlaylistFragment: Fragment() {
         }
         dialog.show()
     }
+
+    //hàm hiện dialog xóa bài hát
+    private fun openDialogRemoveSong(gravity: Int, position: Int){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dlg_remove_song_dialog)
+        dialog.setCancelable(true)
+
+        val window = dialog.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
+        windowAttributes.gravity = gravity
+        window.attributes = windowAttributes
+
+        val btnExit: Button = dialog.findViewById(R.id.btnExit)
+        val btnAccept: Button = dialog.findViewById(R.id.btnAccept)
+
+        btnExit.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnAccept.setOnClickListener {
+            callApiDeleteSongFromPlaylistUser(idPlayList,listsong[position].id)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    //hàm hiện dialog xóa bài hát
+    private fun openDialogRemovePlaylist(gravity: Int){
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dlg_remove_playlist_dialog)
+        dialog.setCancelable(true)
+
+        val window = dialog.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val windowAttributes: WindowManager.LayoutParams = window!!.attributes
+        windowAttributes.gravity = gravity
+        window.attributes = windowAttributes
+
+        val btnExit: Button = dialog.findViewById(R.id.btnExit)
+        val btnAccept: Button = dialog.findViewById(R.id.btnAccept)
+
+        btnExit.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnAccept.setOnClickListener {
+            callApiDeletePlaylistUser(idPlayList)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 
     //call service xử lý xự kiện phát nhạc
     private fun clickStartService(list : ArrayList<Song>, position: Int) {

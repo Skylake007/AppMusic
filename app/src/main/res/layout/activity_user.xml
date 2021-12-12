@@ -50,16 +50,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/topNav">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgAvatar"
+        <RelativeLayout
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_centerInParent="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            android:src="@drawable/img_avatar_1" />
+            android:layout_margin="15dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/img_avatar_4" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/cm_view" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/ic_camera" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <ScrollView
@@ -152,6 +169,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/SignOut"
                 android:layout_width="match_parent"

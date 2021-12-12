@@ -75,12 +75,6 @@ class LibrarySingerFragment: Fragment() {
             LinearLayoutManager.VERTICAL, false)
         rcvFollowSinger.adapter = followSingerAdapter
 
-        followSingerAdapter.setOnItemClickListener(object :FollowSingerAdapter.IonItemClickListener{
-            override fun onRemoveItem(position: Int) {
-//                TODO("Not yet implemented")
-            }
-        })
-
         val user = session.getUserDetails()
         val gson = Gson()
         val type: Type = object : TypeToken<ArrayList<String?>?>() {}.type

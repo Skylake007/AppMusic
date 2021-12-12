@@ -72,7 +72,9 @@ class UserInfoActivity : AppCompatActivity() {
         edtName.setText(user[session.KEY_NAME])
         edtEmail.setText(user[session.KEY_EMAIL])
 
-        Picasso.get().load(user[session.KEY_AVATAR]).error(R.drawable.img_error).into(image)
+        Picasso.get().load(user[session.KEY_AVATAR])
+            .error(R.drawable.img_avatar_4)
+            .into(image)
 
         if (user[session.KEY_SEX].toBoolean()) {
             edtSex.setText("Nam")

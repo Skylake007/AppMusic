@@ -61,8 +61,6 @@ class UserActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-//        val a = Intent(this, HomeActivity::class.java)
-//        startActivity(a)
         finish()
     }
 
@@ -74,9 +72,11 @@ class UserActivity : AppCompatActivity() {
         tvName = findViewById(R.id.tvName)
         image = findViewById(R.id.imgAvatar)
         tvName.text = user[session.KEY_NAME]
-        MyLib.showLog("UserAvatar :"+ user[session.KEY_AVATAR]!!)
 //        Picasso.get().load(user[session.KEY_AVATAR]).error(R.drawable.img_error).into(image)
-        Glide.with(this@UserActivity).load(user[session.KEY_AVATAR]).error(R.drawable.ic_account).into(image)
+        Glide.with(this@UserActivity)
+            .load(user[session.KEY_AVATAR])
+            .error(R.drawable.img_avatar_4)
+            .into(image)
     }
     private fun event(session: SessionUser){
         btnBack = findViewById(R.id.btnBack)
@@ -97,10 +97,7 @@ class UserActivity : AppCompatActivity() {
         signOut.setOnClickListener {
             session.logoutUser()
         }
-
-        image.setOnClickListener{
-            clickPicture()
-        }
+        clickPicture()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -134,7 +131,7 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
@@ -182,7 +179,10 @@ class UserActivity : AppCompatActivity() {
                         session.editor.commit()
 
 //                        Picasso.get().load(dataUser.user.avatar).fit().centerInside().rotate(90f).error(R.drawable.img_error).into(image)
-                        Glide.with(this@UserActivity).load(dataUser.user.avatar).error(R.drawable.img_error).into(image)
+                        Glide.with(this@UserActivity)
+                            .load(dataUser.user.avatar)
+                            .error(R.drawable.img_error)
+                            .into(image)
 
                     }
                     else {

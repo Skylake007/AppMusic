@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -25,21 +26,21 @@ class FollowSingerAdapter(var context: Context,
                           private var singer: ArrayList<Singer>)
     : RecyclerView.Adapter<FollowSingerAdapter.FollowSingerViewHolder>() {
 
-    private lateinit var mListener: IonItemClickListener
-
-    interface IonItemClickListener{
-        fun onRemoveItem(position: Int)
+//    private lateinit var mListener: IonItemClickListener
+//
+//    interface IonItemClickListener{
+//        fun onRemoveItem(position: Int)
 //        fun onItemSelected(isSelected: Boolean)
-    }
-
-    fun setOnItemClickListener(listener: IonItemClickListener){
-        mListener = listener
-    }
+//    }
+//
+//    fun setOnItemClickListener(listener: IonItemClickListener){
+//        mListener = listener
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowSingerViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.i_singer_remove_item, parent, false)
-        return FollowSingerViewHolder(view, mListener)
+            .inflate(R.layout.i_singer_item, parent, false)
+        return FollowSingerViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: FollowSingerViewHolder, position: Int) {
@@ -50,17 +51,17 @@ class FollowSingerAdapter(var context: Context,
         return singer.size
     }
 
-    class FollowSingerViewHolder(itemView: View, listener: IonItemClickListener) : RecyclerView.ViewHolder(itemView){
-        var titleSinger: TextView = itemView.findViewById(R.id.titleSinger)
+    class FollowSingerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        var titleSinger: TextView = itemView.findViewById(R.id.tvSingerName)
         var imgSinger: CircleImageView = itemView.findViewById(R.id.imgSinger)
-        var layoutItem: ConstraintLayout = itemView.findViewById(R.id.layoutSinger)
-        var imgRemove: ImageView = itemView.findViewById(R.id.imgRemove)
-
-        init {
-            imgRemove.setOnClickListener {
-                listener.onRemoveItem(adapterPosition)
-            }
-        }
+        var layoutItem: LinearLayout = itemView.findViewById(R.id.layoutSinger)
+//        var imgRemove: ImageView = itemView.findViewById(R.id.imgRemove)
+//
+//        init {
+//            imgRemove.setOnClickListener {
+//                listener.onRemoveItem(adapterPosition)
+//            }
+//        }
 
         fun bindSinger(itemSinger: Singer){
             titleSinger.text = itemSinger.singername

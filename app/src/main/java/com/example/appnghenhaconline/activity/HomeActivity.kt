@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.fragment.*
 import com.example.appnghenhaconline.R
@@ -29,6 +30,7 @@ import com.example.appnghenhaconline.models.user.DataUser
 import com.example.appnghenhaconline.models.user.User
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fm_play_now_fragment.*
 import kotlinx.android.synthetic.main.tab_album_of_singer.*
@@ -42,13 +44,14 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     private lateinit var gestureDetector : GestureDetector
     private lateinit var btnPlayOrPause : ImageView
     private lateinit var tvPlayNav : TextView
-    private lateinit var menuUser: ImageView
+    private lateinit var menuUser: CircleImageView
     private var mList: ArrayList<Song> = ArrayList()
     lateinit var imgPlayNav : ImageView
     lateinit var session : SessionUser
     lateinit var btnNext : ImageView
     lateinit var btnPrev : ImageView
     lateinit var playNav : RelativeLayout
+
 
     private var backPressedTime: Long = 0
     private lateinit var backToast: Toast
@@ -99,6 +102,13 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         session.checkLogin()
         //initSongInfo()
 
+        // chuyển sang userActivity
+        val user = session.getUserDetails()
+
+        Glide.with(this)
+            .load(user[session.KEY_AVATAR])
+            .error(R.drawable.img_avatar_4)
+            .into(menuUser)
     }
 
     override fun onBackPressed() {
@@ -185,13 +195,25 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             true
 
         }
+
         // chuyển sang userActivity
+        val user = session.getUserDetails()
+
+        Glide.with(this)
+            .load(user[session.KEY_AVATAR])
+            .error(R.drawable.cm_button_bg)
+            .into(menuUser)
+
         menuUser.setOnClickListener {v ->
             intent = Intent(this, UserActivity::class.java)
             startActivity(intent)
         }
+
         //khởi tạo sự kiện click và vuốt cho PlayNav
         showPlayMusicFragment()
+
+        //set text auto scroll when max ems
+        tvPlayNav.isSelected = true
     }
     //endregion
     //===============================================

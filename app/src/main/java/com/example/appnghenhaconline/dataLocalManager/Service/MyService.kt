@@ -7,6 +7,9 @@ import android.app.PendingIntent.getBroadcast
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.session.MediaSession
@@ -14,6 +17,7 @@ import android.media.session.MediaSession.Token
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Base64
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -32,6 +36,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.io.InputStream
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -162,7 +168,7 @@ class MyService : Service() {
     // phát tiếp bài hát đang hát
     private fun resumeMusic() {
         if (!isPlaying){
-            mediaPlayer.seekTo(pauseLength)
+//            mediaPlayer.seekTo(pauseLength)
             mediaPlayer.start()
             isPlaying = true
             sendNotification(mList[mPosition])
@@ -174,7 +180,7 @@ class MyService : Service() {
     private fun pauseMusic() {
         if (isPlaying){
             mediaPlayer.pause()
-            pauseLength = mediaPlayer.currentPosition
+//            pauseLength = mediaPlayer.currentPosition
 
             isPlaying = false
             sendNotification(mList[mPosition])
@@ -250,6 +256,7 @@ class MyService : Service() {
                                                             0,
                                                             intent,
                                                             FLAG_UPDATE_CURRENT)
+
             val imageSinger = MyLib.getBitmap(this@MyService, song.image)
 
             val mMediaSession  = MediaSessionCompat(this@MyService, "tag")

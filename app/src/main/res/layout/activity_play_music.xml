@@ -93,17 +93,16 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    android:maxLines="2"
                     android:text="@string/app_name"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.1"
-                    app:layout_constraintWidth_percent=".8" />
+                    app:layout_constraintWidth_percent=".85" />
 
                 <TextView
                     android:id="@+id/tvAuthorPlayMusic"
@@ -114,7 +113,7 @@
                     android:gravity="center"
                     android:text="@string/app_name"
                     android:textColor="#DAD5D5"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
 
                     android:textStyle="italic"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -160,7 +159,10 @@
                         android:id="@+id/seekbarPlay"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_below="@id/tvEndSeekbar" />
+                        android:layout_below="@id/tvEndSeekbar"
+                        android:progress="50"
+                        android:progressDrawable="@drawable/cm_seekbar_music"
+                        android:thumb="@drawable/cm_thumb_seekbar" />
                 </RelativeLayout>
 
                 <LinearLayout

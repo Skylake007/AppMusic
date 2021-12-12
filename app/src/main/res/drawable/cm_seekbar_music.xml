@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background"
+        android:drawable="@drawable/cm_thumb_seekbar_m"
+        android:gravity="center" />
+
+   <item android:id="@android:id/progress"
+       android:gravity="center">
+        <scale android:scaleWidth="100%">
+            <selector>
+                <item android:drawable="@drawable/cm_thumb_seekbar_l" />
+            </selector>
+        </scale>
+   </item>
+</layer-list>

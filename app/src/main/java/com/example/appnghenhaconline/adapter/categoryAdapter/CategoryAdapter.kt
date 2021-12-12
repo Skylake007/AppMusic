@@ -57,7 +57,7 @@ class CategoryAdapter (var context: Context,
             Picasso.get().load(itemCategory.imageCategory)
                 .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
-                .error(R.drawable.img_error)
+                .error(R.drawable.ic_music_note_grey)
                 .into(imgCategory)
         }
     }
