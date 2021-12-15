@@ -4,10 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import com.example.appnghenhaconline.MyLib
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.LoginActivity
@@ -22,6 +20,8 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
     lateinit var edtResetCode : EditText
     lateinit var btnConfirmResetCode : Button
     lateinit var tvResendResetCode : TextView
+    lateinit var btnReset : ImageView
+    lateinit var resetLayout: LinearLayout
     lateinit var email : String
     lateinit var btnBack : ImageView
 
@@ -42,6 +42,8 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
         edtResetCode = findViewById(R.id.edtResetcode)
         btnConfirmResetCode = findViewById(R.id.btnSendResetCode)
         tvResendResetCode = findViewById(R.id.tvResendResetCode)
+        resetLayout = findViewById(R.id.resetLayout)
+        btnReset = findViewById(R.id.btnReset)
         btnBack = findViewById(R.id.btnBack)
     }
 
@@ -117,14 +119,25 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
     }
 
     private fun countDownTimer() {
-        var timer = object : CountDownTimer(60000,1000) {
+        var timer = object : CountDownTimer(10000,1000) {
             override fun onTick(millisUntilFinished: Long) {
                 tvResendResetCode.text = "Thử lại sau " + millisUntilFinished / 1000
+                tvResendResetCode.setTextColor(resources.getColor(R.color.black))
+                tvResendResetCode.paintFlags = 0
+
+                btnReset.visibility = View.GONE
+
+                resetLayout.setOnClickListener {  }
             }
 
             override fun onFinish() {
                 tvResendResetCode.text = "Thử lại"
-                tvResendResetCode.setOnClickListener {
+                tvResendResetCode.setTextColor(resources.getColor(R.color.blue))
+                tvResendResetCode.paintFlags = tvResendResetCode.paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
+
+                btnReset.visibility = View.VISIBLE
+
+                resetLayout.setOnClickListener {
                     callApiSendEmailForgotPassword(email)
                     countDownTimer()
                 }

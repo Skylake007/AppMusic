@@ -19,7 +19,7 @@ class MyPlaylistAdapter(var context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPlaylistViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.i_playlist_sm_item, parent, false)
+            .inflate(R.layout.i_my_playlist_item, parent, false)
         return MyPlaylistViewHolder(view)
     }
 
@@ -32,7 +32,7 @@ class MyPlaylistAdapter(var context: Context,
     }
 
     class MyPlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvPlaylistTittleSM)
+        var tvPlaylistTitle: TextView = itemView.findViewById(R.id.tvMyPlaylist)
 //        var imgPlaylist: ImageView = itemView.findViewById(R.id.imgPlaylistSM)
         var layoutItem: CardView = itemView.findViewById(R.id.layoutPlaylistSM)
 

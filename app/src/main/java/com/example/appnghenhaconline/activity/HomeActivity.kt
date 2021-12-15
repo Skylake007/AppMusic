@@ -75,7 +75,6 @@ class HomeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             isPlaying = bundle.getBoolean("status_player")
 
             songObj = mList[mPosition]
-            MyLib.showLog("HomeActivity : $songObj")
             val actionMusic: Int = bundle.getInt("action_music")
 
             handleLayoutMusic(actionMusic)

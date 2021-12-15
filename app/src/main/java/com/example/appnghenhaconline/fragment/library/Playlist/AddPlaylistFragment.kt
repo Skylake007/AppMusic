@@ -44,6 +44,7 @@ class AddPlaylistFragment: Fragment() {
     lateinit var idPlayList : String
     lateinit var btnDeletePlayListUser : ImageView
     lateinit var imgAddPlaylist: ImageView
+    lateinit var btnChangeName: ImageView
     private lateinit var btnPlayPlaylist: Button
     private lateinit var btnShufflePlaylist: Button
 
@@ -69,6 +70,7 @@ class AddPlaylistFragment: Fragment() {
         imgAddPlaylist = view.findViewById(R.id.imgAddPlaylist)
         btnPlayPlaylist = view.findViewById(R.id.btnPlayPlaylist)
         btnShufflePlaylist = view.findViewById(R.id.btnShufflePlaylist)
+        btnChangeName = view.findViewById(R.id.btnChangeName)
     }
 
 
@@ -91,7 +93,7 @@ class AddPlaylistFragment: Fragment() {
             MyLib.changeFragment(requireActivity(), fragmentLayout)
         }
 
-        tvNamePlaylist.setOnClickListener {
+        btnChangeName.setOnClickListener {
             openDialogEditNamePlaylist(Gravity.CENTER)
         }
 
