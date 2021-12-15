@@ -43,31 +43,36 @@ class TabSignupFragment : Fragment() {
         val confirmPassword : TextInputEditText = view.findViewById(R.id.edtConfirmPassword)
 
         btnSignup.setOnClickListener {
-            if(first_name.text.toString() == "" ||
-                last_name.text.toString() == "" ||
-                email.text.toString() == "" ||
-                password.text.toString() == "" ||
-                confirmPassword.text.toString() == "" ||
-                edtSex.text.toString() == "") {
+            if(first_name.text.toString().trim() == "" ||
+                last_name.text.toString().trim() == "" ||
+                email.text.toString().trim() == "" ||
+                password.text.toString().trim() == "" ||
+                confirmPassword.text.toString().trim() == "" ||
+                edtSex.text.toString().trim() == "") {
                 MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
             }
             else {
-                if(password.text.toString() != confirmPassword.text.toString()) {
-                    MyLib.showToast(requireContext(),"Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
-                }
-                else {
-                    val sex: Boolean = edtSex.text.toString() == "Nam"
-                    val name = firstName.text.toString() + " " + lastName.text.toString()
-                    val encryptPassword = MyLib.md5(password.text.toString())
+                when {
+                    password.text!!.length < 6 -> {
+                        MyLib.showToast(requireContext(),"Mật khẩu phải từ 6 kí tự trở lên")
+                    }
+                    password.text.toString() != confirmPassword.text.toString() -> {
+                        MyLib.showToast(requireContext(),"Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
+                    }
+                    else -> {
+                        val sex: Boolean = edtSex.text.toString() == "Nam"
+                        val name = firstName.text.toString() + " " + lastName.text.toString()
+                        val encryptPassword = MyLib.md5(password.text.toString())
 
-                    callApiSignIn(name,encryptPassword,sex,email.text.toString())
+                        callApiSignIn(name,encryptPassword,sex,email.text.toString())
 
-                    firstName.text?.clear()
-                    lastName.text?.clear()
-                    email.text?.clear()
-                    password.text?.clear()
-                    confirmPassword.text?.clear()
-                    edtSex.text.clear()
+                        firstName.text?.clear()
+                        lastName.text?.clear()
+                        email.text?.clear()
+                        password.text?.clear()
+                        confirmPassword.text?.clear()
+                        edtSex.text.clear()
+                    }
                 }
             }
         }

@@ -44,18 +44,23 @@ class UserPasswordActivity : AppCompatActivity() {
             val oldPassword = tpOldPassword.text.toString()
             val newPassowrd = tpNewPassword.text.toString()
             val confirmPassword = tpConfirmNewPassword.text.toString()
-            if (oldPassword == "" || newPassowrd == "" || confirmPassword == "") {
+            if (oldPassword.trim() == "" || newPassowrd.trim()== "" || confirmPassword.trim() == "") {
                 MyLib.showToast(this,"Vui lòng điền đầy đủ mật khẩu")
             }
             else {
-                if (newPassowrd != confirmPassword) {
-                    MyLib.showToast(this,"Mật khẩu và xác nhận mật khẩu không khớp")
-                }
-                else {
-                    val encryptOldPassword = MyLib.md5(oldPassword)
-                    val encryptNewPassword = MyLib.md5(newPassowrd)
-                    MyLib.showLog(encryptOldPassword + "\n" + encryptNewPassword)
-                    callApiUpdateUserPassword(user[session.KEY_EMAIL]!!,encryptOldPassword,encryptNewPassword,session)
+                when {
+                    tpNewPassword.text!!.length < 6 -> {
+                        MyLib.showToast(this,"Mật khẩu phải từ 6 kí tự trở lên")
+                    }
+                    newPassowrd != confirmPassword -> {
+                        MyLib.showToast(this,"Mật khẩu và xác nhận mật khẩu không khớp")
+                    }
+                    else -> {
+                        val encryptOldPassword = MyLib.md5(oldPassword)
+                        val encryptNewPassword = MyLib.md5(newPassowrd)
+                        MyLib.showLog(encryptOldPassword + "\n" + encryptNewPassword)
+                        callApiUpdateUserPassword(user[session.KEY_EMAIL]!!,encryptOldPassword,encryptNewPassword,session)
+                    }
                 }
             }
         }
