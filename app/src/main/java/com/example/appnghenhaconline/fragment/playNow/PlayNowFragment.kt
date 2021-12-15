@@ -35,10 +35,13 @@ class PlayNowFragment : Fragment() {
     internal lateinit var view: View
     private lateinit var rcvCategory: RecyclerView
     private lateinit var listPlaylist : ArrayList<Playlist>
+    private lateinit var listPlaylist1 : ArrayList<Playlist>
     private lateinit var listAlbum : ArrayList<Album>
+    private lateinit var listAlbum1 : ArrayList<Album>
     private lateinit var playlistAdapterSL : PlaylistSLAdapter
     private lateinit var playlistAdapterSM : PlaylistSMAdapter
     private lateinit var albumAdapter: AlbumAdapter
+    private lateinit var albumAdapter1: AlbumAdapter
     private lateinit var viewPagerBanner: ViewPager2
     private lateinit var ciBanner: CircleIndicator3
     private lateinit var bannerAdapter: SlideBannerAdapter
@@ -58,8 +61,8 @@ class PlayNowFragment : Fragment() {
         viewPagerBanner = view.findViewById(R.id.viewPagerBanner)
         ciBanner = view.findViewById(R.id.ciBanner)
 
-        initCategoryList()
         initBanner()
+        initCategoryList()
     }
     //region INIT ADAPTER
 
@@ -70,15 +73,17 @@ class PlayNowFragment : Fragment() {
         playlistAdapterSL = PlaylistSLAdapter(view.context,listPlaylist)
 
         createCategorySL(rcvCategory, playlistAdapterSL)
-        callApiPlayList(listPlaylist,playlistAdapterSL)
+
 
         //Playlist_2
-        listPlaylist = ArrayList()
-        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist)
+        listPlaylist1 = ArrayList()
+        playlistAdapterSM = PlaylistSMAdapter(view.context,listPlaylist1)
         rcvCategory = view.findViewById(R.id.rcvCategory2)
 
         createCategorySM(rcvCategory, playlistAdapterSM)
-        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+//        callApiPlayListSM(listPlaylist,playlistAdapterSM)
+
+        callApiPlayList(listBanner, bannerAdapter, listPlaylist, playlistAdapterSL, listPlaylist1, playlistAdapterSM)
 
         //Album_1
         listAlbum = ArrayList()
@@ -86,15 +91,16 @@ class PlayNowFragment : Fragment() {
         rcvCategory = view.findViewById(R.id.rcvCategory3)
 
         createAlbumSM(rcvCategory, albumAdapter)
-        callApiAlbum(listAlbum,albumAdapter)
+//        callApiAlbum(listAlbum,albumAdapter)
 
         //Album_2
-        listAlbum = ArrayList()
-        albumAdapter = AlbumAdapter(view.context,listAlbum)
+        listAlbum1 = ArrayList()
+        albumAdapter1 = AlbumAdapter(view.context,listAlbum1)
         rcvCategory = view.findViewById(R.id.rcvCategory4)
 
-        createAlbumSM(rcvCategory, albumAdapter)
-        callApiAlbum(listAlbum,albumAdapter)
+        createAlbumSM(rcvCategory, albumAdapter1)
+
+        callApiAlbum(listAlbum, albumAdapter, listAlbum1, albumAdapter1)
     }
     //endregion
     //===========================================================
@@ -134,7 +140,7 @@ class PlayNowFragment : Fragment() {
 
         bannerAdapter.registerAdapterDataObserver(ciBanner.adapterDataObserver)
 
-        callApiBanner(listBanner, bannerAdapter)
+//        callApiBanner(listBanner, bannerAdapter)
         autoSlideBanner()
     }
 
@@ -177,26 +183,26 @@ class PlayNowFragment : Fragment() {
 //        })
 //    }
 
-    private fun callApiBanner(list : ArrayList<Playlist>, adapter : SlideBannerAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                var dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-        })
-    }
+//    private fun callApiBanner(list : ArrayList<Playlist>, adapter : SlideBannerAdapter) {
+//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+//                var dataPlayList = response.body()
+//                if(dataPlayList != null) {
+//                    if(!dataPlayList.error) {
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                    else {
+//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//        })
+//    }
 
     // set adapter cho Playlist SL
     private fun createCategorySL(rcv: RecyclerView, adapter: PlaylistSLAdapter){
@@ -225,14 +231,32 @@ class PlayNowFragment : Fragment() {
     //===========================================================
     //region CALL API
 
-    private fun callApiPlayList(list : ArrayList<Playlist>, adapter : PlaylistSLAdapter) {
+    private fun callApiPlayList(listBanner : ArrayList<Playlist>, adapterBanner : SlideBannerAdapter ,list : ArrayList<Playlist>, adapter : PlaylistSLAdapter, list1 : ArrayList<Playlist>, adapter1 : PlaylistSMAdapter) {
         ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
             override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
                 var dataPlayList = response.body()
                 if(dataPlayList != null) {
                     if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
+                        val listPlaylist = dataPlayList.listPlayList
+                        for (i in 0 until listPlaylist.size) {
+                            when (i) {
+                                in 0..3 -> {
+                                    listBanner.add(listPlaylist[i])
+                                    adapterBanner.notifyDataSetChanged()
+
+                                }
+                                in 4..8 -> {
+                                    list.add(listPlaylist[i])
+                                    adapter.notifyDataSetChanged()
+                                }
+                                in 9..13 -> {
+                                    list1.add(listPlaylist[i])
+                                    adapter1.notifyDataSetChanged()
+                                }
+                            }
+                        }
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
                     }
                     else {
                         MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
@@ -246,35 +270,48 @@ class PlayNowFragment : Fragment() {
         })
     }
 
-    private fun callApiPlayListSM(list : ArrayList<Playlist>, adapter : PlaylistSMAdapter) {
-        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
-            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
-                var dataPlayList = response.body()
-                if(dataPlayList != null) {
-                    if(!dataPlayList.error) {
-                        list.addAll(dataPlayList.listPlayList)
-                        adapter.notifyDataSetChanged()
-                    }
-                    else {
-                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
-                    }
-                }
-            }
+//    private fun callApiPlayListSM(list : ArrayList<Playlist>, adapter : PlaylistSMAdapter) {
+//        ApiService.apiService.getPlayList().enqueue(object : Callback<DataPlayList?> {
+//            override fun onResponse(call: Call<DataPlayList?>, response: Response<DataPlayList?>) {
+//                var dataPlayList = response.body()
+//                if(dataPlayList != null) {
+//                    if(!dataPlayList.error) {
+//                        list.addAll(dataPlayList.listPlayList)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                    else {
+//                        MyLib.showLog("PlayNowFragment.kt: " + dataPlayList.message)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
+//                MyLib.showToast(requireContext(),"Call Api Error")
+//            }
+//        })
+//    }
 
-            override fun onFailure(call: Call<DataPlayList?>, t: Throwable) {
-                MyLib.showToast(requireContext(),"Call Api Error")
-            }
-        })
-    }
-
-    private fun callApiAlbum(list : ArrayList<Album>, adapter : AlbumAdapter) {
+    private fun callApiAlbum(list : ArrayList<Album>, adapter : AlbumAdapter, list1 : ArrayList<Album>, adapter1: AlbumAdapter) {
         ApiService.apiService.getAllAlbum().enqueue(object : Callback<DataAlbum?> {
             override fun onResponse(call: Call<DataAlbum?>, response: Response<DataAlbum?>) {
                 var dataAlbum = response.body()
                 if(dataAlbum != null) {
                     if (!dataAlbum.error) {
-                        list.addAll(dataAlbum.albums)
-                        adapter.notifyDataSetChanged()
+                        val listAlbum = dataAlbum.albums
+                        for (i in 0 until listAlbum.size) {
+                            when (i) {
+                                in 0..4 -> {
+                                    list.add(dataAlbum.albums[i])
+                                    adapter.notifyDataSetChanged()
+                                }
+                                in 5..9 -> {
+                                    list1.add(dataAlbum.albums[i])
+                                    adapter1.notifyDataSetChanged()
+                                }
+                            }
+                        }
+//                        list.addAll(dataAlbum.albums)
+//                        adapter.notifyDataSetChanged()
                     }
                     else {
                         MyLib.showLog("PlayNowFragment.kt: " + dataAlbum.message)
