@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.*
 import androidx.core.graphics.rotationMatrix
 import com.bumptech.glide.Glide
@@ -38,6 +39,7 @@ class UserActivity : AppCompatActivity() {
     lateinit var signOut : LinearLayout
     lateinit var tvName : TextView
     lateinit var image : CircleImageView
+    lateinit var btnChangeImg : View
     private val IMAGE_PICK_CODE = 100
     private val PERMISSION_CODE = 1001
     private lateinit var mUri : Uri
@@ -69,6 +71,7 @@ class UserActivity : AppCompatActivity() {
         mUri = Uri.EMPTY
         viewInfo = findViewById(R.id.layout_info)
         viewChangePass = findViewById(R.id.layout_password)
+        btnChangeImg = findViewById(R.id.btnChangeAvatar)
         tvName = findViewById(R.id.tvName)
         image = findViewById(R.id.imgAvatar)
         tvName.text = user[session.KEY_NAME]
@@ -137,7 +140,7 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun clickPicture() {
-        image.setOnClickListener {
+        btnChangeImg.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_DENIED )  {
