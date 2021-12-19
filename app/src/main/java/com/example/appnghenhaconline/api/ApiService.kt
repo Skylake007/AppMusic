@@ -5,10 +5,13 @@ import com.example.appnghenhaconline.models.playlist.DataCategories
 import com.example.appnghenhaconline.models.playlist.DataPlayList
 import com.example.appnghenhaconline.models.playlist.DataPlayListUser
 import com.example.appnghenhaconline.models.playlist.Playlist
+import com.example.appnghenhaconline.models.singer.DataSinger
 import com.example.appnghenhaconline.models.song.DataSong
 import com.example.appnghenhaconline.models.user.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,10 +26,12 @@ interface ApiService {
     fun getListSongByID(@Query ("playlistId") id : String) : Call<DataSong>
 
     companion object{
-        private val baseUrl = "http://192.168.1.3:3000/"
         //private val baseUrl = "http://192.168.10.62:3000/"
+        private val baseUrl = "http://192.168.1.4:3000/"
 //      private val baseUrl = "http://192.168.0.31:3000/"
 //        private val baseUrl = "http://192.168.0.155:3000/"
+//        private val baseUrl = "http://192.168.2.3:3000/"
+//        private val baseUrl = "https://teacup-music.herokuapp.com/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val apiService: ApiService = Retrofit.Builder()
             .baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create(gson))
@@ -140,4 +145,27 @@ interface ApiService {
 
     @GET("/album/getSingerAlbum")
     fun getListAlbumBySingerId(@Query("idSinger") SingerId: String) : Call<DataAlbum>
+
+    @PUT("updateuser/AddFavoriteSinger")
+    fun followSinger(@Query("singerid") SingerId: String,
+                     @Query("userid") UserId : String
+
+    )  : Call<DataUser>
+
+    @PUT("/updateuser/removeFavoriteSinger")
+    fun unFollowSinger(@Query("singerid") SingerId: String,
+                       @Query("userid") UserId : String
+
+    )  : Call<DataUser>
+
+    @Multipart
+    @PUT("/updateuser/UpdateAvatarUser")
+    fun updateAvatarUser (@Part image : MultipartBody.Part,
+                          @Part("idUser") idUser : RequestBody
+    ) : Call<DataUser>
+
+    @FormUrlEncoded
+    @POST("/singer/getListSinger?_method=GET")
+    fun getListLoveSinger(@Field ("singerIds[]") listSingerIds : ArrayList<String>)
+    : Call<DataSinger>
 }

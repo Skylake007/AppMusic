@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".activity.LoginActivity"
     android:id="@+id/layoutLoginActivity"
-    >
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent=".35"
         android:scaleType="centerCrop"
@@ -37,6 +37,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -70,7 +72,7 @@
             android:paddingTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent=".8"
+            app:layout_constraintHeight_percent=".9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tab_layout"
             app:layout_constraintVertical_bias="0" />

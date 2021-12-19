@@ -126,7 +126,7 @@ android:background="@color/white">
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="italic" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

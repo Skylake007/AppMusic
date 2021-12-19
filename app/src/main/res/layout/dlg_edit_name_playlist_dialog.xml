@@ -38,13 +38,16 @@
             android:hint="Tên playlist"
             app:startIconDrawable="@drawable/ic_queue_music"
             app:endIconMode="clear_text"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtNamePlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:maxLength="20"/>
         </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"

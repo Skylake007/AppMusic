@@ -11,8 +11,10 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
 
-        <item name="android:statusBarColor" tools:targetApi="l">#00555555</item>
-
+<!--        <item name="android:statusBarColor" tools:targetApi="l">#00555555</item>-->
+        <item name="android:windowTranslucentStatus">true</item>
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
         <!-- Customize your theme here. -->
     </style>
 
@@ -25,5 +27,9 @@
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="recodeText">
+        <item name="android:textStyle"></item>
     </style>
 </resources>

@@ -4,12 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.appnghenhaconline.MyLib
-import com.example.appnghenhaconline.adapter.LoginAdapter
+import com.example.appnghenhaconline.adapter.anotherAdapter.LoginAdapter
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlin.system.exitProcess
 import android.content.Intent
 
 

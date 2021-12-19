@@ -56,20 +56,30 @@ class ResetPasswordSendNewPasswordActivity : AppCompatActivity() {
 
     private fun backIntent(){
         btnBack.setOnClickListener {
-            val  intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
     private fun sendNewPassword() {
         btnRestorePassword.setOnClickListener {
-            if (edtNewPassword.text.toString().trim() == "" || edtConfirmNewPassword.text.toString().trim() == "") {
+            val newPassword = edtNewPassword.text.toString()
+            val confirmNewPassword = edtConfirmNewPassword.text.toString()
+
+            if (newPassword.trim() == "" || confirmNewPassword.trim() == "") {
                 MyLib.showToast(this,"Vui lòng nhập đầy đủ thông tin")
             }
             else {
-                if (edtNewPassword.text.toString().trim() == edtConfirmNewPassword.text.toString().trim()) {
-                    var password = MyLib.md5(edtNewPassword.text.toString().trim())
-                    callApiSendNewPassword(email,resendCode,password)
+                when {
+                    edtNewPassword.text.length < 6 -> {
+                        MyLib.showToast(this, "Mật khẩu phải từ 6 kí tự trở lên")
+                    }
+                    newPassword != confirmNewPassword -> {
+                        MyLib.showToast(this, "Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
+                    }
+                    else -> {
+                        var password = MyLib.md5(newPassword)
+                        callApiSendNewPassword(email, resendCode, password)
+                    }
                 }
             }
         }
