@@ -18,26 +18,33 @@
         >
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendNewPasswordActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendResetCodeActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ForgotPassword.ResetPasswordSendEmailActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.UserPasswordActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.UserActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.UserInfoActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.PlayMusicActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.HomeActivity"
             android:exported="true"
@@ -52,7 +59,8 @@
             android:name=".activity.LoginActivity"
             android:exported="true"
             android:noHistory="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".dataLocalManager.Service.MyService"

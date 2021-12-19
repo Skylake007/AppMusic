@@ -43,7 +43,7 @@ class AlbumOfSingerAdapter(var context: Context,
         fun bindAlbum(itemAlbum : Album){
             tvAlbumTitle.text = itemAlbum.albumname
             Picasso.get().load(itemAlbum.imageAlbum)
-                .resize(480,500)
+//                .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
                 .error(R.drawable.img_error)
                 .into(imgAlbum)

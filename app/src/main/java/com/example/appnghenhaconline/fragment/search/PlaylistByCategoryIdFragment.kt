@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class PlaylistByCategoryIdFragment: Fragment() {
     private lateinit var rcvPlByCategory : RecyclerView
     private lateinit var listPlByCategory : ArrayList<Playlist>
     private lateinit var plByCategoryAdapter : PlaylistByCategoryAdapter
+    private lateinit var nameCategory: TextView
     private lateinit var idCategory : String
     private lateinit var btnBack: ImageView
 
@@ -38,6 +40,7 @@ class PlaylistByCategoryIdFragment: Fragment() {
     private fun init(){
         rcvPlByCategory = view.findViewById(R.id.rcvPlaylistByCategory)
         btnBack = view.findViewById(R.id.btnBack)
+        nameCategory = view.findViewById(R.id.tvCategoryName)
         initPlaylistInfo()
         event()
     }
@@ -53,6 +56,7 @@ class PlaylistByCategoryIdFragment: Fragment() {
         val bundle = requireArguments()
         if (bundle != null){
             idCategory = bundle.getString("id_category")!!
+            nameCategory.text = bundle.getString("name_category")
             initPlaylistByCategory()
         }
     }

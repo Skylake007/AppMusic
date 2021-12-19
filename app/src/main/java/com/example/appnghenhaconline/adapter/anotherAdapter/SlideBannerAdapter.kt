@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.models.playlist.Playlist
@@ -40,6 +41,8 @@ class SlideBannerAdapter(var context: Context,
                         .placeholder(R.drawable.ic_loading_double)
                         .error(R.drawable.img_error)
                         .into(holder.imgBanner)
+
+        holder.tvBanner.text = playlist.playlistname
     }
 
     override fun getItemCount(): Int {
@@ -54,6 +57,7 @@ class SlideBannerAdapter(var context: Context,
                                 : RecyclerView.ViewHolder(itemView){
 
         var imgBanner: ImageView = itemView.findViewById(R.id.imgBanner)
+        var tvBanner: TextView = itemView.findViewById(R.id.tvPlByCategory)
 
         init {
             itemView.setOnClickListener {

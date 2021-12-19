@@ -49,7 +49,7 @@ class SingerAdapter(var context: Context,
         fun bindSinger(itemSinger: Singer){
             singerName.text = itemSinger.singername
             Picasso.get().load(itemSinger.image)
-                .resize(80,80)
+//                .resize(80,80)
                 .into(imgSinger)
         }
     }

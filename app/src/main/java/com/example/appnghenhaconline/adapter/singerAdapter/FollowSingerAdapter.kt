@@ -66,7 +66,7 @@ class FollowSingerAdapter(var context: Context,
         fun bindSinger(itemSinger: Singer){
             titleSinger.text = itemSinger.singername
             Picasso.get().load( itemSinger.image)
-                .resize(480,500)
+//                .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
                 .error(R.drawable.img_error)
                 .into(imgSinger)

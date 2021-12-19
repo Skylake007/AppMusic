@@ -40,7 +40,6 @@ class UserInfoActivity : AppCompatActivity() {
     lateinit var edtName : TextInputEditText
     lateinit var edtEmail : TextInputEditText
     lateinit var btnSaveInfo : ImageView
-    lateinit var image : CircleImageView
 
     private lateinit var progressDialog: ProgressDialog
     private lateinit var session : SessionUser
@@ -68,13 +67,8 @@ class UserInfoActivity : AppCompatActivity() {
         edtName = findViewById(R.id.edtName)
         edtEmail = findViewById(R.id.edtEmail)
         btnSaveInfo = findViewById(R.id.btnSaveInfo)
-        image = findViewById(R.id.imgAvatar)
         edtName.setText(user[session.KEY_NAME])
         edtEmail.setText(user[session.KEY_EMAIL])
-
-        Picasso.get().load(user[session.KEY_AVATAR])
-            .error(R.drawable.img_avatar_4)
-            .into(image)
 
         if (user[session.KEY_SEX].toBoolean()) {
             edtSex.setText("Nam")
@@ -106,8 +100,9 @@ class UserInfoActivity : AppCompatActivity() {
             }
             else {
                 callApiUpdateUser(user[session.KEY_EMAIL]!!, name, sex, session)
+//                finish()
             }
-            finish()
+//            finish()
         }
     }
 
@@ -124,6 +119,7 @@ class UserInfoActivity : AppCompatActivity() {
                         session.editor.putString(session.KEY_NAME,user.name)
                         session.editor.putBoolean(session.KEY_SEX,user.sex)
                         session.editor.commit()
+                        finish()
                     }
                     else {
                         MyLib.showToast(this@UserInfoActivity,dataUser.message)

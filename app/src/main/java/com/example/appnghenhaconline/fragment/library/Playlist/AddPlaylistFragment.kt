@@ -313,7 +313,7 @@ class AddPlaylistFragment: Fragment() {
                         songAdapter.notifyDataSetChanged()
                     }
                     else {
-                        MyLib.showToast(requireContext(),dataPlayListUser.message)
+//                        MyLib.showToast(requireContext(),dataPlayListUser.message)
                     }
                 }
             }

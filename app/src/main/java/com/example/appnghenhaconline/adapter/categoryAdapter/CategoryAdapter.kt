@@ -55,7 +55,7 @@ class CategoryAdapter (var context: Context,
             tvCategoryTitle.text = itemCategory.categoryname
 
             Picasso.get().load(itemCategory.imageCategory)
-                .resize(480,500)
+//                .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
                 .error(R.drawable.ic_music_note_grey)
                 .into(imgCategory)

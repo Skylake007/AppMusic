@@ -67,6 +67,7 @@ class SearchFragment : Fragment() {
 
                 val bundle = Bundle()
                 bundle.putSerializable("id_category", listCategory[position].id)
+                bundle.putSerializable("name_category", listCategory[position].categoryname)
                 fragmentLayout.arguments = bundle
 
                 MyLib.changeFragment(requireActivity(), fragmentLayout)

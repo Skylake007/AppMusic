@@ -53,8 +53,8 @@
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:layout_marginStart="15dp"
                 android:paddingBottom="10dp"
+                android:paddingStart="10dp"
                 android:paddingTop="15dp"/>
             <View
                 android:layout_width="match_parent"
@@ -68,9 +68,10 @@
                     android:id="@+id/tvCategory1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Category1"
+                    android:text="Có thể bạn muốn nghe"
                     android:paddingTop="10dp"
                     android:textSize="20dp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:paddingStart="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
@@ -90,8 +91,9 @@
                     android:id="@+id/tvCategory2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Category2"
+                    android:text="Lựa chọn hôm nay"
                     android:textSize="20dp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
                     android:paddingStart="10dp"/>
@@ -111,7 +113,8 @@
                     android:id="@+id/tvCategory3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Album1"
+                    android:text="Chill"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
@@ -132,8 +135,9 @@
                     android:id="@+id/tvCategory4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Album2"
+                    android:text="Album nổi bật"
                     android:textSize="20dp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:paddingTop="10dp"
                     android:paddingStart="10dp"/>

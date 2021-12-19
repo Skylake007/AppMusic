@@ -145,5 +145,4 @@ class ResetPasswordSendResetCodeActivity : AppCompatActivity() {
         }
         timer.start()
     }
-
 }

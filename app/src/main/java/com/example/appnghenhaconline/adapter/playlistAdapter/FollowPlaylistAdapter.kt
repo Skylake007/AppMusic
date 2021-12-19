@@ -42,7 +42,7 @@ class FollowPlaylistAdapter(var context: Context,
         fun bindPlaylist(itemPlaylist: Playlist){
             tvPlaylistTitle.text = itemPlaylist.playlistname
             Picasso.get().load(itemPlaylist.image)
-                .resize(480,500)
+//                .resize(480,500)
                 .placeholder(R.drawable.ic_loading_double)
                 .error(R.drawable.img_error)
                 .into(imgPlaylist)
