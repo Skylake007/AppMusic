@@ -313,69 +313,77 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             lyricView.visibility = View.VISIBLE
 
             val lyric = """
-            [00:05.70] Đây là lyric 1
-            [00:06.45] Đây là lyric 2
-            [00:07.52] Đây là lyric 3
-            [00:09.02] Đây là lyric 4
-            [00:23.97] Đây là lyric 5
-            [00:33.61] Đây là lyric 6
-            [00:38.00] Đây là lyric 7
-            [00:41.56] Đây là lyric 8
-            [00:44.40] Đây là lyric 9
-            [00:50.66] Đây là lyric 10
-            [00:52.97] Đây là lyric 11
-            [00:59.14] 往海的深处听
-            [01:03.45] 谁的哀鸣在指引
-            [01:08.65] 灵魂没入寂静
-            [01:10.94] 无人将你吵醒
-            [01:17.23] 你喜欢海风咸咸的气息
-            [01:20.10] 踩着湿湿的沙砾
-            [01:22.37] 你说人们的骨灰应该撒进海里
-            [01:26.09] 你问我死后会去哪里
-            [01:29.03] 有没有人爱你
-            [01:31.09] 世界能否不再
-            [01:35.27] 总爱对凉薄的人扯着笑脸
-            [01:39.70] 岸上人们脸上都挂着无关
-            [01:44.20] 人间毫无留恋
-            [01:46.51] 一切散为烟
-            [02:24.45] 散落的月光穿过了云
-            [02:33.65] 躲着人群
-            [02:38.07] 溜进海底
-            [02:42.03] 海浪清洗血迹
-            [02:44.64] 妄想温暖你
-            [02:50.80] 灵魂没入寂静
-            [02:53.27] 无人将你吵醒
-            [02:59.60] 你喜欢海风咸咸的气息
-            [03:02.25] 踩着湿湿的沙砾
-            [03:04.60] 你说人们的骨灰应该撒进海里
-            [03:08.16] 你问我死后会去哪里
-            [03:11.07] 有没有人爱你
-            [03:13.29] 世界已然将你抛弃
-            [03:17.49] 总爱对凉薄的人扯着笑脸
-            [03:21.90] 岸上人们脸上都挂着无关
-            [03:26.32] 人间毫无留恋
-            [03:28.53] 一切散为烟
-            [03:34.70] 来不及来不及
-            [03:39.30] 你曾笑着哭泣
-            [03:43.47] 来不及来不及
-            [03:47.75] 你颤抖的手臂
-            [03:52.07] 来不及来不及
-            [03:56.69] 无人将你打捞起
-            [04:01.39] 来不及来不及
-            [04:05.77] 你明明讨厌窒息
+            [00:00.00] [Music]
+            
+            [00:03.00] I'm sorry but 
+            [00:05.00] Don't wanna talk,
+            [00:06.50] I need a moment 'fore I go
+            [00:10.00] It's nothing personal
+            [00:14.00] I draw the blinds
+            [00:16.00] They don't need to see me cry
+            [00:18.00] Cause even if they understand
+            [00:22.00] They don't understand 
+            [00:26.00] So then when I'm finished
+
+            [00:27.00] I'm all 'bout my business 
+            [00:29.00] And ready to save the world
+            [00:31.00] I'm takin my misery
+            [00:33.00] Make it my bitch
+            [00:34.00] Can't be everyone's favorite girl
+            
+            [00:35.50] So take aim and fire away
+            [00:39.50] I've never been so wide awake
+            [00:43.00] No, nobody but me can keep me safe
+            [00:46.00] And I'm on my way
+            [00:48.00] The blood moon is on the rise
+            [00:50.50] The fire burning in my eyes
+            [00:54.50] No, nobody but me can keep me safe
+            [00:57.50] And I'm on my way
+            
+            [00:59.00] [Music]
+            
+            [01:21.00] Lo siento mucho (Farru), pero me voy (rh)
+            [01:27.50] Porque a tu lado me di cuenta que nada soy (rh-ey)
+            [01:32.00] Y me cansé de luchar y de guerrear en vano
+            [01:34.50] De estar en la línea de fuego y de meter la mano
+            [01:38.00] Acepto mis errore', también soy humano
+            [01:41.00] Y tú no ve' que lo hago porque te amo (pum-pum-pum-pum)
+            [01:44.00] Pero ya (Ya) no tengo más na' que hacer aquí (aquí)
+            [01:49.50] Me voy, llegó la hora 'e partir (partir)
+            [01:52.00] De mi propio camino, seguir lejos de ti
+            [01:56.00] So take aim and fire away  
+            [01:59.00] I've never been so wide awake
+            [02:02.00] No, nobody but me can keep me safe
+            [02:05.00] And I'm on my way
+            [02:06.50] The blood moon is on the rise (is on the rise, na-na)
+            [02:09.50] The fire burning in my eyes (the fire burning in my eyes)
+            [02:13.00] No, nobody but me can keep me safe
+            [02:17.00] And I'm on my way
+            [02:19.00] [Music]
+                        
+            [02:51.00] So take aim and fire away
+            [02:55.00] I've never been so wide awake
+            [02:58.00] No, nobody but me can keep me safe
+            [03:02.00] And I'm on my way
+            [03:03.50] The blood moon is on the rise
+            [03:07.00]The fire burning in my eyes
+            [03:09.00] No, nobody but me can keep me safe
+            [03:12.00] And I'm on my way
+           
             """.trimIndent()
+
             lyricView.loadLyric(lyric)
+            lyricView.setCurrentTextSize(65f)
+            lyricView.setCurrentColor(R.color.red)
+            lyricView.setNormalColor(R.color.colorPrimaryDark)
             lyricView.setDraggable(true, object : OnPlayClickListener {
                 override fun onPlayClick(time: Long): Boolean {
                     lyricView.updateTime(time)
                     MyLib.showLog(time.toString())
-
-                    //seekBarMusic.progress = time.toInt()
-                    MyService.mediaPlayer.seekTo(time.toInt())
-
-                    seekBarMusic.progress = MyService.mediaPlayer.currentPosition
+                    var timeSync = time.toInt()
+                    MyService.mediaPlayer.seekTo(timeSync)
+                    seekBarMusic.progress = timeSync
                     return true
-
                 }
             })
 
@@ -400,6 +408,10 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             startSeekBar.text = time.format(MyService.mediaPlayer.currentPosition)
             seekBarMusic.progress = MyService.mediaPlayer.currentPosition
 
+            var lyricTime = seekBarMusic.progress.toLong()
+
+
+            lyricView.updateTime(lyricTime)
 
             MyService.mediaPlayer.setOnCompletionListener {
                 if (isRepeat){
