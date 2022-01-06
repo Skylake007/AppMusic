@@ -20,11 +20,11 @@
         android:scaleX="3"
         />
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
+    <!--    <ImageView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
 
-<!--        android:background="#52626262" />-->
+    <!--        android:background="#52626262" />-->
 
     <RelativeLayout
         android:id="@+id/background"
@@ -74,14 +74,6 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/img_avatar_2" />
 
-                    <com.example.lib.LyricViewX
-                        android:id="@+id/lyricVieew"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:lrcPadding="16dp">
-
-
-                    </com.example.lib.LyricViewX>
                 </androidx.cardview.widget.CardView>
 
 
