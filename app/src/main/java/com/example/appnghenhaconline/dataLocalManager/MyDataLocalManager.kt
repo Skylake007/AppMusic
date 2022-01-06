@@ -19,6 +19,8 @@ class MyDataLocalManager {
         private const val KEY_PREF_IS_PLAYING = "PREF_IS_PLAYING"
         private const val KEY_PREF_IS_REPEAT = "PREF_IS_REPEAT"
         private const val KEY_PREF_IS_SHUFFLE = "PREF_IS_SHUFFLE"
+        private const val KEY_PREF_IS_LYRIC = "PREF_IS_LYRIC"
+
 
         private lateinit var instance: MyDataLocalManager
 
@@ -103,6 +105,17 @@ class MyDataLocalManager {
         fun setIsShuffle(isShuffle: Boolean){
             getInstance().mySharePreferences
                 .setBooleanValue(KEY_PREF_IS_SHUFFLE, isShuffle)
+        }
+
+        //Check lời bài hát
+        fun getIsLyric(): Boolean {
+            return getInstance().mySharePreferences
+                .getBooleanValue(KEY_PREF_IS_LYRIC)
+        }
+
+        fun setIsLyric(isLyric: Boolean){
+            getInstance().mySharePreferences
+                .setBooleanValue(KEY_PREF_IS_LYRIC, isLyric)
         }
 
         //Check lần tải đầu tiên

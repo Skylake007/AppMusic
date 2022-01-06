@@ -27,7 +27,8 @@ interface ApiService {
 
     companion object{
         //private val baseUrl = "http://192.168.10.62:3000/"
-        private val baseUrl = "http://192.168.1.4:3000/"
+        private val baseUrl = "http://192.168.1.9:3000/"
+        //private val baseUrl = "http://192.168.1.4:3000/"
 //      private val baseUrl = "http://192.168.0.31:3000/"
 //        private val baseUrl = "http://192.168.0.155:3000/"
 //        private val baseUrl = "http://192.168.2.3:3000/"

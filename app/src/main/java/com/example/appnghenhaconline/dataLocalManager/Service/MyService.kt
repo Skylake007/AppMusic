@@ -26,6 +26,8 @@ import com.example.appnghenhaconline.R
 import com.example.appnghenhaconline.activity.PlayMusicActivity
 import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isRepeat
 import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isShuffle
+import com.example.appnghenhaconline.activity.PlayMusicActivity.Companion.isLyric
+
 import com.example.appnghenhaconline.models.song.Song
 import com.example.appnghenhaconline.dataLocalManager.MyApplication.Companion.CHANNEL_ID
 import com.example.appnghenhaconline.dataLocalManager.MyDataLocalManager
@@ -51,6 +53,7 @@ class MyService : Service() {
         const val ACTION_PREVIOUS: Int = 6
         const val ACTION_REPEAT: Int = 7
         const val ACTION_SHUFFLE: Int = 8
+        const val ACTION_LYRIC: Int = 9
         var mediaPlayer: MediaPlayer = MediaPlayer()
     }
     private var mList : ArrayList<Song> = ArrayList()
@@ -126,6 +129,9 @@ class MyService : Service() {
             }
             ACTION_SHUFFLE ->{
                 shuffleMusic()
+            }
+            ACTION_LYRIC ->{
+                lyricMusic()
             }
         }
     }
@@ -213,6 +219,9 @@ class MyService : Service() {
     private fun shuffleMusic() {
         sendActionToActivity(ACTION_SHUFFLE)
     }
+    private fun lyricMusic() {
+        sendActionToActivity(ACTION_LYRIC)
+    }
 
     // lặp lại bài hát
     private fun repeatMusic() {
@@ -253,9 +262,9 @@ class MyService : Service() {
         scope.launch {
             val intent = Intent(this@MyService, PlayMusicActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(this@MyService,
-                                                            0,
-                                                            intent,
-                                                            FLAG_UPDATE_CURRENT)
+                0,
+                intent,
+                FLAG_UPDATE_CURRENT)
 
             val imageSinger = MyLib.getBitmap(this@MyService, song.image)
 
@@ -320,6 +329,7 @@ class MyService : Service() {
         MyDataLocalManager.setIsPlaying(isPlaying)
         MyDataLocalManager.setIsRepeat(isRepeat)
         MyDataLocalManager.setIsShuffle(isShuffle)
+//        MyDataLocalManager.setIsLyric(isLyric)
         intent.putExtras(bundle)
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)

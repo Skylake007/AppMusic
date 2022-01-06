@@ -16,4 +16,8 @@
     <color name="grey_s">#A5FFFFFF</color>
     <color name="grey_m">#4AC0BEBE</color>
     <color name="grey_l">#65FFFCFC</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>
