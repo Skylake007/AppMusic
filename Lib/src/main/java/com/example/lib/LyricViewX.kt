@@ -573,7 +573,7 @@ class LyricViewX @JvmOverloads constructor(context: Context?, attrs: AttributeSe
             }
             val flag = sb.toString()
             this@LyricViewX.flag = flag
-            thread {
+//            thread {
                 val lrcEntries = LyricUtil.parseLrc(arrayOf(mainLyricText, secondLyricText))
                 runOnUi {
                     if (flag === flag) {
@@ -581,7 +581,7 @@ class LyricViewX @JvmOverloads constructor(context: Context?, attrs: AttributeSe
                         this@LyricViewX.flag = null
                     }
                 }
-            }
+//            }
         }
     }
 

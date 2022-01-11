@@ -28,9 +28,9 @@ interface ApiService {
     companion object{
         //private val baseUrl = "http://192.168.10.62:3000/"
 //        private val baseUrl = "http://192.168.1.9:3000/"
-        private val baseUrl = "http://192.168.1.6:3000/"
-//      private val baseUrl = "http://192.168.0.31:3000/"
-//        private val baseUrl = "http://192.168.0.155:3000/"
+//        private val baseUrl = "http://192.168.1.6:3000/" // Nghia
+      private val baseUrl = "http://192.168.0.31:3000/" // Si
+//        private val baseUrl = "http://192.168.0.155:3000/" // Si
 //        private val baseUrl = "http://192.168.2.3:3000/"
 //        private val baseUrl = "https://teacup-music.herokuapp.com/"
         private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()

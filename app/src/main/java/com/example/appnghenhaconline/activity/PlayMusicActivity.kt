@@ -393,18 +393,21 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         tvSongPlay.text = songObj.title
         tvNameSinger.text = songObj.singer[0].singername
         seekBarMusic.max = MyService.mediaPlayer.duration
-        lyricView.setLabel("Hiện chưa có lời bài hát")
-        lyric?.trimIndent()
-        lyricView.loadLyric(lyric)
-        lyricView.setDraggable(true, object : OnPlayClickListener {
-            override fun onPlayClick(time: Long): Boolean {
-                lyricView.updateTime(time)
-                var timeSync = time.toInt()
-                MyService.mediaPlayer.seekTo(timeSync)
-                seekBarMusic.progress = timeSync
-                return true
-            }
-        })
+        loadLyric(lyric.toString())
+//        lyricView.setLabel("Hiện chưa có lời bài hát")
+//        lyricView.setCurrentTextSize(65f)
+//        lyricView.setNormalTextSize(60f)
+//        lyric?.trimIndent()
+//        lyricView.loadLyric(lyric)
+//        lyricView.setDraggable(true, object : OnPlayClickListener {
+//            override fun onPlayClick(time: Long): Boolean {
+//                lyricView.updateTime(time)
+//                var timeSync = time.toInt()
+//                MyService.mediaPlayer.seekTo(timeSync)
+//                seekBarMusic.progress = timeSync
+//                return true
+//            }
+//        })
 //        MyLib.showToast(this,lyric)
 
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
