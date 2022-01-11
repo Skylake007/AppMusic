@@ -6,11 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.PlayMusicActivity"
     android:id="@+id/layoutPlayMusic">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </LinearLayout>
     <ImageView
         android:id="@+id/imgBackgroundPlayMusic"
         android:layout_width="match_parent"
@@ -56,37 +52,46 @@
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintHeight_percent=".5">
 
-                <androidx.cardview.widget.CardView
-
-                    android:id="@+id/imgPlayMusic"
+                <RelativeLayout
+                    android:id="@+id/layoutRelative"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintHeight_percent=".7"
                     app:layout_constraintWidth_percent=".7">
+                    <androidx.cardview.widget.CardView
 
-                    <ImageView
-                        android:id="@+id/imgSongPlayMusic"
+                        android:id="@+id/imgPlayMusic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/img_avatar_2" />
+                        app:cardCornerRadius="20dp">
 
-                    <com.example.lib.LyricViewX
-                        android:id="@+id/lyricVieew"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:lrcPadding="16dp">
-
-
-                    </com.example.lib.LyricViewX>
-                </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:id="@+id/imgSongPlayMusic"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/img_avatar_2" />
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
 
 
+                <com.example.lib.LyricViewX
+                    android:id="@+id/lyricView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".9"
+                    app:layout_constraintHeight_percent=".9"
+                    app:layout_constraintVertical_bias="1"
+                    app:lrcPadding="40dp"
+                    android:visibility="invisible"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,6 +108,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/layoutImg"
                 app:layout_constraintVertical_bias="0.0">
 
+                <ImageView
+                    android:id="@+id/btnLyric"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_lyrics_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.1"
+                    app:layout_constraintWidth_percent=".85"
+                    android:layout_marginEnd="10dp"/>
                 <TextView
                     android:id="@+id/tvSongNamePlayMusic"
                     android:layout_width="0dp"
@@ -118,7 +134,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.1"
-                    app:layout_constraintWidth_percent=".85" />
+                    app:layout_constraintWidth_percent=".8" />
 
                 <TextView
                     android:id="@+id/tvAuthorPlayMusic"
@@ -197,7 +213,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center">
                         <ImageView
                             android:id="@+id/btnShuffle"
                             android:layout_width="45dp"
@@ -232,16 +249,6 @@
                             android:layout_height="45dp"
                             android:src="@drawable/ic_repeat_white" />
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_marginTop="20dp"
-                            android:id="@+id/btnLyric"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_lyrics_white"/>
                     </LinearLayout>
                 </LinearLayout>
 

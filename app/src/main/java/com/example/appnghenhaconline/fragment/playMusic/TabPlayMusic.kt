@@ -143,7 +143,7 @@ class TabPlayMusic: Fragment() {
         btnRepeat = view.findViewById(R.id.btnRepeat)
         btnShuffle = view.findViewById(R.id.btnShuffle)
         btnLyric = view.findViewById(R.id.btnLyric)
-        lyricView = view.findViewById(R.id.lyricVieew)
+        lyricView = view.findViewById(R.id.lyricView)
     }
     //endregion
     //===============================================

@@ -329,7 +329,7 @@ class MyService : Service() {
         MyDataLocalManager.setIsPlaying(isPlaying)
         MyDataLocalManager.setIsRepeat(isRepeat)
         MyDataLocalManager.setIsShuffle(isShuffle)
-//        MyDataLocalManager.setIsLyric(isLyric)
+        MyDataLocalManager.setIsLyric(isLyric)
         intent.putExtras(bundle)
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)

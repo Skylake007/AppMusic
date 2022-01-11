@@ -15,10 +15,11 @@ class Song(
     var category: ArrayList<Category>,
     var singer: List<Singer>,
     @SerializedName("playlistid")
-    var playlistId: ArrayList<String>
+    var playlistId: ArrayList<String>,
+    var lyric: String?
 ) : Serializable {
     override fun toString(): String {
-        return "Song(id='$id', image='$image', link='$link', title='$title', category=$category, singer=$singer, playlistId=$playlistId)"
+        return "Song(id='$id', image='$image', link='$link', title='$title', category=$category, singer=$singer, playlistId=$playlistId, lyric='$lyric')"
     }
 }
 

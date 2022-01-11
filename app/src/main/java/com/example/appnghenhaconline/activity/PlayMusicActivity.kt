@@ -69,6 +69,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private lateinit var btnPrev : ImageView
     private lateinit var imgCardViewPlay : CardView
     private lateinit var btnPlayOrPause : ImageView
+    private lateinit var layoutImage : RelativeLayout
     private lateinit var tvNameSinger: TextView
     private lateinit var imgBgPlay: ImageView
     private lateinit var mainLayout: RelativeLayout
@@ -82,7 +83,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     lateinit var btnRepeat : ImageView
     lateinit var btnShuffle : ImageView
     lateinit var btnLyric : ImageView
-    lateinit var layoutImg : ConstraintLayout
+//    lateinit var layoutImg : ConstraintLayout
 
     var isPlaying: Boolean = false
 
@@ -145,7 +146,8 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     //===============================================
     //region INIT
     private fun init(){
-        layoutImg = findViewById(R.id.layoutImg)
+//        layoutImg = findViewById(R.id.layoutImg)
+        layoutImage = findViewById(R.id.layoutRelative)
         MyLib.hideSystemUI(window, layoutPlayMusic)
         btnPlayOrPause = findViewById(R.id.btnPlay_Pause)
         imgPlay = findViewById(R.id.imgSongPlayMusic)
@@ -163,8 +165,9 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         btnRepeat = findViewById(R.id.btnRepeat)
         btnShuffle = findViewById(R.id.btnShuffle)
         btnLyric = findViewById(R.id.btnLyric)
-        lyricView = findViewById(R.id.lyricVieew)
+        lyricView = findViewById(R.id.lyricView)
         swipeActivity()
+
 
     }
     //endregion
@@ -174,11 +177,13 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun handleLayoutMusic(action: Int) {
         when(action){
             MyService.ACTION_PAUSE->{
-                initSongInfo()
+//                initSongInfo()
+
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_RESUME->{
-                initSongInfo()
+//                initSongInfo()
+
                 setStatusButtonPlayOrPause()
             }
             MyService.ACTION_START->{
@@ -187,9 +192,14 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             }
             MyService.ACTION_NEXT->{
                 initSongInfo()
+//                setStatusButtonPlayOrPause()
             }
             MyService.ACTION_PREVIOUS->{
+//                setStatusButtonPlayOrPause()
                 initSongInfo()
+            }
+            MyService.ACTION_LYRIC->{
+//                initSongInfo()
             }
         }
     }
@@ -221,10 +231,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
     @SuppressLint("ClickableViewAccessibility")
-
-
-
-
 
     override fun onDown(e: MotionEvent?): Boolean {
         return false
@@ -276,8 +282,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
 
-
-
         tvSongPlay.isSelected = true
     }
     //set chế độ lặp lại
@@ -303,97 +307,46 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
         MyDataLocalManager.setIsShuffle(isShuffle)
     }
+
     //xem lời bài hát
-    //mainLyricFile: File, secondLyricFile: File? = null
-    private fun loadLyric(){
-        if (!isLyric){
+    private fun lyricSong(){
+        if (!isLyric ){
             isLyric = true
             btnLyric.setImageResource(R.drawable.ic_lyrics)
-            imgPlay.visibility = View.GONE
+            layoutImage.clearAnimation()
+            layoutImage.visibility = View.INVISIBLE
             lyricView.visibility = View.VISIBLE
 
-            val lyric = """
-            [00:00.00] [Music]
-            
-            [00:03.00] I'm sorry but 
-            [00:05.00] Don't wanna talk,
-            [00:06.50] I need a moment 'fore I go
-            [00:10.00] It's nothing personal
-            [00:14.00] I draw the blinds
-            [00:16.00] They don't need to see me cry
-            [00:18.00] Cause even if they understand
-            [00:22.00] They don't understand 
-            [00:26.00] So then when I'm finished
+        }else{
+            isLyric = false
+            btnLyric.setImageResource(R.drawable.ic_lyrics_white)
+            layoutImage.clearAnimation()
+            layoutImage.visibility = View.VISIBLE
+            lyricView.visibility = View.INVISIBLE
+        }
+        MyDataLocalManager.setIsLyric(isLyric)
+        sendActionToService(MyService.ACTION_LYRIC)
+    }
 
-            [00:27.00] I'm all 'bout my business 
-            [00:29.00] And ready to save the world
-            [00:31.00] I'm takin my misery
-            [00:33.00] Make it my bitch
-            [00:34.00] Can't be everyone's favorite girl
-            
-            [00:35.50] So take aim and fire away
-            [00:39.50] I've never been so wide awake
-            [00:43.00] No, nobody but me can keep me safe
-            [00:46.00] And I'm on my way
-            [00:48.00] The blood moon is on the rise
-            [00:50.50] The fire burning in my eyes
-            [00:54.50] No, nobody but me can keep me safe
-            [00:57.50] And I'm on my way
-            
-            [00:59.00] [Music]
-            
-            [01:21.00] Lo siento mucho (Farru), pero me voy (rh)
-            [01:27.50] Porque a tu lado me di cuenta que nada soy (rh-ey)
-            [01:32.00] Y me cansé de luchar y de guerrear en vano
-            [01:34.50] De estar en la línea de fuego y de meter la mano
-            [01:38.00] Acepto mis errore', también soy humano
-            [01:41.00] Y tú no ve' que lo hago porque te amo (pum-pum-pum-pum)
-            [01:44.00] Pero ya (Ya) no tengo más na' que hacer aquí (aquí)
-            [01:49.50] Me voy, llegó la hora 'e partir (partir)
-            [01:52.00] De mi propio camino, seguir lejos de ti
-            [01:56.00] So take aim and fire away  
-            [01:59.00] I've never been so wide awake
-            [02:02.00] No, nobody but me can keep me safe
-            [02:05.00] And I'm on my way
-            [02:06.50] The blood moon is on the rise (is on the rise, na-na)
-            [02:09.50] The fire burning in my eyes (the fire burning in my eyes)
-            [02:13.00] No, nobody but me can keep me safe
-            [02:17.00] And I'm on my way
-            [02:19.00] [Music]
-                        
-            [02:51.00] So take aim and fire away
-            [02:55.00] I've never been so wide awake
-            [02:58.00] No, nobody but me can keep me safe
-            [03:02.00] And I'm on my way
-            [03:03.50] The blood moon is on the rise
-            [03:07.00]The fire burning in my eyes
-            [03:09.00] No, nobody but me can keep me safe
-            [03:12.00] And I'm on my way
-           
-            """.trimIndent()
-
-            lyricView.loadLyric(lyric)
+    private fun loadLyric(lyric : String){
+        if (isLyric){
+            lyricView.setLabel("Hiện chưa có lời bài hát")
             lyricView.setCurrentTextSize(65f)
-            lyricView.setCurrentColor(R.color.red)
-            lyricView.setNormalColor(R.color.colorPrimaryDark)
+            lyricView.setNormalTextSize(60f)
+
+            lyric.trimIndent()
+            lyricView.loadLyric(lyric)
+
             lyricView.setDraggable(true, object : OnPlayClickListener {
                 override fun onPlayClick(time: Long): Boolean {
                     lyricView.updateTime(time)
-                    MyLib.showLog(time.toString())
                     var timeSync = time.toInt()
                     MyService.mediaPlayer.seekTo(timeSync)
                     seekBarMusic.progress = timeSync
                     return true
                 }
             })
-
-        }else{
-            isLyric = false
-            btnLyric.setImageResource(R.drawable.ic_lyrics_white)
-            imgPlay.visibility = View.VISIBLE
-            lyricView.visibility = View.GONE
         }
-        //MyDataLocalManager.setIsLyric(isLyrics)
     }
     //chỗ này là lyrics
 
@@ -409,8 +362,6 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             seekBarMusic.progress = MyService.mediaPlayer.currentPosition
 
             var lyricTime = seekBarMusic.progress.toLong()
-
-
             lyricView.updateTime(lyricTime)
 
             MyService.mediaPlayer.setOnCompletionListener {
@@ -436,18 +387,32 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
 
     //set thông tin bài hát
-    private fun initSongInfo() {
+
+    private fun initSongInfo(){
+        val lyric = songObj.lyric
         tvSongPlay.text = songObj.title
         tvNameSinger.text = songObj.singer[0].singername
-
         seekBarMusic.max = MyService.mediaPlayer.duration
+        lyricView.setLabel("Hiện chưa có lời bài hát")
+        lyric?.trimIndent()
+        lyricView.loadLyric(lyric)
+        lyricView.setDraggable(true, object : OnPlayClickListener {
+            override fun onPlayClick(time: Long): Boolean {
+                lyricView.updateTime(time)
+                var timeSync = time.toInt()
+                MyService.mediaPlayer.seekTo(timeSync)
+                seekBarMusic.progress = timeSync
+                return true
+            }
+        })
+//        MyLib.showToast(this,lyric)
 
         val isPlayingData: Boolean = MyDataLocalManager.getIsPlaying()
         val isRepeatData: Boolean = MyDataLocalManager.getIsRepeat()
         val isShuffleData: Boolean = MyDataLocalManager.getIsShuffle()
-        val isLyricData: Boolean = false;
+        val isLyricData: Boolean = MyDataLocalManager.getIsLyric();
 
-        runnable.run()
+
         val scope = CoroutineScope(Job()+ Dispatchers.Main)
         scope.launch {
             Picasso.get().load(songObj.image)
@@ -474,17 +439,35 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 })
         }
 
+        runnable.run()
         runnableAnim.run()
 
         val animZoomIn = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_img)
         val animZoomOut = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_out_img)
 
-        if (isPlayingData){
-            imgCardViewPlay.startAnimation(animZoomIn)
+        if (isPlayingData && !isLyricData){
+            layoutImage.startAnimation(animZoomIn)
             btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
-        }else{
-            imgCardViewPlay.startAnimation(animZoomOut)
+            btnLyric.setImageResource(R.drawable.ic_lyrics_white)
+
+        }else if (!isPlayingData && !isLyricData){
+            layoutImage.startAnimation(animZoomOut)
             btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
+            btnLyric.setImageResource(R.drawable.ic_lyrics_white)
+
+        }else if (isPlayingData && isLyricData){
+            layoutImage.clearAnimation()
+            layoutImage.visibility = View.INVISIBLE
+            lyricView.visibility = View.VISIBLE
+            btnPlayOrPause.setImageResource(R.drawable.ic_pause_circle_white)
+            btnLyric.setImageResource(R.drawable.ic_lyrics)
+
+        }else{
+            layoutImage.clearAnimation()
+            layoutImage.visibility = View.INVISIBLE
+            lyricView.visibility = View.VISIBLE
+            btnPlayOrPause.setImageResource(R.drawable.ic_play_circle_white)
+            btnLyric.setImageResource(R.drawable.ic_lyrics)
         }
 
         if (isRepeatData){
@@ -499,19 +482,17 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             btnShuffle.setImageResource(R.drawable.ic_shuffle_white)
         }
 
-        if (isLyricData){
-            btnLyric.setImageResource(R.drawable.ic_lyrics)
-        }else{
-            btnLyric.setImageResource(R.drawable.ic_lyrics_white)
-        }
-
         btnPlayOrPause.setOnClickListener {
-            if (isPlayingData){
+            if (isPlayingData && isLyricData){
                 sendActionToService(MyService.ACTION_PAUSE)
-                imgCardViewPlay.startAnimation(animZoomOut)
+            }else if (!isPlayingData && isLyricData){
+                sendActionToService(MyService.ACTION_RESUME)
+            }else if (isPlayingData && !isLyricData){
+                sendActionToService(MyService.ACTION_PAUSE)
+                layoutImage.startAnimation(animZoomOut)
             }else{
                 sendActionToService(MyService.ACTION_RESUME)
-                imgCardViewPlay.startAnimation(animZoomIn)
+                layoutImage.startAnimation(animZoomIn)
             }
         }
 
@@ -531,7 +512,10 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             shuffleSong()
         }
         btnLyric.setOnClickListener {
-            loadLyric()
+            lyricSong()
+            if (lyric != null) {
+                loadLyric(lyric)
+            }
         }
 
 
