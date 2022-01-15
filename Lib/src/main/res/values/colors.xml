@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lrc_normal_text_color">#E7E6E6</color>
+    <color name="lrc_normal_text_color">#ABB2B1B1</color>
     <color name="lrc_current_text_color">#FFFFFF</color>
     <color name="lrc_timeline_text_color">#CFCCCC</color>
     <color name="lrc_timeline_color">#80D7D7D7</color>

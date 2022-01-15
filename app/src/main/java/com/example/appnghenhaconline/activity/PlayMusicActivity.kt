@@ -331,7 +331,7 @@ class PlayMusicActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     private fun loadLyric(lyric : String){
         if (isLyric){
             lyricView.setLabel("Hiện chưa có lời bài hát")
-            lyricView.setCurrentTextSize(65f)
+            lyricView.setCurrentTextSize(75f)
             lyricView.setNormalTextSize(60f)
 
             lyric.trimIndent()

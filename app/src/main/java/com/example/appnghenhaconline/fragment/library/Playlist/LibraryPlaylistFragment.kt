@@ -69,7 +69,8 @@ class LibraryPlaylistFragment: Fragment() {
     }
 
     private fun initTabFragment(){
-        val tabOfSingerAdapter = TabOfLibPlaylistAdapter(requireActivity())
+        val lifecycle = viewLifecycleOwner.lifecycle
+        val tabOfSingerAdapter = TabOfLibPlaylistAdapter(childFragmentManager, lifecycle)
         viewPager.adapter = tabOfSingerAdapter
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
