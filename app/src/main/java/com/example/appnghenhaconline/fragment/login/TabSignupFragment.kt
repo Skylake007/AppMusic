@@ -54,7 +54,7 @@ class TabSignupFragment : Fragment() {
             else {
                 when {
                     password.text!!.length < 6 -> {
-                        MyLib.showToast(requireContext(),"Mật khẩu phải từ 6 kí tự trở lên")
+                        MyLib.showToast(requireContext(),"Mật khẩu phải từ 7 kí tự trở lên")
                     }
                     password.text.toString() != confirmPassword.text.toString() -> {
                         MyLib.showToast(requireContext(),"Kiểm tra lại mật khẩu và Xác nhận mật khẩu")
