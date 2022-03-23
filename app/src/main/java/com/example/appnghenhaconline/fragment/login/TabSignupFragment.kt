@@ -49,7 +49,7 @@ class TabSignupFragment : Fragment() {
                 password.text.toString().trim() == "" ||
                 confirmPassword.text.toString().trim() == "" ||
                 edtSex.text.toString().trim() == "") {
-                MyLib.showToast(requireContext(),"Vui lòng nhập đầy đủ thông tin")
+                MyLib.showToast(requireContext(),"Vui lòng điền đầy đủ thông tin")
             }
             else {
                 when {
